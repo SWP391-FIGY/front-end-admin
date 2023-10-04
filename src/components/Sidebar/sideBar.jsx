@@ -17,9 +17,10 @@ const PageSidebar = () => {
           <Sidebar.ItemGroup className='w-full '>
             {topSideBarData.map((item, index) => {
               const navBasePath = item.href.split('/')[1];
-              const activeRouteDecoration = currentBasePath === navBasePath ? 'bg-gray-200':'';
+              const activeRouteDecoration = currentBasePath === navBasePath ? 'bg-gray-200' : '';
               return (
                 <Sidebar.Item
+                  key={index}
                   href={item.href}
                   icon={item.icon}
                   className={`justify-start ${activeRouteDecoration}`}

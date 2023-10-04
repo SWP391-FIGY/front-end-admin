@@ -5,7 +5,7 @@ import { MdPets } from 'react-icons/md'
 export const topSideBarData = [
   {
     title: "Dashboard",
-    href: "#",
+    href: "/",
     icon: HiChartPie,
     allowRole: [],
   },
