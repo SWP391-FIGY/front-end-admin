@@ -1,0 +1,42 @@
+export const userInfo = [
+	{
+		name: 'Michael',
+		email: 'michaelking@gmail.com',
+		password: '123',
+		phoneNumber: '0123456789',
+        role: 'customer',
+		status: 'OK',
+	},
+    {
+		name: 'Michael',
+		email: 'michaelking@gmail.com',
+		password: '123',
+		phoneNumber: '0123456789',
+        role: 'customer',
+		status: 'OK',
+	},
+    {
+		name: 'Michael',
+		email: 'michaelking@gmail.com',
+		password: '123',
+		phoneNumber: '0123456789',
+        role: 'customer',
+		status: 'OK',
+	},
+    {
+		name: 'Michael',
+		email: 'michaelking@gmail.com',
+		password: '123',
+		phoneNumber: '0123456789',
+        role: 'customer',
+		status: 'OK',
+	},
+    {
+		name: 'Michael',
+		email: 'michaelking@gmail.com',
+		password: '123',
+		phoneNumber: '0123456789',
+        role: 'customer',
+		status: 'OK',
+	},
+]
