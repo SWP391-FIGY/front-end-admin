@@ -9,7 +9,7 @@ const { default: PageLayout } = require("@/layout/pageLayout")
 
 const SpeciesCreatePage = () => {
   const [spinner, setSpinner] = useState(false)
-
+  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
       color: '',
@@ -24,8 +24,8 @@ const SpeciesCreatePage = () => {
       color: Yup.string().required('Required'),
       size: Yup.string().required('Required'),
       voice: Yup.string().required('Required'),
-      imageLink: Yup.string().required('Required'),
-      age: Yup.number().required('Required'),
+      imageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
+      age: Yup.number().lessThan(70, 'Age must be lower than 70').positive('Age must be higher than 0').integer('Age must be an integer').required('Required'),
       habitat: Yup.string().required('Required'),
       total: Yup.number().required('Required'),
     }),

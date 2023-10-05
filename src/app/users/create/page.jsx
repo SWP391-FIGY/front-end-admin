@@ -9,8 +9,8 @@ const { default: PageLayout } = require("@/layout/pageLayout")
 
 const UserCreatePage = () => {
   const [spinner, setSpinner] = useState(false)
-  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/
-  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
+  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const formik = useFormik({
     initialValues: {
       name: '',
