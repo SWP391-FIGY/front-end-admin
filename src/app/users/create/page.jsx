@@ -9,7 +9,7 @@ const { default: PageLayout } = require("@/layout/pageLayout")
 
 const UserCreatePage = () => {
   const [spinner, setSpinner] = useState(false)
-
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -23,7 +23,7 @@ const UserCreatePage = () => {
       name: Yup.string().required('Required'),
       email: Yup.string().required('Required'),
       password: Yup.string().required('Required'),
-      phoneNumber: Yup.number().required('Required'),
+      phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
       role: Yup.string().required('Required'),
       status: Yup.string().required('Required'),
     }),
