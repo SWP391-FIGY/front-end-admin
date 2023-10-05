@@ -60,7 +60,7 @@ const UserCreatePage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="name"
-              value="Food name"
+              value="User name"
             />
             <TextInput
               id="name"

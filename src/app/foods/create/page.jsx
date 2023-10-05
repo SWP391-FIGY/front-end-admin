@@ -54,7 +54,7 @@ const FoodCreatePage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="name"
-              value="User name"
+              value="Food name"
             />
             <TextInput
               id="name"
