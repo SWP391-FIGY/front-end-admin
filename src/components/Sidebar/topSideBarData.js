@@ -17,7 +17,7 @@ export const topSideBarData = [
   },
   {
     title: "Species Management",
-    href: "#",
+    href: "/species/index",
     icon: MdPets,
     allowRole: [],
   },
@@ -35,7 +35,7 @@ export const topSideBarData = [
   },
   {
     title: "Food Management",
-    href: "#",
+    href: "/foods/index",
     icon: HiViewBoards,
     allowRole: [],
   },
@@ -59,7 +59,7 @@ export const topSideBarData = [
   },
   {
     title: "User Management",
-    href: "#",
+    href: "/users/index",
     icon: HiViewBoards,
     allowRole: [],
   },
