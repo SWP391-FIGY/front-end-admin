@@ -9,7 +9,8 @@ const { default: PageLayout } = require("@/layout/pageLayout")
 
 const UserCreatePage = () => {
   const [spinner, setSpinner] = useState(false)
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/
+  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -21,7 +22,7 @@ const UserCreatePage = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
-      email: Yup.string().required('Required'),
+      email: Yup.string().matches(emailRegExp, 'Email is not valid').required('Required'),
       password: Yup.string().required('Required'),
       phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
       role: Yup.string().required('Required'),
