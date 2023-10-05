@@ -35,7 +35,7 @@ const PageSidebar = () => {
           <Sidebar.ItemGroup>
 
             <Sidebar.Item
-              href="#"
+              href="/auth/login"
               icon={HiArrowSmRight}
             >
               <p>

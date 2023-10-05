@@ -3,7 +3,7 @@ import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-
 import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -14,14 +14,14 @@ const BirdCreatePage = () => {
     initialValues: {
       name: '',
       species: 'Species 2',
-      birthdate: new Date(),
+      birthdate: '',
       gender: 'Male',
       status: 'Status 1',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
       species: Yup.string().required('Required'),
-      birthdate: Yup.date().max(new Date()).required('Required'),
+      birthdate: Yup.date().max(new Date().toLocaleDateString(),'Birth date must before today').required('Required'),
       gender: Yup.string().required('Required'),
       status: Yup.string().required('Required'),
     }),
@@ -31,7 +31,6 @@ const BirdCreatePage = () => {
         data: values,
       }
       console.log("Submitted");
-      console.log(values);
       axios
         .post(`${API}/feedbacks`, payloadData)
         .then(response => {
@@ -45,6 +44,9 @@ const BirdCreatePage = () => {
     },
   })
 
+  useEffect(() => {
+    console.log(formik)
+  }, [formik])
   return (
     <PageLayout>
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
@@ -102,10 +104,17 @@ const BirdCreatePage = () => {
               value="Birth Date"
             />
             <Datepicker id="birthDate"
-              onSelectedDateChanged={formik.handleChange}
+              language="vi-VN"
+              onSelectedDateChanged={(date) => {
+                console.log(new Date(date));
+                formik.setFieldValue("birthdate",date)
+                console.log('value',formik.values)
+                console.log('errors',formik.errors)
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.birthdate} />
-            {formik.touched.birthdate && formik.errors.birthdate ? (
+              onSelect={(e) => { console.log(e); }}
+            />
+            {formik.errors.birthdate ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
                 {formik.errors.birthdate}
               </div>
