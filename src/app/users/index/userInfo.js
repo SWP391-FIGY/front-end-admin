@@ -4,7 +4,7 @@ export const userInfo = [
 		email: 'michaelking@gmail.com',
 		password: '123',
 		phoneNumber: '0123456789',
-        role: 'customer',
+        role: 'Bird Carer',
 		status: 'OK',
 	},
     {
@@ -12,7 +12,7 @@ export const userInfo = [
 		email: 'michaelking@gmail.com',
 		password: '123',
 		phoneNumber: '0123456789',
-        role: 'customer',
+        role: 'Bird Carer',
 		status: 'OK',
 	},
     {
@@ -20,7 +20,7 @@ export const userInfo = [
 		email: 'michaelking@gmail.com',
 		password: '123',
 		phoneNumber: '0123456789',
-        role: 'customer',
+        role: 'Bird Carer',
 		status: 'OK',
 	},
     {
@@ -28,7 +28,7 @@ export const userInfo = [
 		email: 'michaelking@gmail.com',
 		password: '123',
 		phoneNumber: '0123456789',
-        role: 'customer',
+        role: 'Bird Carer',
 		status: 'OK',
 	},
     {
@@ -36,7 +36,7 @@ export const userInfo = [
 		email: 'michaelking@gmail.com',
 		password: '123',
 		phoneNumber: '0123456789',
-        role: 'customer',
+        role: 'Bird Carer',
 		status: 'OK',
 	},
 ]
