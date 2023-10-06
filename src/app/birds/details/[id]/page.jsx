@@ -2,15 +2,19 @@
 import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-react"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
-import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
 import Link from "next/link"
-import {HiOutlineArrowSmallLeft} from 'react-icons/hi2'
+import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
-const BirdCreatePage = () => {
+const BirdEditPage = () => {
   const [spinner, setSpinner] = useState(false)
+  const params = useParams();
+  const uid = params.id;
+
+  console.log('detail id',uid);
 
   const formik = useFormik({
     initialValues: {
@@ -23,7 +27,7 @@ const BirdCreatePage = () => {
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
       species: Yup.string().required('Required'),
-      birthdate: Yup.date().max(new Date().toLocaleDateString(),'Birth date must before today').required('Required'),
+      birthdate: Yup.date().max(new Date().toLocaleDateString(), 'Birth date must before today').required('Required'),
       gender: Yup.string().required('Required'),
       status: Yup.string().required('Required'),
     }),
@@ -53,9 +57,8 @@ const BirdCreatePage = () => {
     <PageLayout>
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
         <div className='flex flex-col justify-between gap-4'>
-          <Link href={'/birds/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center"/>} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new Birds</h2>
-
+          <Link href={'/birds/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
+          <h2 className='text-3xl font-bold'>Bird Details</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
@@ -110,9 +113,9 @@ const BirdCreatePage = () => {
               language="vi-VN"
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
-                formik.setFieldValue("birthdate",date)
-                console.log('value',formik.values)
-                console.log('errors',formik.errors)
+                formik.setFieldValue("birthdate", date)
+                console.log('value', formik.values)
+                console.log('errors', formik.errors)
               }}
               onBlur={formik.handleBlur}
               onSelect={(e) => { console.log(e); }}
@@ -183,4 +186,4 @@ const BirdCreatePage = () => {
   )
 }
 
-export default BirdCreatePage
+export default BirdEditPage

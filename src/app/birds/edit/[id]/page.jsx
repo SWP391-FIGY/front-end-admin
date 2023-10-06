@@ -4,6 +4,8 @@ import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import Link from "next/link"
+import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -12,7 +14,7 @@ const BirdEditPage = () => {
   const params = useParams();
   const uid = params.id;
 
-  console.log(uid);
+  console.log('editing id',uid);
 
   const formik = useFormik({
     initialValues: {
@@ -54,9 +56,9 @@ const BirdEditPage = () => {
   return (
     <PageLayout>
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-        <div className='flex flex-row justify-between'>
-          <h2 className='text-3xl font-bold'>Add new Birds</h2>
-
+        <div className='flex flex-col justify-between gap-4'>
+          <Link href={'/birds/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
+          <h2 className='text-3xl font-bold'>Update Birds</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
