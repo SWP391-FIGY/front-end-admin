@@ -146,7 +146,7 @@ const UserCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.role}
             >
-              <option>Bird Carer</option>
+              <option>Staff</option>
               <option>Admin</option>
 
             </Select>
