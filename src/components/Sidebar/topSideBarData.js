@@ -10,7 +10,7 @@ export const topSideBarData = [
     allowRole: [],
   },
   {
-    title: "Bird List",
+    title: "Bird",
     href: "/birds/index",
     icon: HiViewBoards,
     allowRole: [],
