@@ -2,9 +2,10 @@ import { Button, Table } from 'flowbite-react'
 import React from 'react'
 import { userInfo } from './userInfo'
 import { FiEdit, FiEye, FiTrash2 } from 'react-icons/fi';
-
+import { useRouter } from 'next/navigation';
 
 const UserList = () => {
+	const router = useRouter()
 	if (!userInfo) return (
 		<>No Data</>
 	)
@@ -34,10 +35,10 @@ const UserList = () => {
 								<Table.Cell><span>{user.status}</span></Table.Cell>
 								<Table.Cell className='flex flex-row gap-4'>
 									<Button>
-										<FiEdit />
+										<FiEdit onClick={()=> {router.push(`edit/${index}`)}}/>
 									</Button>
 									<Button>
-										<FiEye />
+										<FiEye onClick={()=> {router.push(`details/${index}`)}}/>
 									</Button>
 									<Button>
 										<FiTrash2 />
