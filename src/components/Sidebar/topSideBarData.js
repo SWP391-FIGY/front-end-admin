@@ -1,6 +1,21 @@
+import {
+  HiArrowSmRight,
+  HiChartPie,
+  HiInbox,
+  HiShoppingBag,
+  HiCheckCircle,
+  HiDatabase,
+  HiViewBoards,
+  HiCalendar,
+  HiShoppingCart,
+  HiOutlineClipboardList,
+  HiUserCircle,
 
-import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from 'react-icons/hi';
-import { MdPets } from 'react-icons/md'
+} from "react-icons/hi";
+import {GiCage} from 'react-icons/gi'
+import {PiBirdFill} from 'react-icons/pi'
+import { MdPets } from "react-icons/md";
+import { BsUiChecksGrid } from 'react-icons/bs'
 
 export const topSideBarData = [
   {
@@ -10,58 +25,75 @@ export const topSideBarData = [
     allowRole: [],
   },
   {
-    title: "Bird",
-    href: "/birds/index",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-  {
-    title: "Species",
-    href: "/species/index",
+    title: "Bird Management",
     icon: MdPets,
-    allowRole: [],
+    items: [
+      {
+        title: "Bird",
+        href: "/birds/index",
+        icon: PiBirdFill,
+        allowRole: [],
+      },
+      {
+        title: "Species",
+        href: "/species/index",
+        icon: MdPets,
+        allowRole: [],
+      },
+      {
+        title: "Cage",
+        href: "#",
+        icon: GiCage,
+        allowRole: [],
+      },
+    ],
   },
   {
-    title: "Cage",
-    href: "#",
-    icon: HiViewBoards,
-    allowRole: [],
+    title: "Plan Management",
+    icon: HiCalendar,
+    items: [
+      {
+        title: "Task",
+        href: "#",
+        icon: HiCheckCircle,
+        allowRole: [],
+      },
+      {
+        title: "Food",
+        href: "/foods/index",
+        icon: HiDatabase,
+        allowRole: [],
+      },
+      {
+        title: "Feeding Plan",
+        href: "#",
+        icon: BsUiChecksGrid,
+        allowRole: [],
+      },
+    ],
   },
   {
-    title: "Task",
-    href: "#",
-    icon: HiViewBoards,
-    allowRole: [],
+    title: "Purchase Management",
+    icon: HiShoppingCart,
+    items: [
+      {
+        title: "Purchase Request",
+        href: "#",
+        icon: HiShoppingCart,
+        allowRole: [],
+      },
+      {
+        title: "Purchase Order",
+        href: "#",
+        icon: HiOutlineClipboardList,
+        allowRole: [],
+      },
+      {
+        title: "User",
+        href: "/users/index",
+        icon: HiUserCircle,
+        allowRole: [],
+      },
+    ],
   },
-  {
-    title: "Food",
-    href: "/foods/index",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-  {
-    title: "Feeding Plan",
-    href: "#",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-  {
-    title: "Purchase Request",
-    href: "#",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-  {
-    title: "Purchase Order",
-    href: "#",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-  {
-    title: "User",
-    href: "/users/index",
-    icon: HiViewBoards,
-    allowRole: [],
-  },
-]
-
+];
