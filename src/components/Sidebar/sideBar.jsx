@@ -30,7 +30,6 @@ const PageSidebar = () => {
                     key={index}
                     icon={item.icon} // Change the icon as needed
                     label={item.title || "Sub Items"}
-                    
                   >
                     {item.items.map((subItem, subIndex) => {
                       const navBasePath = subItem.href.split("/")[1];

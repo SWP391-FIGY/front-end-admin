@@ -57,7 +57,7 @@ const BirdList = () => {
                         <FiEye />
                       </Button>
                     </Link>
-                    <Button onClick={() => {}}>
+                    <Button color="failure" onClick={() => {}}>
                       <FiTrash2 />
                     </Button>
                   </Table.Cell>

@@ -12,11 +12,14 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
-const CageCreatePage = () => {
-  const [spinner, setSpinner] = useState(false);
+const CageEditPage = () => {
+  const [spinner, setSpinner] = useState(false)
+  const params = useParams();
+  const uid = params.id;
 
   const formik = useFormik({
     initialValues: {
@@ -197,4 +200,4 @@ const CageCreatePage = () => {
   );
 };
 
-export default CageCreatePage;
+export default CageEditPage;

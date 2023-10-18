@@ -42,7 +42,7 @@ export const topSideBarData = [
       },
       {
         title: "Cage",
-        href: "#",
+        href: "/cage/index",
         icon: GiCage,
         allowRole: [],
       },
