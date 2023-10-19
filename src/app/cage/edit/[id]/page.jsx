@@ -12,15 +12,14 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
-const CageCreatePage = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const [spinner, setSpinner] = useState(false);
+const CageEditPage = () => {
+  const [spinner, setSpinner] = useState(false)
+  const params = useParams();
+  const uid = params.id;
 
   const formik = useFormik({
     initialValues: {
@@ -34,12 +33,12 @@ const CageCreatePage = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
-      size: Yup.string().required("Required"),
+      size:Yup.string().required("Required"),
       color: Yup.string().required("Required"),
       area: Yup.string().required("Required"),
       type: Yup.string().required("Required"),
       cageStatus: Yup.string().required("Required"),
-      capacity: Yup.number().min(1, "Capacity must greater than 0"),
+      capacity: Yup.number().min(1, "Capacity must greater than 0")
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -63,25 +62,13 @@ const CageCreatePage = () => {
   useEffect(() => {
     console.log(formik);
   }, [formik]);
-
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
         <div className="flex flex-col justify-between gap-4">
-          {searchParams && searchParams.get("bird-add") === "true" ? (
-            <Link
-              href={"#"}
-              onClick={() => router.back()}
-              className="flex flex-row gap-2"
-            >
-              {<HiOutlineArrowSmallLeft className="self-center" />} Back to bird
-              info
-            </Link>
-          ) : (
-            <Link href={"/cage/index"} className="flex flex-row gap-2">
-              {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
-            </Link>
-          )}
+          <Link href={"/cage/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
           <h2 className="text-3xl font-bold">Add new Cage</h2>
         </div>
         <form
@@ -163,7 +150,7 @@ const CageCreatePage = () => {
               </div>
             ) : null}
           </div>
-
+          
           <div className="flex flex-col gap-2">
             <Label htmlFor="cageStatus" value="Cage status" />
             <Select
@@ -213,4 +200,4 @@ const CageCreatePage = () => {
   );
 };
 
-export default CageCreatePage;
+export default CageEditPage;

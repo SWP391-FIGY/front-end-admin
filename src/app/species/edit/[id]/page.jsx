@@ -2,20 +2,18 @@
 import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-react"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
-import { useParams } from "next/navigation"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const SpeciesEditPage = () => {
   const [spinner, setSpinner] = useState(false)
-  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const params = useParams();
   const uid = params.id;
 
   console.log('editing id',uid);
-
+  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
       color: '',
@@ -59,7 +57,7 @@ const SpeciesEditPage = () => {
     <PageLayout>
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
         <div className='flex flex-row justify-between'>
-          <h2 className='text-3xl font-bold'>Edit species</h2>
+          <h2 className='text-3xl font-bold'>Add new species</h2>
 
         </div>
         <form

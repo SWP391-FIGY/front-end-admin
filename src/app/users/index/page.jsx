@@ -16,7 +16,7 @@ const UserListPage = () => {
 	return (
 		<PageLayout>
 			<div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-				<div className='dashboard-content-header'>
+				<div className='dashboard-content-header flex flex-row justify-between'>
 					<h2 className='text-3xl font-bold'>User List</h2>
 					<div onClick={handleAddClick}>
 						<Button>
