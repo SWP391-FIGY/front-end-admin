@@ -56,23 +56,23 @@ return (
       <div className="bg-white rounded-lg shadow p-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="name" value="Bird name" />
+            <label htmlFor="name" className="text-lg font-bold">Name</label>
             <p>{birdData.name}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="species" value="Bird species" />
+            <label htmlFor="species" className="text-lg font-bold">Species</label>
             <p>{birdData.species}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="birthDate" value="Birth Date" />
+            <label htmlFor="birthDate" className="text-lg font-bold">Birth date</label>
             <p>{formattedBirthDate}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="gender" value="Bird gender" />
+            <label htmlFor="gender" className="text-lg font-bold">Gender</label>
             <p>{birdData.gender}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="status" value="Bird status" />
+            <label htmlFor="status" className="text-lg font-bold">Status</label>
             <p>{birdData.status}</p>
           </div>
         </div>

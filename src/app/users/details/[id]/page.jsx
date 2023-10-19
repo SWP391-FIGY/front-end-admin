@@ -12,20 +12,6 @@ const UserDetailPage = () => {
   const params = useParams();
   const index = parseInt(params.id, 10);
 
-//  useEffect(() => {
-//    axios
-//      .get(`${API}/birds/${uid}`)
-//      .then(response => {
-//        setuserData(response.data);
-//        setLoading(false);
-//      })
-//      .catch(error => {
-//        setLoading(false);
-//        console.log('An error occurred:', error.response);
-//      });
-//  }, [uid]);
-
-
 if (isNaN(index) || index < 0 || index >= userInfo.length) {
   return (
     <PageLayout>
@@ -50,27 +36,27 @@ return (
       <div className="bg-white rounded-lg shadow p-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="name" value="User name" />
+            <label htmlFor="name" className="text-lg font-bold">Name</label>
             <p>{userData.name}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="email" value="Email" />
+            <label htmlFor="email" className="text-lg font-bold">Email</label>
             <p>{userData.email}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="password" value="Password" />
+            <label htmlFor="password" className="text-lg font-bold">Password</label>
             <p>{userData.password}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="phoneNumber" value="Phone number" />
+            <label htmlFor="phoneNumber" className="text-lg font-bold">Phone number</label>
             <p>{userData.phoneNumber}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="role" value="Role" />
+            <label htmlFor="role" className="text-lg font-bold">Role</label>
             <p>{userData.role}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <Label htmlFor="status" value="Status" />
+            <label htmlFor="status" className="text-lg font-bold">Status</label>
             <p>{userData.status}</p>
           </div>
         </div>
