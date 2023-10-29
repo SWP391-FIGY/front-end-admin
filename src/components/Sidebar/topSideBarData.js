@@ -54,7 +54,7 @@ export const topSideBarData = [
     items: [
       {
         title: "Task",
-        href: "#",
+        href: "/tasks/index",
         icon: HiCheckCircle,
         allowRole: [],
       },
