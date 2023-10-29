@@ -16,7 +16,7 @@ import { FiTrash2 } from "react-icons/fi";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
-const MenuCreatePage = () => {
+const MenuUpdatePage = () => {
   const [spinner, setSpinner] = useState(false);
   const [selectedFood, setSelectedFood] = useState(1);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -97,7 +97,7 @@ const MenuCreatePage = () => {
           <Link href={"/menu/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Add new Menu</h2>
+          <h2 className="text-3xl font-bold">Update Menu</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
@@ -259,4 +259,4 @@ const MenuCreatePage = () => {
   );
 };
 
-export default MenuCreatePage;
+export default MenuUpdatePage;
