@@ -29,7 +29,7 @@ const TaskCreatePage = () => {
       taskName: Yup.string().required("Required"),
       dateAndTime: Yup.date().min(new Date().toLocaleDateString(), "Birth date must after today").required("Required"),
       description: Yup.string().required("Required"),
-      status: Yup.string().required("Required")
+      status: Yup.number().required("Required")
     }),
     onSubmit: values => {
       setSpinner(true)
@@ -85,7 +85,7 @@ const TaskCreatePage = () => {
             </Select>
             {formik.touched.birdId && formik.errors.birdId ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.role}
+                {formik.errors.birdId}
               </div>
             ) : null}
           </div>

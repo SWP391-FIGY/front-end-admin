@@ -66,7 +66,7 @@ export const topSideBarData = [
       },
       {
         title: "Feeding Plan",
-        href: "#",
+        href: "feeding-plan/index",
         icon: BsUiChecksGrid,
         allowRole: [],
       },
