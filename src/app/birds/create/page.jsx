@@ -144,7 +144,7 @@ const BirdCreatePage = () => {
                   <option value={3}>Cage 3</option>
                 </Select>
               </div>
-              <Link href={"/cage/create?bird-add=true"}>
+              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">

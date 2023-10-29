@@ -4,6 +4,7 @@ import { birdInfo } from "./birdInfo";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import DataTable from "datatables.net-dt";
 
 const BirdList = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const BirdList = () => {
   const onPageChange = (page) => setCurrentPage(page);
 
   if (!birdInfo) return <>No Data</>;
+  let table = new DataTable('#table-auto');
   return (
     <>
       <Table className="table-auto">

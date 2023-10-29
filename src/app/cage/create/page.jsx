@@ -19,7 +19,10 @@ const { default: PageLayout } = require("@/layout/pageLayout");
 const CageCreatePage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  console.log('passed param');
+  for (const name of searchParams.keys()) {
+    console.log(name);
+  }
   const [spinner, setSpinner] = useState(false);
 
   const formik = useFormik({

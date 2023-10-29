@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "next dev -p 3005",
     "build": "next build",
-    "start": "next start",
+    "start": "next build && next start",
     "lint": "next lint"
   },
   "dependencies": {
     "autoprefixer": "^10.4.16",
+    "datatables.net-dt": "^1.13.6",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "firebase": "^10.5.0",

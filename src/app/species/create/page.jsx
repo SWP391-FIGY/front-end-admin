@@ -9,7 +9,7 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import Link from "next/link";
@@ -17,6 +17,8 @@ import Link from "next/link";
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const SpeciesCreatePage = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false);
   const urlRegExp =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
@@ -69,9 +71,20 @@ const SpeciesCreatePage = () => {
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
         <div className="flex flex-col justify-between gap-4">
-          <Link href={"/species/index"} className="flex flex-row gap-2">
-            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
-          </Link>
+          {searchParams && searchParams.get("bird-add") === "true" ? (
+            <Link
+              href={"#"}
+              onClick={() => router.back()}
+              className="flex flex-row gap-2"
+            >
+              {<HiOutlineArrowSmallLeft className="self-center" />} Back to bird
+              info
+            </Link>
+          ) : (
+            <Link href={"/species/index"} className="flex flex-row gap-2">
+              {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+            </Link>
+          )}
           <h2 className="text-3xl font-bold">Add new Species</h2>
         </div>
         <form
