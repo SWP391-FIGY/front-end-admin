@@ -33,12 +33,12 @@ const FoodList = () => {
                   <span>{food.storageConditions}</span>
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-4">
-                  <Link href={"#"}>
+                  <Link href={`/foods/edit/${index}`}>
                     <Button>
                       <FiEdit />
                     </Button>
                   </Link>
-                  <Link href={"#"}>
+                  <Link href={`/foods/edit/${index}`}>
                     <Button>
                       <FiEye />
                     </Button>

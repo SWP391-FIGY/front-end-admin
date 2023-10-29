@@ -167,6 +167,7 @@ const BirdCreatePage = () => {
             <Datepicker
               id="birthDate"
               language="vi-VN"
+              value={formik.values.birthdate}
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
                 formik.setFieldValue("birthdate", date);

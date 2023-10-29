@@ -12,6 +12,7 @@ import {
   HiUserCircle,
 
 } from "react-icons/hi";
+import {FaAppleWhole} from 'react-icons/fa6'
 import {GiCage} from 'react-icons/gi'
 import {PiBirdFill, PiBowlFoodFill} from 'react-icons/pi'
 import { MdPets } from "react-icons/md";
@@ -61,18 +62,18 @@ export const topSideBarData = [
       {
         title: "Food",
         href: "/foods/index",
-        icon: PiBowlFoodFill,
+        icon: FaAppleWhole,
         allowRole: [],
       },
       {
         title: "Feeding Plan",
-        href: "feeding-plan/index",
+        href: "/feeding-plan/index",
         icon: BsUiChecksGrid,
         allowRole: [],
       },
       {
         title: "Menu",
-        href: "menu/index",
+        href: "/menu/index",
         icon: HiDatabase,
         allowRole: [],
       },
