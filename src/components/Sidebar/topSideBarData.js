@@ -13,7 +13,7 @@ import {
 
 } from "react-icons/hi";
 import {GiCage} from 'react-icons/gi'
-import {PiBirdFill} from 'react-icons/pi'
+import {PiBirdFill, PiBowlFoodFill} from 'react-icons/pi'
 import { MdPets } from "react-icons/md";
 import { BsUiChecksGrid } from 'react-icons/bs'
 
@@ -61,13 +61,19 @@ export const topSideBarData = [
       {
         title: "Food",
         href: "/foods/index",
-        icon: HiDatabase,
+        icon: PiBowlFoodFill,
         allowRole: [],
       },
       {
         title: "Feeding Plan",
         href: "feeding-plan/index",
         icon: BsUiChecksGrid,
+        allowRole: [],
+      },
+      {
+        title: "Menu",
+        href: "menu/index",
+        icon: HiDatabase,
         allowRole: [],
       },
     ],

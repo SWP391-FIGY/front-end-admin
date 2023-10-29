@@ -25,7 +25,7 @@ const FoodListPage = () => {
 									<HiPlus />
 								</div>
 								<p>
-									Add new food
+									Add new Inventory
 								</p>
 							</div>
 						</Button>

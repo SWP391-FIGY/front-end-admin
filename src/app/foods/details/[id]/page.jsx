@@ -31,7 +31,7 @@ return (
         <Link href={'/foods/index'} className="flex items-center gap-2 text-blue-500 hover:underline">
           <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
         </Link>
-        <h2 className='text-3xl font-bold'>Food Details</h2>
+        <h2 className='text-3xl font-bold'>Inventory Details</h2>
       </div>
       <div className="bg-white rounded-lg shadow p-6">
         <div className="grid grid-cols-2 gap-4">

@@ -19,7 +19,8 @@ const BirdList = () => {
     <>
       <DataTable
         columns={birdColumns}
-        data={[...birdInfo, ...birdInfo, ...birdInfo, ...birdInfo]}
+        data={[...birdInfo]}
+        className="opacity-100"
         pagination
       />
     </>
