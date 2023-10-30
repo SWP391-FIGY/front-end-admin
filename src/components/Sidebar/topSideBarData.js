@@ -85,7 +85,7 @@ export const topSideBarData = [
     items: [
       {
         title: "Purchase Request",
-        href: "#",
+        href: "/purchase-request/index",
         icon: HiShoppingCart,
         allowRole: [],
       },
