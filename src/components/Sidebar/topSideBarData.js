@@ -91,7 +91,7 @@ export const topSideBarData = [
       },
       {
         title: "Purchase Order",
-        href: "#",
+        href: "/purchase-order/index",
         icon: HiOutlineClipboardList,
         allowRole: [],
       },
