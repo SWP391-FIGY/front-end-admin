@@ -14,19 +14,21 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const BirdCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
-
+ 
+  console.log(moment(new Date()).format('DD/MM/YYYY'));
   const formik = useFormik({
     initialValues: {
       name: "",
       speciesId: 1,
       cageId: 1,
-      birthdate: "",
+      birthdate: moment(new Date()).format('DD/MM/YYYY'),
       gender: "Male",
       status: "Status 1",
     },
@@ -167,7 +169,7 @@ const BirdCreatePage = () => {
             <Datepicker
               id="birthDate"
               language="vi-VN"
-              value={formik.values.birthdate}
+              value={moment(formik.values.birthdate).format('DD/MM/YYYY')}
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
                 formik.setFieldValue("birthdate", date);
