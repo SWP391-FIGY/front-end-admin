@@ -9,19 +9,54 @@ import {
   signOut,
   linkWithRedirect,
 } from "firebase/auth";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import GoogleButton from "react-google-button";
+import Link from "next/link";
 
-const { Button } = require("flowbite-react");
+const { Button, Label, TextInput } = require("flowbite-react");
 
 const auth = getAuth(firebase_app);
 const googleProvider = new GoogleAuthProvider();
 
 const LoginPage = () => {
   const router = useRouter();
-  const handleLogin = async () => {
+  const [spinner, setSpinner] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().required("Required"),
+      password: Yup.string().required("Required"),
+    }),
+    onSubmit: (values) => {
+      setSpinner(true);
+      axios
+        .post(`${API}/auth/local`, values)
+        .then((response) => {
+          // Navigation to homepage
+          setUser(response.data.user);
+          setToken(response.data.jwt);
+
+          router.push("/");
+          // Handle success.
+          setSpinner(false);
+        })
+        .catch((error) => {
+          // Handle error.
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
+        });
+    },
+  });
+
+  const handleGoogleLogin = async () => {
     signInWithPopup(auth, googleProvider).then((result) => {
       var credential = GoogleAuthProvider.credentialFromResult(result);
 
@@ -57,13 +92,13 @@ const LoginPage = () => {
 
   const handleLoginPassword = async () => {
     signInWithEmailAndPassword(auth, "datlt.mdc@gmail.com", "somenewPassword")
-      .then( async (userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
         console.log(user);
         console.log(auth);
 
-        const currentUser = auth.currentUser
+        const currentUser = auth.currentUser;
         //const credential = await linkWithRedirect(currentUser, googleProvider);
         // ...
       })
@@ -76,19 +111,88 @@ const LoginPage = () => {
   };
 
   const handleLogout = async () => {
-    signOut(auth)
+    signOut(auth);
     console.log(auth);
-  }
+  };
 
   return (
     <div className="h-[100vh] px-[1rem] md:px-[2rem] lg:px-[3rem] xl:px-[10rem]">
       <div className="flex w-full gap-4 justify-center items-center mx-auto h-[100vh]">
-        <Button onClick={handleCreateAccount} >Signup with email password</Button>
-        <Button onClick={handleLoginPassword} >Login with email password</Button>
-        <div className="w-6/12 justify-center items-center flex flex-col gap-2">
-          <GoogleButton onClick={handleLogin} />
-        </div>
-        <Button onClick={handleLogout} >Logout</Button>
+        <form
+          onSubmit={formik.handleSubmit}
+          className="w-6/12 px-[100px] flex flex-col gap-2"
+        >
+          <h3 className="text-3xl font-bold whitespace-nowrap">
+            Welcome to <br/><span className="text-[#444444]">Bird Farm Meal System</span>
+          </h3>
+
+          <Label
+            htmlFor="email"
+            value="Email"
+            className="text-sm font-normal"
+          />
+          <TextInput
+            id="email"
+            name="identifier"
+            type="email"
+            placeholder="Enter your email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="text-xs text-red-600 dark:text-red-400">
+              {formik.errors.email}
+            </div>
+          ) : null}
+
+          <Label
+            htmlFor="password"
+            value="Password"
+            className="text-sm font-normal"
+          />
+          <TextInput
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div className="text-xs text-red-600 dark:text-red-400">
+              {formik.errors.password}
+            </div>
+          ) : null}
+
+          <div className="flex flex-col gap-2 items-end">
+            <Link
+              href="/auth/resetPassword"
+              className="text-gray-500 italic text-sm"
+            >
+              Fotgot password?
+            </Link>
+            <Link href="/auth/register" className="italic text-sm">
+              or Register?
+            </Link>
+          </div>
+
+          <Button type="submit" color="dark" size="sm">
+            {spinner ? (
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
+                <p>Loading...</p>
+              </div>
+            ) : (
+              <>Login</>
+            )}
+          </Button>
+          <div className="w-6/12 justify-center items-center flex flex-col mx-auto gap-2">
+            <GoogleButton onClick={handleGoogleLogin} />
+          </div>
+        </form>
+
         <div className="w-6/12 relative">
           <Image
             src="https://thuthuatnhanh.com/wp-content/uploads/2021/11/Hinh-anh-chim-chao-mao-sac-net-va-dep-nhat.jpg?fbclid=IwAR3W60eSDugGeS5fBfTpfHfX79KkZBLaP-rdic2sUHk8Vu2C6REkxDabOMU"
