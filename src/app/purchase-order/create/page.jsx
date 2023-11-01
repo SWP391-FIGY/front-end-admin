@@ -96,7 +96,7 @@ const PurchaseOrderCreatePage = () => {
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]"
+          className="flex flex-col gap-4 w-full"
         >
           
           

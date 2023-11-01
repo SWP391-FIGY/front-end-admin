@@ -124,32 +124,39 @@ export const birdInfo = [
 
 export const birdColumns = [
   {
-    name: "Name",
-    selector: (row) => row.name,
+    name: "Id",
+    selector: (row) => row.ID,
     sortable: true,
   },
   {
     name: "Species",
-    selector: (row) => row.speciesId,
+    selector: (row) => row.Species.Name,
     sortable: true,
   },
   {
     name: "Cage",
-    selector: (row) => row.cageId,
+    selector: (row) => row.CageId,
     sortable: true,
   },
   {
     name: "Birth Date",
-    selector: (row) => row.birthDate,
+    selector: (row) => row.DoB,
   },
   {
     name: "Gender",
-    selector: (row) => row.gender,
+    selector: (row) => row.Gender,
+  },
+  {
+    name: "Image",
+    cell: (row) => (
+      // <img src={row.BirdImageUrl} />
+      <img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
+    ),
   },
 
   {
     name: "Status",
-    selector: (row) => row.status,
+    selector: (row) => row.BirdStatus,
     sortable: true,
   },
   {

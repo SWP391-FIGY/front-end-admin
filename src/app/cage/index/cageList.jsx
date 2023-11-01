@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { cageInfo } from "./cageInfo";
-import { Button, Pagination, Table } from "flowbite-react";
+import { Button, Pagination, Spinner, Table } from "flowbite-react";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
 import Link from "next/link";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
 
 const CageList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,12 +12,24 @@ const CageList = () => {
   const totalPages = parseInt(cageInfo.length / itemsPerPage) + 1;
   const onPageChange = (page) => setCurrentPage(page);
 
-  if (!cageInfo) return <>No Data</>;
+  const { response, loading, error } =  useAxios({
+    method: 'get',
+        url: `${API}/cage`        
+  })
+
+  console.log('Fetched cage data', response);
+  if (error) return <>No Data</>;
+  if (loading && !error)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner aria-label="Spinner button example" />
+      </div>
+    );
   return (
     <>
       <Table className="table-auto">
         <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
+          <Table.HeadCell>Id</Table.HeadCell>
           <Table.HeadCell>Size</Table.HeadCell>
           <Table.HeadCell>Color</Table.HeadCell>
           <Table.HeadCell>Area</Table.HeadCell>
@@ -24,13 +38,13 @@ const CageList = () => {
           <Table.HeadCell>Status</Table.HeadCell>
         </Table.Head>
         <Table.Body>
-          {cageInfo
+          {response
             .slice(itemsPerPage * (currentPage - 1), itemsPerPage * currentPage)
             .map((item, index) => {
               return (
                 <Table.Row key={index}>
                   <Table.Cell>
-                    <span>{item.name}</span>
+                    <span>{item.id}</span>
                   </Table.Cell>
                   <Table.Cell>
                     <span>{item.size}</span>
@@ -51,12 +65,12 @@ const CageList = () => {
                     <span>{item.cageStatus}</span>
                   </Table.Cell>
                   <Table.Cell className="flex flex-row gap-4">
-                    <Link href={`/cage/edit/${index}`}>
+                    <Link href={`/cage/edit/${item.id}`}>
                       <Button>
                         <FiEdit />
                       </Button>
                     </Link>
-                    <Link href={`/cage/details/${index}`}>
+                    <Link href={`/cage/details/${item.id}`}>
                       <Button>
                         <FiEye />
                       </Button>
