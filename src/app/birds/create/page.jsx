@@ -47,18 +47,16 @@ const BirdCreatePage = () => {
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
-      console.log(payloadData);
-      // axios
-      //   .post(`${API}/feedbacks`, payloadData)
-      //   .then(response => {
-      //     setSpinner(false)
-      //     formik.resetForm()
-      //   })
-      //   .catch(error => {
-      //     setSpinner(false)
-      //     console.log('An error occurred:', error.response)
-      //   })
+      axios
+        .post(`${API}/bird`, payloadData)
+        .then(response => {
+          setSpinner(false)
+          formik.resetForm()
+        })
+        .catch(error => {
+          setSpinner(false)
+          console.log('An error occurred:', error.response)
+        })
 
       router.push("create/meal-info");
     },

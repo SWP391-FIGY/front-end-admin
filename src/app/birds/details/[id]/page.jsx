@@ -10,22 +10,15 @@ const { default: PageLayout } = require("@/layout/pageLayout");
 
 const BirdDetailPage = () => {
   const params = useParams();
-  const index = parseInt(params.id, 10);
+  const birdId = parseInt(params.id, 10);
 
-  //  useEffect(() => {
-  //    axios
-  //      .get(`${API}/birds/${uid}`)
-  //      .then(response => {
-  //        setBirdData(response.data);
-  //        setLoading(false);
-  //      })
-  //      .catch(error => {
-  //        setLoading(false);
-  //        console.log('An error occurred:', error.response);
-  //      });
-  //  }, [uid]);
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/bird/${index}`,
+  });
 
-  if (isNaN(index) || index < 0 || index >= birdInfo.length) {
+
+  if (isNaN(birdId) || birdId < 0 || birdId >= birdInfo.length) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -35,7 +28,7 @@ const BirdDetailPage = () => {
     );
   }
 
-  const birdData = birdInfo[index];
+  const birdData = birdInfo[birdId];
   const birthDateParts = birdData.birthDate.split("/");
   const day = parseInt(birthDateParts[0], 10);
   const month = parseInt(birthDateParts[1], 10) - 1; // Subtract 1 because months are zero-based

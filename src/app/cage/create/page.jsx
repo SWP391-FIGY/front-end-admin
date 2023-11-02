@@ -13,16 +13,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { useRouter, useSearchParams } from "next/navigation";
+import { message } from "antd";
+import axios from "axios";
+import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const CageCreatePage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  console.log('passed param');
-  for (const name of searchParams.keys()) {
-    console.log(name);
-  }
+  const [messageApi, contextHolder] = message.useMessage();
+
+  
   const [spinner, setSpinner] = useState(false);
 
   const formik = useFormik({
@@ -32,7 +34,7 @@ const CageCreatePage = () => {
       color: "Black",
       area: "300",
       type: "Type 1",
-      cageStatus: "In use",
+      cageStatus: 1,
       capacity: 5,
     },
     validationSchema: Yup.object({
@@ -49,23 +51,25 @@ const CageCreatePage = () => {
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
+      console.log(payloadData);
       axios
         .post(`${API}/cage`, payloadData)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          message.success("Add new cage success");
+          // messageApi.open({
+          //   type: 'success',
+          //   content: 'Add new cage success',
+          // });
         })
         .catch((error) => {
+          message.error("An error occurred");
           setSpinner(false);
           console.log("An error occurred:", error.response);
         });
     },
   });
-
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
 
   return (
     <PageLayout>
@@ -175,8 +179,8 @@ const CageCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.cageStatus}
             >
-              <option>In use</option>
-              <option>Maintainance</option>
+              <option value={1}>In use</option>
+              <option value={2}>Maintainance</option>
             </Select>
             {formik.touched.cageStatus && formik.errors.cageStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">
