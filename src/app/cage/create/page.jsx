@@ -22,7 +22,6 @@ const { default: PageLayout } = require("@/layout/pageLayout");
 const CageCreatePage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [messageApi, contextHolder] = message.useMessage();
 
   
   const [spinner, setSpinner] = useState(false);
@@ -51,17 +50,17 @@ const CageCreatePage = () => {
       const payloadData = {
         data: values,
       };
-      console.log(payloadData);
+      console.log(payloadData.data);
       axios
-        .post(`${API}/cage`, payloadData)
+        .post(`${API}/cage`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          
+          router.push("/cage/index")
+        })
+        .then((response) => {
           message.success("Add new cage success");
-          // messageApi.open({
-          //   type: 'success',
-          //   content: 'Add new cage success',
-          // });
         })
         .catch((error) => {
           message.error("An error occurred");
