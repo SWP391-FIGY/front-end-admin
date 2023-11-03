@@ -13,8 +13,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
 import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -25,40 +28,47 @@ const BirdCreatePage = () => {
   console.log(moment(new Date()).format('DD/MM/YYYY'));
   const formik = useFormik({
     initialValues: {
-      name: "",
-      speciesId: 1,
-      cageId: 1,
-      birthdate: moment(new Date()).format('DD/MM/YYYY'),
-      gender: "Male",
-      status: "Status 1",
+      Notation: "",
+      SpeciesId: 1,
+      CageId: 1,
+      DoB: moment(new Date()).format('DD/MM/YYYY'),
+      LastModifyDate: moment(new Date()).format('DD/MM/YYYY'),
+      Gender: "Male",
+      Status: "Status 1",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Required"),
-      speciesId: Yup.number().required("Required"),
-      cageId: Yup.number().required("Required"),
-      birthdate: Yup.date()
+      Notation: Yup.string().required("Required"),
+      SpeciesId: Yup.number().required("Required"),
+      CageId: Yup.number().required("Required"),
+      DoB: Yup.date()
         .max(new Date().toLocaleDateString(), "Birth date must before today")
         .required("Required"),
-      gender: Yup.string().required("Required"),
-      status: Yup.string().required("Required"),
+      LastModifyDate: Yup.date().required("Required"),
+      Gender: Yup.string().required("Required"),
+      Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
+      console.log(payloadData.data);
       axios
-        .post(`${API}/bird`, payloadData)
-        .then(response => {
-          setSpinner(false)
-          formik.resetForm()
+        .post(`${API}/bird`, payloadData.data)
+        .then((response) => {
+          setSpinner(false);
+          formik.resetForm();
+          
+          router.push("/birds/index")
         })
-        .catch(error => {
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+        .then((response) => {
+          message.success("Add new bird success");
         })
-
-      router.push("create/meal-info");
+        .catch((error) => {
+          message.error("An error occurred");
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
+        });
     },
   });
 
@@ -78,32 +88,114 @@ const BirdCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
-          {/* //* Bird name */}
+
+          {/* // * Bird birthDate */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="name" value="Bird name" />
-            <TextInput
-              id="name"
-              type="text"
-              onChange={formik.handleChange}
+            <Label htmlFor="DoB" value="Birthdate" />
+            <Datepicker
+              id="DoB"
+              language="vi-VN"
+              value={moment(formik.values.birthdate).format('DD/MM/YYYY')}
+              onSelectedDateChanged={(date) => {
+                console.log(new Date(date));
+                formik.setFieldValue("DoB", date);
+                console.log("value", formik.values);
+                console.log("errors", formik.errors);
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
+              onSelect={(e) => {
+                console.log(e);
+              }}
             />
-            {formik.touched.name && formik.errors.name ? (
+            {formik.touched.DoB && formik.errors.DoB ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.name}
+                {formik.errors.DoB}
               </div>
             ) : null}
           </div>
+          
+          {/* // * Bird gender */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="Gender" value="Bird gender" />
+            <Select
+              id="Gender"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.Gender}
+            >
+              <option>Male</option>
+              <option>Female</option>
+            </Select>
+            {formik.touched.Gender && formik.errors.Gender ? (
+              <div className="text-xs text-red-600 dark:text-red-400">
+                {formik.errors.Gender}
+              </div>
+            ) : null}
+          </div>
+
+          {/* //* Bird Notation */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="Notation" value="Notation" />
+            <TextInput
+              id="Notation"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.Notation}
+            />
+            {formik.touched.Notation && formik.errors.Notation ? (
+              <div className="text-xs text-red-600 dark:text-red-400">
+                {formik.errors.Notation}
+              </div>
+            ) : null}
+          </div>
+
+          {/* //* Bird image */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="BirdImageUrl" value="Bird Image URL" />
+            <TextInput
+              id="BirdImageUrl"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.BirdImageUrl}
+            />
+            {formik.touched.BirdImageUrl && formik.errors.BirdImageUrl ? (
+              <div className="text-xs text-red-600 dark:text-red-400">
+                {formik.errors.BirdImageUrl}
+              </div>
+            ) : null}
+          </div>
+
+          {/* // * Bird status */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="Status" value="Bird status" />
+            <Select
+              id="Status"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.Status}
+            >
+              <option>Status 1</option>
+              <option>Status 2</option>
+            </Select>
+            {formik.touched.Status && formik.errors.Status ? (
+              <div className="text-xs text-red-600 dark:text-red-400">
+                {formik.errors.Status}
+              </div>
+            ) : null}
+          </div>
+
           {/* //* Bird species */}
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="speciesId" value="Bird species" />
+            <Label htmlFor="SpeciesId" value="Bird species" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="speciesId"
+                  id="SpeciesId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.speciesId}
+                  value={formik.values.SpeciesId}
                 >
                   <option value={1}>Species 1</option>
                   <option value={2}>Species 2</option>
@@ -155,72 +247,13 @@ const BirdCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.cageId && formik.errors.cageId ? (
+            {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.cageId}
+                {formik.errors.CageId}
               </div>
             ) : null}
           </div>
-          {/* // * Bird birthDate */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="birthDate" value="Birth Date" />
-            <Datepicker
-              id="birthDate"
-              language="vi-VN"
-              value={moment(formik.values.birthdate).format('DD/MM/YYYY')}
-              onSelectedDateChanged={(date) => {
-                console.log(new Date(date));
-                formik.setFieldValue("birthdate", date);
-                console.log("value", formik.values);
-                console.log("errors", formik.errors);
-              }}
-              onBlur={formik.handleBlur}
-              onSelect={(e) => {
-                console.log(e);
-              }}
-            />
-            {formik.touched.birthdate && formik.errors.birthdate ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.birthdate}
-              </div>
-            ) : null}
-          </div>
-          {/* // * Bird gender */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="gender" value="Bird gender" />
-            <Select
-              id="gender"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.gender}
-            >
-              <option>Male</option>
-              <option>Female</option>
-            </Select>
-            {formik.touched.gender && formik.errors.gender ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.gender}
-              </div>
-            ) : null}
-          </div>
-          {/* // * Bird status */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="status" value="Bird status" />
-            <Select
-              id="status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.status}
-            >
-              <option>Status 1</option>
-              <option>Status 2</option>
-            </Select>
-            {formik.touched.status && formik.errors.status ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.status}
-              </div>
-            ) : null}
-          </div>
+          
           <Button type="submit" className="w-[500px] ">
             {spinner ? (
               <div className="flex justify-center items-center gap-4">

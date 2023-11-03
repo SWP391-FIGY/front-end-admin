@@ -1,12 +1,23 @@
-'use client'
-import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-react"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { useParams } from "next/navigation"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
-import Link from "next/link"
-import { HiOutlineArrowSmallLeft } from "react-icons/hi2"
+"use client";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Datepicker,
+  Spinner,
+} from "flowbite-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -36,23 +47,28 @@ const UserEditPage = () => {
       role: Yup.string().required('Required'),
       status: Yup.string().required('Required'),
     }),
-    onSubmit: values => {
-      setSpinner(true)
+    onSubmit: (values) => {
+      setSpinner(true);
       const payloadData = {
         data: values,
-      }
-      console.log("Submitted");
-      console.log(values);
+      };
+      console.log(payloadData.data);
       axios
-        .post(`${API}/feedbacks`, payloadData)
-        .then(response => {
-          setSpinner(false)
-          formik.resetForm()
+        .post(`${API}/user`, payloadData.data)
+        .then((response) => {
+          setSpinner(false);
+          formik.resetForm();
+          
+          router.push("/users/index")
         })
-        .catch(error => {
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+        .then((response) => {
+          message.success("Add new user success");
         })
+        .catch((error) => {
+          message.error("An error occurred");
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
+        });
     },
   })
 
