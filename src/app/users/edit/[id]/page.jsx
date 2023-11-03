@@ -21,31 +21,32 @@ import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
-const UserEditPage = () => {
-  const [spinner, setSpinner] = useState(false)
-  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
-  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
+const UserCreatePage = () => {
+  const router = useRouter();
   const params = useParams();
   const uid = params.id;
 
   console.log('editing id',uid);
-
+  
+  const [spinner, setSpinner] = useState(false)
+  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
+  const EmailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
-      password: '',
-      phoneNumber: '',
-      role: 'Bird Carer',
-      status: 'Status 1',
+      Name: '',
+      Email: '',
+      Password: '',
+      PhoneNumber: '',
+      Role: 'Bird Carer',
+      Status: 'Status 1',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Required'),
-      email: Yup.string().matches(emailRegExp, 'Email is not valid').required('Required'),
-      password: Yup.string().required('Required'),
-      phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
-      role: Yup.string().required('Required'),
-      status: Yup.string().required('Required'),
+      Name: Yup.string().required('Required'),
+      Email: Yup.string().matches(EmailRegExp, 'Email is not valid').required('Required'),
+      Password: Yup.string().required('Required'),
+      PhoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
+      Role: Yup.string().required('Required'),
+      Status: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -77,7 +78,7 @@ const UserEditPage = () => {
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
       <div className='flex flex-col justify-between gap-4'>
           <Link href={'/users/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Edit user</h2>
+          <h2 className='text-3xl font-bold'>Add new user</h2>
 
         </div>
         <form
@@ -85,7 +86,7 @@ const UserEditPage = () => {
           className="flex flex-col gap-4 w-[600px]">
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="name"
+              htmlFor="Name"
               value="User name"
             />
             <TextInput
@@ -94,112 +95,112 @@ const UserEditPage = () => {
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
+              value={formik.values.Name}
             />
-            {formik.touched.name && formik.errors.name ? (
+            {formik.touched.Name && formik.errors.Name ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.name}
+                {formik.errors.Name}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="email"
+              htmlFor="Email"
               value="Email"
             />
             <TextInput
-              id="email"
+              id="Email"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.email}
+              value={formik.values.Email}
             />
-            {formik.touched.email && formik.errors.email ? (
+            {formik.touched.Email && formik.errors.Email ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.email}
+                {formik.errors.Email}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="password"
+              htmlFor="Password"
               value="Password"
             />
             <TextInput
-              id="password"
+              id="Password"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.password}
+              value={formik.values.Password}
             />
-            {formik.touched.password && formik.errors.password ? (
+            {formik.touched.Password && formik.errors.Password ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.password}
+                {formik.errors.Password}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="phoneNumber"
+              htmlFor="PhoneNumber"
               value="Phone number"
             />
             <TextInput
-              id="phoneNumber"
+              id="PhoneNumber"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.phoneNumber}
+              value={formik.values.PhoneNumber}
             />
-            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+            {formik.touched.PhoneNumber && formik.errors.PhoneNumber ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.phoneNumber}
+                {formik.errors.PhoneNumber}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="role"
+              htmlFor="Role"
               value="User Role"
             />
             <Select
-              id="role"
+              id="Role"
 
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.role}
+              value={formik.values.Role}
             >
-              <option>Bird Carer</option>
+              <option>Staff</option>
               <option>Admin</option>
 
             </Select>
-            {formik.touched.role && formik.errors.role ? (
+            {formik.touched.Role && formik.errors.Role ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.role}
+                {formik.errors.Role}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="status"
-              value="User status"
+              htmlFor="Status"
+              value="User Status"
             />
             <Select
-              id="status"
+              id="Status"
 
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.status}
+              value={formik.values.Status}
             >
               <option>Status 1</option>
               <option>Status 2</option>
 
             </Select>
-            {formik.touched.status && formik.errors.status ? (
+            {formik.touched.Status && formik.errors.Status ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.status}
+                {formik.errors.Status}
               </div>
             ) : null}
           </div>
@@ -220,4 +221,4 @@ const UserEditPage = () => {
   )
 }
 
-export default UserEditPage
+export default UserCreatePage
