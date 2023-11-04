@@ -33,8 +33,8 @@ const UserCreatePage = () => {
       Password: '',
       phoneNumber: '',
       firebaseID: '',
-      role: 'Bird Carer',
-      status: 'status 1',
+      role: 1,
+      status: 1,
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
@@ -42,8 +42,8 @@ const UserCreatePage = () => {
       Password: Yup.string().required('Required'),
       phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
       firebaseID: Yup.string().required('Required'),
-      role: Yup.string().required('Required'),
-      status: Yup.string().required('Required'),
+      role: Yup.number().required('Required'),
+      status: Yup.number().required('Required'),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -173,50 +173,6 @@ const UserCreatePage = () => {
             {formik.touched.firebaseID && formik.errors.firebaseID ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
                 {formik.errors.firebaseID}
-              </div>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="role"
-              value="User role"
-            />
-            <Select
-              id="role"
-
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.role}
-            >
-              <option>Staff</option>
-              <option>Admin</option>
-
-            </Select>
-            {formik.touched.role && formik.errors.role ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.role}
-              </div>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="status"
-              value="User status"
-            />
-            <Select
-              id="status"
-
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.status}
-            >
-              <option>status 1</option>
-              <option>status 2</option>
-
-            </Select>
-            {formik.touched.status && formik.errors.status ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.status}
               </div>
             ) : null}
           </div>
