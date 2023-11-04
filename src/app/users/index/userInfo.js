@@ -19,11 +19,6 @@ export const userColumns = [
     sortable: true,
   },
   {
-    name: "Password",
-    selector: (row) => row.password,
-    sortable: true,
-  },
-  {
     name: "Phone Number",
     selector: (row) => row.phoneNumber,
 	sortable: true,

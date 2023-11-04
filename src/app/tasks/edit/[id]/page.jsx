@@ -19,51 +19,71 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const TaskEditPage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false)
   const params = useParams();
-  const uid = params.id;
+  const taskId = parseInt(params.id, 10);
 
-  console.log('editing id',uid);
+  //Fetch old task data
+  const {
+    response: taskResponse,
+    loading: taskLoading,
+    error: taskError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/task/?filter=ID%20eq%20${taskId}`,
+  });
+ 
+  //Fetch old data to form
+  useEffect(() => {
+    if (taskResponse) {
+      console.log(taskResponse);
+      formik.setValues({
+        ...taskResponse[0],
+      });
+    }
+  }, [taskResponse]);
 
   const formik = useFormik({
     initialValues: {
+      Id: taskId,
       BirdId: 1,
       CageId: 1,
       StaffId: 1,
       TaskName: "",
-      DateTime: "",
+      DateTime: moment(new Date()),
       Description: "",
-      Status: "Status 1",
+      Status: "Pending",
     },
     validationSchema: Yup.object({
       BirdId: Yup.number().required("Required"),
       CageId: Yup.number().required("Required"),
       StaffId: Yup.number().required("Required"),
       TaskName: Yup.string().required("Required"),
-      DateTime: Yup.date().min(new Date().toLocaleDateString(), "Birth date must after today").required("Required"),
+      DateTime: Yup.date()
+        .min(new Date(), "Date must be today or later")
+        .required("Required"),
       Description: Yup.string().required("Required"),
-      Status: Yup.number().required("Required")
+      Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log(payloadData.data);
+      console.log('submit data',payloadData.data);
       axios
-        .post(`${API}/task`, payloadData.data)
+        .put(`${API}/task/${taskId}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/tasks/index")
-        })
-        .then((response) => {
-          message.success("Add new task success");
+          message.success("Update task success");
+          router.push("/tasks/index");
         })
         .catch((error) => {
           message.error("An error occurred");
@@ -73,15 +93,12 @@ const TaskEditPage = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
   return (
     <PageLayout>
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
       <div className='flex flex-col justify-between gap-4'>
           <Link href={'/tasks/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new task</h2>
+          <h2 className='text-3xl font-bold'>Edit task</h2>
 
         </div>
         <form

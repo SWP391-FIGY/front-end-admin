@@ -54,6 +54,7 @@ const UserEditPage = () => {
   const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const formik = useFormik({
     initialValues: {
+      Id: userId,
       name: '',
       email: '',
       Password: '',
@@ -98,7 +99,7 @@ const UserEditPage = () => {
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
       <div className='flex flex-col justify-between gap-4'>
           <Link href={'/users/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new user</h2>
+          <h2 className='text-3xl font-bold'>Edit user</h2>
 
         </div>
         <form

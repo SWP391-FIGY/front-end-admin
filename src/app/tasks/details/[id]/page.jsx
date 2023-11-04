@@ -53,7 +53,7 @@ const TaskDetailPage = () => {
           >
             <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
           </Link>
-          <h2 className="text-3xl font-bold">User Details</h2>
+          <h2 className="text-3xl font-bold">Task Details</h2>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 gap-4">
