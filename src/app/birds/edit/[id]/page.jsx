@@ -19,6 +19,7 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -26,48 +27,81 @@ const BirdEditPage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
   const params = useParams();
-  const uid = params.id;
+  const birdId = parseInt(params.id, 10);
 
-  console.log('editing id',uid);
- 
-  console.log(moment(new Date()).format('DD/MM/YYYY'));
+  // Fetch old bird data
+  const {
+    response: birdResponse,
+    loading: birdLoading,
+    error: birdError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
+  });
+
+  // Get species list
+  const {
+    response: speciesResponse,
+    loading: speciesLoading,
+    error: speciesError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/species/`,
+  });
+  // Get cage list
+  const {
+    response: cageResponse,
+    loading: cageLoading,
+    error: cageError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/cage/`,
+  });
+
+  
+  // Fetch old data to form
+  useEffect(() => {
+    if (birdResponse) {
+      console.log(birdResponse);
+      formik.setValues({
+        ...birdResponse[0],
+      });
+    }
+  }, [birdResponse]);
+
+
   const formik = useFormik({
     initialValues: {
+      Id: birdId,
       Description: "",
       SpeciesId: 1,
-      CageId: 1,
-      DoB: moment(new Date()).format('DD/MM/YYYY'),
-      LastModifyDate: moment(new Date()).format('DD/MM/YYYY'),
+      CageID: 1,
+      DoB: moment(new Date()),
+      LastModifyDate: moment(new Date()),
       Gender: "Male",
-      Status: "Status 1",
+      Status: "1",
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
       SpeciesId: Yup.number().required("Required"),
-      CageId: Yup.number().required("Required"),
+      CageID: Yup.number().required("Required"),
       DoB: Yup.date()
         .max(new Date().toLocaleDateString(), "Birth date must before today")
         .required("Required"),
-      LastModifyDate: Yup.date().required("Required"),
-      Gender: Yup.string().required("Required"),
-      Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log(payloadData.data);
+      console.log('submit data',payloadData.data);
       axios
-        .put(`${API}/bird`, payloadData.data)
+        .put(`${API}/bird/${birdId}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/birds/index")
-        })
-        .then((response) => {
-          message.success("Add new bird success");
+          message.success("Update bird success");
+          router.push("/birds/index");
         })
         .catch((error) => {
           message.error("An error occurred");
@@ -77,9 +111,9 @@ const BirdEditPage = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
+  // useEffect(() =>{
+  //   console.log(formik);
+  // },[formik])
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -87,20 +121,19 @@ const BirdEditPage = () => {
           <Link href={"/birds/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Add new Birds</h2>
+          <h2 className="text-3xl font-bold">Edit Bird</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
-
           {/* // * Bird birthDate */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="DoB" value="Birthdate" />
             <Datepicker
               id="DoB"
               language="vi-VN"
-              value={moment(formik.values.birthdate).format('DD/MM/YYYY')}
+              value={moment(formik.values.DoB).format("DD/MM/YYYY")}
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
                 formik.setFieldValue("DoB", date);
@@ -108,9 +141,6 @@ const BirdEditPage = () => {
                 console.log("errors", formik.errors);
               }}
               onBlur={formik.handleBlur}
-              onSelect={(e) => {
-                console.log(e);
-              }}
             />
             {formik.touched.DoB && formik.errors.DoB ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -118,7 +148,7 @@ const BirdEditPage = () => {
               </div>
             ) : null}
           </div>
-          
+
           {/* // * Bird gender */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="Gender" value="Bird gender" />
@@ -128,8 +158,8 @@ const BirdEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.Gender}
             >
-              <option>Male</option>
-              <option>Female</option>
+              <option>Trống</option>
+              <option>Cái</option>
             </Select>
             {formik.touched.Gender && formik.errors.Gender ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -181,8 +211,7 @@ const BirdEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.Status}
             >
-              <option>Status 1</option>
-              <option>Status 2</option>
+              <option value={1}>Status 1</option>
             </Select>
             {formik.touched.Status && formik.errors.Status ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -202,9 +231,17 @@ const BirdEditPage = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.SpeciesId}
                 >
-                  <option value={1}>Species 1</option>
-                  <option value={2}>Species 2</option>
-                  <option value={3}>Species 3</option>
+                  {speciesResponse && speciesResponse.length > 0 ? (
+                    speciesResponse.map((species, index) => {
+                      return (
+                        <option key={index} value={species.id}>
+                          {species.name}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
               <Link href={"/species/create?bird-add=true"}>
@@ -219,29 +256,42 @@ const BirdEditPage = () => {
               </Link>
             </div>
 
-            {formik.touched.speciesId && formik.errors.speciesId ? (
+            {formik.touched.SpeciesId && formik.errors.SpeciesId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.speciesId}
+                {formik.errors.SpeciesId}
               </div>
             ) : null}
           </div>
           {/* // * Bird cage */}
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="cageId" value="Bird cage" />
+            <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="cageId"
+                  id="CageId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.cageId}
+                  value={formik.values.CageId}
                 >
-                  <option value={1}>Cage 1</option>
-                  <option value={2}>Cage 2</option>
-                  <option value={3}>Cage 3</option>
+                  {cageResponse && cageResponse.length > 0 ? (
+                    cageResponse.map((cage, index) => {
+                      return (
+                        <option key={index} value={cage.id}>
+                          Cage {cage.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
+              <Link
+                href={{
+                  pathname: "/cage/create",
+                  query: { ...formik.values, "bird-add": true },
+                }}
+              >
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">
@@ -252,13 +302,13 @@ const BirdEditPage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.CageId && formik.errors.CageId ? (
+            {formik.touched.CageID && formik.errors.CageID ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.CageId}
+                {formik.errors.CageID}
               </div>
             ) : null}
           </div>
-          
+
           <Button type="submit" className="w-[500px] ">
             {spinner ? (
               <div className="flex justify-center items-center gap-4">
