@@ -4,40 +4,40 @@ import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
 export const taskColumns = [
   {
-    name: "Id",
-    selector: (row) => row.ID,
+    name: "ID",
+    selector: (row) => row.id,
     sortable: true,
   },
   {
-    name: "Bird",
-    selector: (row) => row.BirdID,
+    name: "Bird ID",
+    selector: (row) => row.birdID,
     sortable: true,
   },
   {
     name: "Cage",
-    selector: (row) => row.CageID,
+    selector: (row) => row.cageID,    
     sortable: true,
   },
   {
     name: "Staff",
-    selector: (row) => row.StaffID,
+    selector: (row) => row.staffID,
   },
   {
     name: "Task Name",
-    selector: (row) => row.TaskName,
+    selector: (row) => row.taskName,
   },
   {
     name: "Date & Time",
-    selector: (row) => row.DateTime,
+    selector: (row) => row.dateTime,
     sortable: true,
   },
   {
     name: "Description",
-    selector: (row) => row.Description,
+    selector: (row) => row.description,
   },
   {
     name: "Status",
-    selector: (row) => row.Status,
+    selector: (row) => row.status,
   },
   {
     name: "Action",

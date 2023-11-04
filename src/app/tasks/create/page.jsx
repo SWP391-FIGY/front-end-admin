@@ -30,18 +30,18 @@ const TaskCreatePage = () => {
       CageId: 1,
       StaffId: 1,
       TaskName: "",
-      DateTime: "",
+      DateTime: moment(new Date()).format('DD/MM/YYYY'),
       Description: "",
-      Status: "Status 1",
+      Status: "Pending",
     },
     validationSchema: Yup.object({
       BirdId: Yup.number().required("Required"),
       CageId: Yup.number().required("Required"),
       StaffId: Yup.number().required("Required"),
       TaskName: Yup.string().required("Required"),
-      DateTime: Yup.date().min(new Date().toLocaleDateString(), "Birth date must after today").required("Required"),
+      DateTime: Yup.date().min(new Date(), "Date must be today or later").required("Required"),
       Description: Yup.string().required("Required"),
-      Status: Yup.number().required("Required")
+      Status: Yup.string().required("Required")
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -208,24 +208,6 @@ const TaskCreatePage = () => {
             {formik.touched.Description && formik.errors.Description ? (
               <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.Description}
-              </div>
-            ) : null}
-          </div>
-          
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Status" value="Task Status" />
-            <Select
-              id="Status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.Status}
-            >
-              <option>Status 1</option>
-              <option>Status 2</option>
-            </Select>
-            {formik.touched.Status && formik.errors.Status ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Status}
               </div>
             ) : null}
           </div>
