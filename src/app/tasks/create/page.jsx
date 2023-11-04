@@ -90,6 +90,7 @@ const TaskCreatePage = () => {
             <Label htmlFor="BirdId" value="Bird" />
             <Select
               id="BirdId"
+              name="BirdId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.BirdId}
@@ -111,6 +112,7 @@ const TaskCreatePage = () => {
               <div className="w-[500px]">
                 <Select
                   id="CageId"
+                  name="CageId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.CageId}
@@ -147,6 +149,7 @@ const TaskCreatePage = () => {
             <Label htmlFor="StaffId" value="Staff" />
             <Select
               id="StaffId"
+              name="StaffId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.StaffId}

@@ -19,16 +19,36 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
-
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const FoodEditPage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false)
   const params = useParams();
   const uid = params.id;
+  const foodId = parseInt(params.id, 10);
  
-  console.log('editing id',uid);
+  // Fetch old food data
+  const {
+    response: foodResponse,
+    loading: foodLoading,
+    error: foodError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/food/?filter=ID%20eq%20${foodId}`,
+  });
+
+  // Fetch old data to form
+  useEffect(() => {
+    if (foodResponse) {
+      console.log(foodResponse);
+      formik.setValues({
+        ...foodResponse[0],
+      });
+    }
+  }, [foodResponse]);
 
   const formik = useFormik({
     initialValues: {
@@ -52,17 +72,14 @@ const FoodEditPage = () => {
       const payloadData = {
         data: values,
       };
-      console.log(payloadData.data);
+      console.log('submit data',payloadData.data);
       axios
-        .post(`${API}/food`, payloadData.data)
+        .put(`${API}/food/${foodId}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/foods/index")
-        })
-        .then((response) => {
-          message.success("Add new food success");
+          message.success("Update food success");
+          router.push("/foods/index");
         })
         .catch((error) => {
           message.error("An error occurred");
@@ -77,7 +94,7 @@ const FoodEditPage = () => {
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
       <div className='flex flex-col justify-between gap-4'>
           <Link href={'/foods/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new Inventory</h2>
+          <h2 className='text-3xl font-bold'>Edit Inventory</h2>
 
         </div>
         <form
