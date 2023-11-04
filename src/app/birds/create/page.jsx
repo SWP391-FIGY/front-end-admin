@@ -28,7 +28,7 @@ const BirdCreatePage = () => {
   console.log(moment(new Date()).format('DD/MM/YYYY'));
   const formik = useFormik({
     initialValues: {
-      Notation: "",
+      Description: "",
       SpeciesId: 1,
       CageId: 1,
       DoB: moment(new Date()).format('DD/MM/YYYY'),
@@ -37,7 +37,7 @@ const BirdCreatePage = () => {
       Status: "Status 1",
     },
     validationSchema: Yup.object({
-      Notation: Yup.string().required("Required"),
+      Description: Yup.string().required("Required"),
       SpeciesId: Yup.number().required("Required"),
       CageId: Yup.number().required("Required"),
       DoB: Yup.date()
@@ -133,19 +133,19 @@ const BirdCreatePage = () => {
             ) : null}
           </div>
 
-          {/* //* Bird Notation */}
+          {/* //* Bird Description */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Notation" value="Notation" />
+            <Label htmlFor="Description" value="Description" />
             <TextInput
-              id="Notation"
+              id="Description"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.Notation}
+              value={formik.values.Description}
             />
-            {formik.touched.Notation && formik.errors.Notation ? (
+            {formik.touched.Description && formik.errors.Description ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Notation}
+                {formik.errors.Description}
               </div>
             ) : null}
           </div>

@@ -19,14 +19,14 @@ export const birdColumns = [
     sortable: true,
   },
   {
-    name: "Notation",
-    selector: (row) => row.Notation,
+    name: "Description",
+    selector: (row) => row.Description,
   },
   {
     name: "Image",
     cell: (row) => (
-      // <img src={row.BirdImageUrl} />
-      <img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
+       <img src={row.BirdImageUrl} />
+      //<img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
     ),
   },
   {

@@ -4,32 +4,42 @@ import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
 export const userColumns = [
   {
-    name: "Id",
-    selector: (row) => row.ID,
+    name: "id",
+    selector: (row) => row.id,
     sortable: true,
   },
   {
     name: "Name",
-    selector: (row) => row.Name,
+    selector: (row) => row.name,
     sortable: true,
   },
   {
     name: "Email",
-    selector: (row) => row.Password,
+    selector: (row) => row.email,
+    sortable: true,
+  },
+  {
+    name: "Password",
+    selector: (row) => row.password,
     sortable: true,
   },
   {
     name: "Phone Number",
-    selector: (row) => row.PhoneNumber,
+    selector: (row) => row.phoneNumber,
+	sortable: true,
+  },
+  {
+    name: "Firebase id",
+    selector: (row) => row.firebaseID,
 	sortable: true,
   },
   {
     name: "Role",
-    selector: (row) => row.Role,
+    selector: (row) => row.role,
   },
   {
     name: "Status",
-    selector: (row) => row.Status,
+    selector: (row) => row.status,
     sortable: true,
   },
   {
