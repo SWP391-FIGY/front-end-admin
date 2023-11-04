@@ -41,7 +41,7 @@ const SpeciesEditPage = () => {
       console.log("Submitted");
       console.log(values);
       axios
-        .post(`${API}/feedbacks`, payloadData)
+        .post(`${API}/species`, payloadData.data)
         .then(response => {
           setSpinner(false)
           formik.resetForm()

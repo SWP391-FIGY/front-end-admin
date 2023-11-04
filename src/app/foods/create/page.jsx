@@ -22,6 +22,7 @@ import { API } from "@/constants";
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const FoodCreatePage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false)
 
   const formik = useFormik({
@@ -61,7 +62,7 @@ const FoodCreatePage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   })

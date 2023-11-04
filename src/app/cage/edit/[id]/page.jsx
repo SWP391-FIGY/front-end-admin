@@ -12,27 +12,30 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import { API } from "@/constants";
+import { message } from "antd";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const CageEditPage = () => {
   const [spinner, setSpinner] = useState(false)
+  const router = useRouter();
   const params = useParams();
   const uid = params.id;
 
   const formik = useFormik({
     initialValues: {
-      
+      id: parseInt(uid),
       size: "90 x 60 x 90",
       color: "Black",
       area: "300",
       type: "Type 1",
-      cageStatus: "In use",
+      cageStatus: 1,
       capacity: 5,
     },
     validationSchema: Yup.object({
-      
       size:Yup.string().required("Required"),
       color: Yup.string().required("Required"),
       area: Yup.string().required("Required"),
@@ -45,16 +48,20 @@ const CageEditPage = () => {
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
+      console.log(payloadData.data);
       axios
-        .post(`${API}/cage`, payloadData)
+        .put(`${API}/cage/${uid}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          router.push("/cage/index")
+        })
+        .then((response) => {
+          message.success("Update cage success");
         })
         .catch((error) => {
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -69,7 +76,7 @@ const CageEditPage = () => {
           <Link href={"/cage/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Add new Cage</h2>
+          <h2 className="text-3xl font-bold">Edit Cage</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
@@ -141,12 +148,15 @@ const CageEditPage = () => {
             <Label htmlFor="cageStatus" value="Cage status" />
             <Select
               id="cageStatus"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("cageStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.cageStatus}
             >
-              <option>In use</option>
-              <option>Maintainance</option>
+              <option value={1}>In use</option>
+              <option value={2}>Maintainance</option>
             </Select>
             {formik.touched.cageStatus && formik.errors.cageStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

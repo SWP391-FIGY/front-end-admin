@@ -25,11 +25,30 @@ const BirdCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
  
+  // Get species list
+  const {
+    response: speciesResponse,
+    loading: speciesLoading,
+    error: speciesError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/species/`,
+  });
+  // Get cage list
+  const {
+    response: cageResponse,
+    loading: cageLoading,
+    error: cageError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/cage/`,
+  });
+
   const formik = useFormik({
     initialValues: {
       Description: "",
       SpeciesId: 1,
-      CageId: 1,
+      CageID: 1,
       DoB: moment(new Date()).format('DD/MM/YYYY'),
       LastModifyDate: moment(new Date()),
       Gender: "Male",
@@ -38,7 +57,7 @@ const BirdCreatePage = () => {
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
       SpeciesId: Yup.number().required("Required"),
-      CageId: Yup.number().required("Required"),
+      CageID: Yup.number().required("Required"),
       DoB: Yup.date()
         .max(new Date().toLocaleDateString(), "Birth date must before today")
         .required("Required"),
@@ -118,8 +137,8 @@ const BirdCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.Gender}
             >
-              <option>Male</option>
-              <option>Female</option>
+              <option>Trống</option>
+              <option>Cái</option>
             </Select>
             {formik.touched.Gender && formik.errors.Gender ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -168,15 +187,26 @@ const BirdCreatePage = () => {
             <Label htmlFor="SpeciesId" value="Bird species" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
-                <Select
+              <Select
                   id="SpeciesId"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.SpeciesId}
                 >
-                  <option value={1}>Species 1</option>
-                  <option value={2}>Species 2</option>
-                  <option value={3}>Species 3</option>
+                  {speciesResponse && speciesResponse.length > 0 ? (
+                    speciesResponse.map((species, index) => {
+                      return (
+                        <option key={index} value={species.id}>
+                          {species.name}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
               <Link href={"/species/create?bird-add=true"}>
@@ -203,14 +233,25 @@ const BirdCreatePage = () => {
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="CageId"
-                  onChange={formik.handleChange}
+                  id="CageID"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("CageID", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.CageId}
+                  value={formik.values.CageID}
                 >
-                  <option value={1}>Cage 1</option>
-                  <option value={2}>Cage 2</option>
-                  <option value={3}>Cage 3</option>
+                  {cageResponse && cageResponse.length > 0 ? (
+                    cageResponse.map((cage, index) => {
+                      return (
+                        <option key={index} value={cage.id}>
+                          Cage {cage.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
               <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>

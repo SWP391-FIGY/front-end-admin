@@ -57,7 +57,7 @@ const UserEditPage = () => {
       Id: userId,
       name: '',
       email: '',
-      Password: '',
+      password: '',
       phoneNumber: '',
       firebaseID: '',
       role: 1,
@@ -66,9 +66,8 @@ const UserEditPage = () => {
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
       email: Yup.string().matches(emailRegExp, 'Email is not valid').required('Required'),
-      Password: Yup.string().required('Required'),
+      password: Yup.string().required('Required'),
       phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
-      firebaseID: Yup.string().required('Required'),
       role: Yup.number().required('Required'),
       status: Yup.number().required('Required'),
     }),
@@ -108,7 +107,7 @@ const UserEditPage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="name"
-              value="User name"
+              value="Full name"
             />
             <TextInput
               id="name"
@@ -149,16 +148,16 @@ const UserEditPage = () => {
               value="Password"
             />
             <TextInput
-              id="Password"
+              id="password"
 
-              type="text"
+              type="password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.Password}
+              value={formik.values.password}
             />
-            {formik.touched.Password && formik.errors.Password ? (
+            {formik.touched.password && formik.errors.password ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.Password}
+                {formik.errors.password}
               </div>
             ) : null}
           </div>
@@ -178,25 +177,6 @@ const UserEditPage = () => {
             {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
                 {formik.errors.phoneNumber}
-              </div>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="firebaseID"
-              value="Firebase ID"
-            />
-            <TextInput
-              id="firebaseID"
-
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.firebaseID}
-            />
-            {formik.touched.firebaseID && formik.errors.firebaseID ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.firebaseID}
               </div>
             ) : null}
           </div>

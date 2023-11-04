@@ -24,11 +24,6 @@ export const userColumns = [
 	sortable: true,
   },
   {
-    name: "Firebase id",
-    selector: (row) => row.firebaseID,
-	sortable: true,
-  },
-  {
     name: "Role",
     selector: (row) => row.role,
   },

@@ -103,6 +103,9 @@ const BirdEditPage = () => {
           message.success("Update bird success");
           router.push("/birds/index");
         })
+        .then((response) => {
+          message.success("Update bird success");
+        })
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
@@ -251,16 +254,6 @@ const BirdEditPage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={"/species/create?bird-add=true"}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new species</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
 
             {formik.touched.SpeciesId && formik.errors.SpeciesId ? (
@@ -296,21 +289,6 @@ const BirdEditPage = () => {
                   )}
                 </Select>
               </div>
-              <Link
-                href={{
-                  pathname: "/cage/create",
-                  query: { ...formik.values, "bird-add": true },
-                }}
-              >
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new cage</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
             {formik.touched.CageID && formik.errors.CageID ? (
               <div className="text-xs text-red-600 dark:text-red-400">

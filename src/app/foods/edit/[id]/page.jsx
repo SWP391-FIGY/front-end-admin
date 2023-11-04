@@ -84,7 +84,7 @@ const FoodEditPage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   })

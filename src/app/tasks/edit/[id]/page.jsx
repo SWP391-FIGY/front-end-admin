@@ -36,7 +36,7 @@ const TaskEditPage = () => {
     error: taskError,
   } = useAxios({
     method: "get",
-    url: `${API}/task/?filter=ID%20eq%20${taskId}`,
+    url: `${API}/task/?filter=ID%20eq%20${taskId}&select=*`,
   });
  
   //Fetch old data to form
@@ -130,7 +130,7 @@ const TaskEditPage = () => {
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
-              <div className="w-[500px]">
+              <div className="w-full">
                 <Select
                   id="CageId"
                   onChange={formik.handleChange}
@@ -142,16 +142,6 @@ const TaskEditPage = () => {
                   <option value={3}>Cage 3</option>
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new cage</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
             {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -182,7 +172,7 @@ const TaskEditPage = () => {
             ) : null}
           </div>
 
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="TaskName" value="Task name" />
             <TextInput
               id="TaskName"
@@ -198,7 +188,7 @@ const TaskEditPage = () => {
             ) : null}
           </div>
           
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="DateTime" value="Date and Time" />
             <Datepicker 
               id="DateTime"
@@ -218,7 +208,7 @@ const TaskEditPage = () => {
             ) : null}
           </div>
           
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="Description" value="Description" />
             <TextInput
               id="Description"
@@ -234,7 +224,7 @@ const TaskEditPage = () => {
             ) : null}
           </div>
           
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="Status" value="Task Status" />
             <Select
               id="Status"

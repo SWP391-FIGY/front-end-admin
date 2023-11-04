@@ -65,7 +65,7 @@ const UserDetailPage = () => {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="name" className="text-lg font-bold">
-                User name
+              Full name
               </label>
               <p>{userData.name}</p>
             </div>
@@ -74,13 +74,7 @@ const UserDetailPage = () => {
                 Email
               </label>
               <p>{userData.email}</p>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="firebaseID" className="text-lg font-bold">
-              Firebase ID
-              </label>
-              <p>{userData.firebaseID}</p>
-            </div>
+            </div>            
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="role" className="text-lg font-bold">
               Role

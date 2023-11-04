@@ -75,9 +75,6 @@ const CageList = () => {
                         <FiEye />
                       </Button>
                     </Link>
-                    <Button color="failure" onClick={() => {}}>
-                      <FiTrash2 />
-                    </Button>
                   </Table.Cell>
                 </Table.Row>
               );
