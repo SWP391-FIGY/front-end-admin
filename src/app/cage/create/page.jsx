@@ -28,16 +28,16 @@ const CageCreatePage = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      
       size: "90 x 60 x 90",
       color: "Black",
-      area: "300",
+      area: "A",
       type: "Type 1",
       cageStatus: 1,
       capacity: 5,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Required"),
+      
       size: Yup.string().required("Required"),
       color: Yup.string().required("Required"),
       area: Yup.string().required("Required"),
@@ -94,21 +94,7 @@ const CageCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="name" value="Cage name" />
-            <TextInput
-              id="name"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
-            />
-            {formik.touched.name && formik.errors.name ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.name}
-              </div>
-            ) : null}
-          </div>
+          
           <div className="flex flex-col gap-2">
             <Label htmlFor="size" value="Cage size" />
             <TextInput
