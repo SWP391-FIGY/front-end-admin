@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { birdInfo } from "../../index/birdInfo";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -14,12 +15,11 @@ const BirdDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/bird/${index}`,
+    url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
   });
 
-  console.log(response);
 
-  if (isNaN(birdId) || birdId < 0 || birdId >= birdInfo.length) {
+  if (isNaN(birdId) || birdId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -28,9 +28,25 @@ const BirdDetailPage = () => {
       </PageLayout>
     );
   }
+  if (error) {
+    message.error("Error While Getting Bird data");
+    return <>No Data</>;
+  }
+  if (loading && !error)
+    return (
+      <PageLayout>
+        <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+          <Spinner />
+        </div>
+      </PageLayout>
+    );
 
-  const birdData = birdInfo[birdId];
-  const birthDateParts = birdData.birthDate.split("/");
+  const birdData = response[0];
+  console.log(birdData);
+  const birdDate = birdData.doB;
+  const birthDateParts = birdDate
+    ? birdDate.split("/")
+    : "30/04/2023".split("/");
   const day = parseInt(birthDateParts[0], 10);
   const month = parseInt(birthDateParts[1], 10) - 1; // Subtract 1 because months are zero-based
   const year = parseInt(birthDateParts[2], 10);
@@ -51,12 +67,6 @@ const BirdDetailPage = () => {
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="name" className="text-lg font-bold">
-                Name
-              </label>
-              <p>{birdData.name}</p>
-            </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="species" className="text-lg font-bold">
                 Species

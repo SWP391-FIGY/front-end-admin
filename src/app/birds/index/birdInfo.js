@@ -50,10 +50,10 @@ export const birdColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/birds/edit/${row.id}`}>
+        <Link href={`/birds/edit/${row.ID}`}>
           <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
         </Link>
-        <Link href={`/birds/details/${row.id}`}>
+        <Link href={`/birds/details/${row.ID}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>
       </Dropdown>

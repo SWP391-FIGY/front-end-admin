@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
-import { foodInfo } from "../../index/foodInfo"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 

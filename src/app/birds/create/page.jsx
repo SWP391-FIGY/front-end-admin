@@ -25,16 +25,15 @@ const BirdCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
  
-  console.log(moment(new Date()).format('DD/MM/YYYY'));
   const formik = useFormik({
     initialValues: {
       Description: "",
       SpeciesId: 1,
       CageId: 1,
       DoB: moment(new Date()).format('DD/MM/YYYY'),
-      LastModifyDate: moment(new Date()).format('DD/MM/YYYY'),
+      LastModifyDate: moment(new Date()),
       Gender: "Male",
-      Status: "Status 1",
+      birdStatus: 1,
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
@@ -43,9 +42,8 @@ const BirdCreatePage = () => {
       DoB: Yup.date()
         .max(new Date().toLocaleDateString(), "Birth date must before today")
         .required("Required"),
-      LastModifyDate: Yup.date().required("Required"),
       Gender: Yup.string().required("Required"),
-      Status: Yup.string().required("Required"),
+      birdStatus: Yup.number().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -72,9 +70,6 @@ const BirdCreatePage = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -91,11 +86,11 @@ const BirdCreatePage = () => {
 
           {/* // * Bird birthDate */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DoB" value="Birthdate" />
+            <Label htmlFor="DoB" value="DoB" />
             <Datepicker
               id="DoB"
               language="vi-VN"
-              value={moment(formik.values.birthdate).format('DD/MM/YYYY')}
+              value={moment(formik.values.DoB).format('DD/MM/YYYY')}
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
                 formik.setFieldValue("DoB", date);
@@ -166,25 +161,7 @@ const BirdCreatePage = () => {
               </div>
             ) : null}
           </div>
-
-          {/* // * Bird status */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Status" value="Bird status" />
-            <Select
-              id="Status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.Status}
-            >
-              <option>Status 1</option>
-              <option>Status 2</option>
-            </Select>
-            {formik.touched.Status && formik.errors.Status ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Status}
-              </div>
-            ) : null}
-          </div>
+    
 
           {/* //* Bird species */}
           <div className="flex flex-col w-full gap-2">
@@ -222,14 +199,14 @@ const BirdCreatePage = () => {
           </div>
           {/* // * Bird cage */}
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="cageId" value="Bird cage" />
+            <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="cageId"
+                  id="CageId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.cageId}
+                  value={formik.values.CageId}
                 >
                   <option value={1}>Cage 1</option>
                   <option value={2}>Cage 2</option>
