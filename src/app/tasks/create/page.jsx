@@ -13,16 +13,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { message } from "antd";
+import { DatePicker, Space, message } from "antd";
 import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 
-const { default: PageLayout } = require("@/layout/pageLayout")
+const { default: PageLayout } = require("@/layout/pageLayout");
 
 const TaskCreatePage = () => {
-  const [spinner, setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -30,7 +30,7 @@ const TaskCreatePage = () => {
       CageId: 1,
       StaffId: 1,
       TaskName: "",
-      DateTime: moment(new Date()).format('DD/MM/YYYY'),
+      DateTime: moment(new Date()),
       Description: "",
       Status: "Pending",
     },
@@ -39,9 +39,11 @@ const TaskCreatePage = () => {
       CageId: Yup.number().required("Required"),
       StaffId: Yup.number().required("Required"),
       TaskName: Yup.string().required("Required"),
-      DateTime: Yup.date().min(new Date(), "Date must be today or later").required("Required"),
+      DateTime: Yup.date()
+        .min(new Date(), "Date must be today or later")
+        .required("Required"),
       Description: Yup.string().required("Required"),
-      Status: Yup.string().required("Required")
+      Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -54,8 +56,8 @@ const TaskCreatePage = () => {
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/tasks/index")
+
+          router.push("/tasks/index");
         })
         .then((response) => {
           message.success("Add new task success");
@@ -73,33 +75,31 @@ const TaskCreatePage = () => {
   }, [formik]);
   return (
     <PageLayout>
-      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-      <div className='flex flex-col justify-between gap-4'>
-          <Link href={'/tasks/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new task</h2>
-
+      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+        <div className="flex flex-col justify-between gap-4">
+          <Link href={"/tasks/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
+          <h2 className="text-3xl font-bold">Add new task</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]">
-
+          className="flex flex-col gap-4 w-[600px]"
+        >
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="BirdId"
-              value="Bird"
-            />
+            <Label htmlFor="BirdId" value="Bird" />
             <Select
               id="BirdId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.BirdId}
             >
-                  <option value={1}>Bird 1</option>
-                  <option value={2}>Bird 2</option>
-                  <option value={3}>Bird 3</option>
+              <option value={1}>Bird 1</option>
+              <option value={2}>Bird 2</option>
+              <option value={3}>Bird 3</option>
             </Select>
             {formik.touched.BirdId && formik.errors.BirdId ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.BirdId}
               </div>
             ) : null}
@@ -120,7 +120,12 @@ const TaskCreatePage = () => {
                   <option value={3}>Cage 3</option>
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
+              <Link
+                href={{
+                  pathname: "/cage/create",
+                  query: { ...formik.values, "bird-add": true },
+                }}
+              >
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">
@@ -139,22 +144,19 @@ const TaskCreatePage = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="StaffId"
-              value="Staff"
-            />
+            <Label htmlFor="StaffId" value="Staff" />
             <Select
               id="StaffId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.StaffId}
             >
-                  <option value={1}>Staff 1</option>
-                  <option value={2}>Staff 2</option>
-                  <option value={3}>Staff 3</option>
+              <option value={1}>Staff 1</option>
+              <option value={2}>Staff 2</option>
+              <option value={3}>Staff 3</option>
             </Select>
             {formik.touched.StaffId && formik.errors.StaffId ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.StaffId}
               </div>
             ) : null}
@@ -175,27 +177,28 @@ const TaskCreatePage = () => {
               </div>
             ) : null}
           </div>
-          
+
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DateTime" value="Date and Time" />
-            <Datepicker 
-              id="DateTime"
-              selected={formik.values.DateTime}
-              showTimeSelect
-              timeFormat="HH:mm"
-              timeIntervals={15}
-              dateFormat="dd/MM/yyyy HH:mm"
-              onChange={(date) => {
-                formik.setFieldValue("DateTime", date);
-              }}
-            />
+            <Label htmlFor="DateTime" value="Date and Time" />            
+            <Space direction="vertical" size={12}>
+              <DatePicker
+                className="!important"
+                showTime
+                minuteStep={30}
+                secondStep={60}
+                autoClose
+                onSelect={(value) => {
+                  formik.setFieldValue("DateTime", value.$d);
+                }}
+              />
+            </Space>
             {formik.touched.DateTime && formik.errors.DateTime ? (
               <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.DateTime}
               </div>
             ) : null}
           </div>
-          
+
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="Description" value="Description" />
             <TextInput
@@ -214,8 +217,8 @@ const TaskCreatePage = () => {
 
           <Button type="submit">
             {spinner ? (
-              <div className='flex justify-center items-center gap-4'>
-                <Spinner aria-label='Spinner button example' />
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
                 <p>Loading...</p>
               </div>
             ) : (
