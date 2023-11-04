@@ -36,7 +36,7 @@ const BirdEditPage = () => {
     error: birdError,
   } = useAxios({
     method: "get",
-    url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
+    url: `${API}/bird/?filter=ID%20eq%20${birdId}&$select=*`,
   });
 
   // Get species list
@@ -79,7 +79,7 @@ const BirdEditPage = () => {
       DoB: moment(new Date()),
       LastModifyDate: moment(new Date()),
       Gender: "Male",
-      Status: "1",
+      BirdStatus: 1,
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
@@ -111,9 +111,9 @@ const BirdEditPage = () => {
     },
   });
 
-  // useEffect(() =>{
-  //   console.log(formik);
-  // },[formik])
+  useEffect(() =>{
+    console.log(formik);
+  },[formik])
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -204,18 +204,22 @@ const BirdEditPage = () => {
 
           {/* // * Bird status */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Status" value="Bird status" />
+            <Label htmlFor="BirdStatus" value="Bird status" />
             <Select
-              id="Status"
-              onChange={formik.handleChange}
+              id="BirdStatus"
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("BirdStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.Status}
+              value={formik.values.BirdStatus}
             >
               <option value={1}>Status 1</option>
+              <option value={2}>Status 2</option>
             </Select>
-            {formik.touched.Status && formik.errors.Status ? (
+            {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Status}
+                {formik.errors.BirdStatus}
               </div>
             ) : null}
           </div>
@@ -227,7 +231,10 @@ const BirdEditPage = () => {
               <div className="w-[500px]">
                 <Select
                   id="SpeciesId"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.SpeciesId}
                 >
@@ -264,14 +271,17 @@ const BirdEditPage = () => {
           </div>
           {/* // * Bird cage */}
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="CageId" value="Bird cage" />
+            <Label htmlFor="CageID" value="Bird cage" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="CageId"
-                  onChange={formik.handleChange}
+                  id="CageID"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("CageID", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.CageId}
+                  value={formik.values.CageID}
                 >
                   {cageResponse && cageResponse.length > 0 ? (
                     cageResponse.map((cage, index) => {
