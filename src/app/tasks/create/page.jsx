@@ -1,11 +1,23 @@
-'use client'
-import { Button, Label, Select, TextInput, Spinner, Datepicker } from "flowbite-react"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { usePathname } from "next/navigation"
+"use client";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Datepicker,
+  Spinner,
+} from "flowbite-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link"
-import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2"
+import Link from "next/link";
+import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -14,39 +26,44 @@ const TaskCreatePage = () => {
 
   const formik = useFormik({
     initialValues: {
-      birdId: 1,
-      cageId: 1,
-      staffId: 1,
-      taskName: "",
-      dateAndTime: "",
-      description: "",
-      status: "Status 1",
+      BirdId: 1,
+      CageId: 1,
+      StaffId: 1,
+      TaskName: "",
+      DateTime: "",
+      Description: "",
+      Status: "Status 1",
     },
     validationSchema: Yup.object({
-      birdId: Yup.number().required("Required"),
-      cageId: Yup.number().required("Required"),
-      staffId: Yup.number().required("Required"),
-      taskName: Yup.string().required("Required"),
-      dateAndTime: Yup.date().min(new Date().toLocaleDateString(), "Birth date must after today").required("Required"),
-      description: Yup.string().required("Required"),
-      status: Yup.number().required("Required")
+      BirdId: Yup.number().required("Required"),
+      CageId: Yup.number().required("Required"),
+      StaffId: Yup.number().required("Required"),
+      TaskName: Yup.string().required("Required"),
+      DateTime: Yup.date().min(new Date().toLocaleDateString(), "Birth date must after today").required("Required"),
+      Description: Yup.string().required("Required"),
+      Status: Yup.number().required("Required")
     }),
-    onSubmit: values => {
-      setSpinner(true)
+    onSubmit: (values) => {
+      setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
-      console.log(values);
+      console.log(payloadData.data);
       axios
-        .post(`${API}/feedbacks`, payloadData)
-        .then(response => {
-          setSpinner(false)
-          formik.resetForm()
+        .post(`${API}/task`, payloadData.data)
+        .then((response) => {
+          setSpinner(false);
+          formik.resetForm();
+          
+          router.push("/tasks/index")
         })
-        .catch(error => {
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+        .then((response) => {
+          message.success("Add new task success");
+        })
+        .catch((error) => {
+          message.error("An error occurred");
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
         });
     },
   });
@@ -68,35 +85,35 @@ const TaskCreatePage = () => {
 
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="birdId"
+              htmlFor="BirdId"
               value="Bird"
             />
             <Select
-              id="birdId"
+              id="BirdId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.birdId}
+              value={formik.values.BirdId}
             >
                   <option value={1}>Bird 1</option>
                   <option value={2}>Bird 2</option>
                   <option value={3}>Bird 3</option>
             </Select>
-            {formik.touched.birdId && formik.errors.birdId ? (
+            {formik.touched.BirdId && formik.errors.BirdId ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.birdId}
+                {formik.errors.BirdId}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="cageId" value="Bird cage" />
+            <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="cageId"
+                  id="CageId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.cageId}
+                  value={formik.values.CageId}
                 >
                   <option value={1}>Cage 1</option>
                   <option value={2}>Cage 2</option>
@@ -114,101 +131,101 @@ const TaskCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.cageId && formik.errors.cageId ? (
+            {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.cageId}
+                {formik.errors.CageId}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="staffId"
+              htmlFor="StaffId"
               value="Staff"
             />
             <Select
-              id="staffId"
+              id="StaffId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.staffId}
+              value={formik.values.StaffId}
             >
                   <option value={1}>Staff 1</option>
                   <option value={2}>Staff 2</option>
                   <option value={3}>Staff 3</option>
             </Select>
-            {formik.touched.staffId && formik.errors.staffId ? (
+            {formik.touched.StaffId && formik.errors.StaffId ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.staffId}
+                {formik.errors.StaffId}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="taskName" value="Task name" />
+            <Label htmlFor="TaskName" value="Task name" />
             <TextInput
-              id="taskName"
+              id="TaskName"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.taskName}
+              value={formik.values.TaskName}
             />
-            {formik.touched.taskName && formik.errors.taskName ? (
+            {formik.touched.TaskName && formik.errors.TaskName ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.taskName}
+                {formik.errors.TaskName}
               </div>
             ) : null}
           </div>
           
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="dateAndTime" value="Date and Time" />
+            <Label htmlFor="DateTime" value="Date and Time" />
             <Datepicker 
-              id="dateAndTime"
-              selected={formik.values.dateAndTime}
+              id="DateTime"
+              selected={formik.values.DateTime}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
               dateFormat="dd/MM/yyyy HH:mm"
               onChange={(date) => {
-                formik.setFieldValue("dateAndTime", date);
+                formik.setFieldValue("DateTime", date);
               }}
             />
-            {formik.touched.dateAndTime && formik.errors.dateAndTime ? (
+            {formik.touched.DateTime && formik.errors.DateTime ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.dateAndTime}
+                {formik.errors.DateTime}
               </div>
             ) : null}
           </div>
           
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="description" value="Description" />
+            <Label htmlFor="Description" value="Description" />
             <TextInput
-              id="description"
+              id="Description"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.description}
+              value={formik.values.Description}
             />
-            {formik.touched.description && formik.errors.description ? (
+            {formik.touched.Description && formik.errors.Description ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.description}
+                {formik.errors.Description}
               </div>
             ) : null}
           </div>
           
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="status" value="Task status" />
+            <Label htmlFor="Status" value="Task Status" />
             <Select
-              id="status"
+              id="Status"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.status}
+              value={formik.values.Status}
             >
               <option>Status 1</option>
               <option>Status 2</option>
             </Select>
-            {formik.touched.status && formik.errors.status ? (
+            {formik.touched.Status && formik.errors.Status ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.status}
+                {formik.errors.Status}
               </div>
             ) : null}
           </div>

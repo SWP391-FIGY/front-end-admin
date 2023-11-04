@@ -1,58 +1,77 @@
-'use client'
-import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-react"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { useParams } from "next/navigation"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
-import Link from "next/link"
-import { HiOutlineArrowSmallLeft } from "react-icons/hi2"
+"use client";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Datepicker,
+  Spinner,
+} from "flowbite-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const UserEditPage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false)
-  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
-  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const params = useParams();
   const uid = params.id;
-
+ 
   console.log('editing id',uid);
-
+  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
+  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const formik = useFormik({
     initialValues: {
       name: '',
       email: '',
-      password: '',
+      Password: '',
       phoneNumber: '',
+      firebaseID: '',
       role: 'Bird Carer',
-      status: 'Status 1',
+      status: 'status 1',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
       email: Yup.string().matches(emailRegExp, 'Email is not valid').required('Required'),
-      password: Yup.string().required('Required'),
+      Password: Yup.string().required('Required'),
       phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
+      firebaseID: Yup.string().required('Required'),
       role: Yup.string().required('Required'),
       status: Yup.string().required('Required'),
     }),
-    onSubmit: values => {
-      setSpinner(true)
+    onSubmit: (values) => {
+      setSpinner(true);
       const payloadData = {
         data: values,
-      }
-      console.log("Submitted");
-      console.log(values);
+      };
+      console.log(payloadData.data);
       axios
-        .post(`${API}/feedbacks`, payloadData)
-        .then(response => {
-          setSpinner(false)
-          formik.resetForm()
+        .post(`${API}/user`, payloadData.data)
+        .then((response) => {
+          setSpinner(false);
+          formik.resetForm();
+          
+          router.push("/users/index")
         })
-        .catch(error => {
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+        .then((response) => {
+          message.success("Add new user success");
         })
+        .catch((error) => {
+          message.error("An error occurred");
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
+        });
     },
   })
 
@@ -61,7 +80,7 @@ const UserEditPage = () => {
       <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
       <div className='flex flex-col justify-between gap-4'>
           <Link href={'/users/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Edit user</h2>
+          <h2 className='text-3xl font-bold'>Add new user</h2>
 
         </div>
         <form
@@ -89,7 +108,7 @@ const UserEditPage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="email"
-              value="Email"
+              value="email"
             />
             <TextInput
               id="email"
@@ -107,20 +126,20 @@ const UserEditPage = () => {
           </div>
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="password"
+              htmlFor="Password"
               value="Password"
             />
             <TextInput
-              id="password"
+              id="Password"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.password}
+              value={formik.values.Password}
             />
-            {formik.touched.password && formik.errors.password ? (
+            {formik.touched.Password && formik.errors.Password ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.password}
+                {formik.errors.Password}
               </div>
             ) : null}
           </div>
@@ -145,8 +164,27 @@ const UserEditPage = () => {
           </div>
           <div className="flex flex-col gap-2">
             <Label
+              htmlFor="firebaseID"
+              value="Firebase ID"
+            />
+            <TextInput
+              id="firebaseID"
+
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.firebaseID}
+            />
+            {formik.touched.firebaseID && formik.errors.firebaseID ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.firebaseID}
+              </div>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label
               htmlFor="role"
-              value="User Role"
+              value="User role"
             />
             <Select
               id="role"
@@ -155,7 +193,7 @@ const UserEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.role}
             >
-              <option>Bird Carer</option>
+              <option>Staff</option>
               <option>Admin</option>
 
             </Select>
@@ -177,8 +215,8 @@ const UserEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.status}
             >
-              <option>Status 1</option>
-              <option>Status 2</option>
+              <option>status 1</option>
+              <option>status 2</option>
 
             </Select>
             {formik.touched.status && formik.errors.status ? (

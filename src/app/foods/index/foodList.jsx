@@ -1,57 +1,32 @@
-import { Button, Table } from "flowbite-react";
 import React from "react";
-import { foodInfo } from "./foodInfo";
-import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import Link from "next/link";
+import { foodColumns, foodInfo } from "./foodInfo";
+import DataTable from "react-data-table-component";
+import useAxios from "@/hooks/useFetch";
+import { Spinner } from "flowbite-react";
+import { API } from "@/constants";
+import { message } from "antd";
 
 const FoodList = () => {
-  if (!foodInfo) return <>No Data</>;
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/food`,
+  });
+
+  console.log("Fetched food data", response);
+  if (error) {
+    message.error('Error While Getting Food data')
+    return <>No Data</>
+  };
+  if (loading && !error)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+
   return (
     <>
-      <Table className="table-auto">
-        <Table.Head>
-          <Table.HeadCell>ID</Table.HeadCell>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Nutritional Ingredients</Table.HeadCell>
-          <Table.HeadCell>Storage Conditions</Table.HeadCell>
-          <Table.HeadCell>Actions</Table.HeadCell>
-        </Table.Head>
-        <Table.Body>
-          {foodInfo.map((food, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.Cell>
-                  <span>{index}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{food.name}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{food.nutritionalIngredients}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{food.storageConditions}</span>
-                </Table.Cell>
-                <Table.Cell className="flex flex-row gap-4">
-                  <Link href={`/foods/edit/${index}`}>
-                    <Button>
-                      <FiEdit />
-                    </Button>
-                  </Link>
-                  <Link href={`/foods/edit/${index}`}>
-                    <Button>
-                      <FiEye />
-                    </Button>
-                  </Link>
-                  <Button color="failure">
-                    <FiTrash2 />
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+      <DataTable columns={foodColumns} data={response} pagination />
     </>
   );
 };
