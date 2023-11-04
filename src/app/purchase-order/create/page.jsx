@@ -118,7 +118,7 @@ const PurchaseOrderCreatePage = () => {
                 {formik.values.purchaseOrderDetails.length > 0 &&
                   formik.values.purchaseOrderDetails.map((item, index) => {
                     return (
-                      <Table.Row>
+                      <Table.Row key={index}>
                         <Table.Cell>{item.foodId}</Table.Cell>
                         <Table.Cell>{item.quantity}</Table.Cell>
                         <Table.Cell>{item.unit}</Table.Cell>

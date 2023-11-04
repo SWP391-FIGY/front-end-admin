@@ -205,7 +205,7 @@ const MenuCreatePage = () => {
                 {formik.values.menuDetails.length > 0 &&
                   formik.values.menuDetails.map((item, index) => {
                     return (
-                      <Table.Row>
+                      <Table.Row key={index}>
                         <Table.Cell>{item.foodId}</Table.Cell>
                         <Table.Cell>{item.quantity}</Table.Cell>
                         <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2/>Delete</Table.Cell>

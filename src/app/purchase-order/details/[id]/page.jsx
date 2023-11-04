@@ -89,7 +89,7 @@ const PurchaseOrderDetailPage = () => {
                   {purchaseOrderDetailInfo.length > 0 &&
                     purchaseOrderDetailInfo.map((item, index) => {
                       return (
-                        <Table.Row>
+                        <Table.Row key={index}>
                           <Table.Cell>{item.foodId}</Table.Cell>
                           <Table.Cell>{item.quantity}</Table.Cell>
                           <Table.Cell>{item.unit}</Table.Cell>

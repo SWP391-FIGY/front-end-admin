@@ -16,8 +16,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import GoogleButton from "react-google-button";
 import Link from "next/link";
+import { useAuthContext } from "@/contexts/authContext";
+import { setToken } from "@/helper";
+import axios from "axios";
+import { API } from "@/constants";
+import { message } from "antd";
 
-const { Button, Label, TextInput } = require("flowbite-react");
+const { Button, Label, TextInput, Spinner } = require("flowbite-react");
 
 const auth = getAuth(firebase_app);
 const googleProvider = new GoogleAuthProvider();
@@ -25,6 +30,7 @@ const googleProvider = new GoogleAuthProvider();
 const LoginPage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
+  const { setUser } = useAuthContext();
 
   const formik = useFormik({
     initialValues: {
@@ -38,11 +44,12 @@ const LoginPage = () => {
     onSubmit: (values) => {
       setSpinner(true);
       axios
-        .post(`${API}/auth/local`, values)
+        .post(`${API}/user/login`, values)
         .then((response) => {
+          console.log(response);
           // Navigation to homepage
-          setUser(response.data.user);
-          setToken(response.data.jwt);
+          setUser(response.data.userInfo);
+          setToken(response.data.token);
 
           router.push("/");
           // Handle success.
@@ -57,16 +64,32 @@ const LoginPage = () => {
   });
 
   const handleGoogleLogin = async () => {
-    signInWithPopup(auth, googleProvider).then((result) => {
-      var credential = GoogleAuthProvider.credentialFromResult(result);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        var credential = GoogleAuthProvider.credentialFromResult(result);
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = credential.idToken;
-      console.log(token);
-      console.log(auth);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var trueToken = auth.currentUser.accessToken;
+        console.log(trueToken);
+        console.log(auth.currentUser);
+        message.info("Validating info", 0);
+        axios
+          .post(`${API}/user/firebase`, {firebaseToken: trueToken})
+          .then((response) => {
+            console.log(response);
+            // Navigation to homepage
+            setUser(response.data.userInfo);
+            setToken(response.data.token);
 
-      //router.push("/");
-    });
+            router.push("/");
+            message.destroy();
+          });
+      })
+      .catch((error) => {
+        // Handle error.
+        setSpinner(false);
+        console.log("An error occurred:", error.response);
+      });
   };
 
   const handleCreateAccount = async () => {
@@ -123,7 +146,8 @@ const LoginPage = () => {
           className="w-6/12 px-[100px] flex flex-col gap-2"
         >
           <h3 className="text-3xl font-bold whitespace-nowrap">
-            Welcome to <br/><span className="text-[#444444]">Bird Farm Meal System</span>
+            Welcome to <br />
+            <span className="text-[#444444]">Bird Farm Meal System</span>
           </h3>
 
           <Label
@@ -133,7 +157,7 @@ const LoginPage = () => {
           />
           <TextInput
             id="email"
-            name="identifier"
+            name="email"
             type="email"
             placeholder="Enter your email"
             onChange={formik.handleChange}

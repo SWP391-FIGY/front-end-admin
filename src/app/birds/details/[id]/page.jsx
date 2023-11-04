@@ -17,6 +17,7 @@ const BirdDetailPage = () => {
     url: `${API}/bird/${index}`,
   });
 
+  console.log(response);
 
   if (isNaN(birdId) || birdId < 0 || birdId >= birdInfo.length) {
     return (
