@@ -19,6 +19,7 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -26,9 +27,29 @@ const UserEditPage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false)
   const params = useParams();
-  const uid = params.id;
+  const userId = parseInt(params.id, 10);
+
+  //Fetch old user data
+  const {
+    response: userResponse,
+    loading: userLoading,
+    error: userError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/user/?filter=ID%20eq%20${userId}`,
+  });
  
-  console.log('editing id',uid);
+  //Fetch old data to form
+  useEffect(() => {
+    if (userResponse) {
+      console.log(userResponse);
+      formik.setValues({
+        ...userResponse[0],
+      });
+    }
+  }, [userResponse]);
+
+
   const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
   const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
   const formik = useFormik({
@@ -55,17 +76,14 @@ const UserEditPage = () => {
       const payloadData = {
         data: values,
       };
-      console.log(payloadData.data);
+      console.log('submit data',payloadData.data);
       axios
-        .post(`${API}/user`, payloadData.data)
+        .put(`${API}/user/${userId}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/users/index")
-        })
-        .then((response) => {
-          message.success("Add new user success");
+          message.success("Update user success");
+          router.push("/users/index");
         })
         .catch((error) => {
           message.error("An error occurred");
