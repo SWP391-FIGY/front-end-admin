@@ -1,11 +1,11 @@
 "use client";
 import { Label, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -17,7 +17,6 @@ const BirdDetailPage = () => {
     method: "get",
     url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
   });
-
 
   if (isNaN(birdId) || birdId < 0) {
     return (

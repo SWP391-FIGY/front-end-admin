@@ -59,7 +59,7 @@ const BirdEditPage = () => {
       };
       console.log(payloadData.data);
       axios
-        .post(`${API}/bird`, payloadData.data)
+        .put(`${API}/bird`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
