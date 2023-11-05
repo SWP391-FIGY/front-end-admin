@@ -47,4 +47,13 @@ export const planColumns = [
   },
 ];
 
+export const planStatusEnum = [
+  "Upcoming",
+  "Ongoing",
+  "Fed",
+  "Overdue",
+  "Other",
+  "Cancel"
+]
+
 

@@ -14,8 +14,9 @@ import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
+import { planStatusEnum } from "../../index/planInfo";
 
-import { feedingPlanStatus } from "../../index/planInfo"
+
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -261,8 +262,9 @@ const PlanEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.FeedingStatus}
             >
-              <option>Status 1</option>
-              <option>Status 2</option>
+              {planStatusEnum.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
             </Select>
             {formik.touched.FeedingStatus && formik.errors.FeedingStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

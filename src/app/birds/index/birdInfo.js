@@ -70,5 +70,6 @@ export const birdStatusEnum = [
   "Sick",
   "Molt",
   "Sold",
-  "Other"
+  "Other",
+  "Cancel"
 ]

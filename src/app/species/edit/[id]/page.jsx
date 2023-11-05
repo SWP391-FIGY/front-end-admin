@@ -1,68 +1,141 @@
-'use client'
-import { Button, Label, Select, TextInput, Datepicker, Spinner } from "flowbite-react"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { useParams, usePathname } from "next/navigation"
-import { useState } from "react"
+"use client";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Datepicker,
+  Spinner,
+} from "flowbite-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
+import { useParams } from "next/navigation";
+import useAxios from "@/hooks/useFetch";
+
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
 const SpeciesEditPage = () => {
   const [spinner, setSpinner] = useState(false)
   const params = useParams();
-  const uid = params.id;
+  const router = useRouter();
+  const speciesId = parseInt(params.id, 10);
 
-  console.log('editing id',uid);
+  // Fetch old species data
+  const {
+    response: speciesResponse,
+    loading: speciesLoading,
+    error: speciesError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/species/?filter=ID%20eq%20${speciesId}&$select=*`,
+  });
+
+  
+  // Fetch old data to form
+  useEffect(() => {
+    if (speciesResponse) {
+      console.log(speciesResponse);
+      formik.setValues({
+        ...speciesResponse[0],
+      });
+    }
+  }, [speciesResponse]);
+
+  
   const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
+      id: speciesId,
+      name:'',
       color: '',
-      size: 'small',
-      voice: 'clear',
+      size: '',
+      voice: '',
       imageLink: '',
-      age: '',
+      lifeExpectancy: '',
       habitat: '',
-      total: '',
+      
     },
     validationSchema: Yup.object({
+      name: Yup.string().required('Required'),
       color: Yup.string().required('Required'),
       size: Yup.string().required('Required'),
-      voice: Yup.string().required('Required'),
+      voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
       imageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
-      age: Yup.number().lessThan(70, 'Age must be lower than 70').positive('Age must be higher than 0').integer('Age must be an integer').required('Required'),
+      lifeExpectancy: Yup.number().lessThan(100, 'LifeExpectancy must be lower than 100').positive('LifeExpectancy must be higher than 0').integer('LifeExpectancy must be an integer').required('Required'),
       habitat: Yup.string().required('Required'),
-      total: Yup.number().required('Required'),
+      
     }),
     onSubmit: values => {
       setSpinner(true)
       const payloadData = {
         data: values,
       }
-      console.log("Submitted");
-      console.log(values);
+      console.log('submit data',payloadData.data);
       axios
-        .post(`${API}/species`, payloadData.data)
+        .put(`${API}/species/${speciesId}`, payloadData.data)
         .then(response => {
-          setSpinner(false)
-          formik.resetForm()
+          setSpinner(false);
+          formik.resetForm();
+          message.success("Update species success");
+          router.push("/species/index");
         })
-        .catch(error => {
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+        .then((response) => {
+          message.success("Update species success");
         })
+        .catch((error) => {
+          message.error("An error occurred");
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
+        });
     },
   })
 
+  
   return (
     <PageLayout>
-      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-        <div className='flex flex-row justify-between'>
-          <h2 className='text-3xl font-bold'>Add new species</h2>
-
+      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+        <div className="flex flex-col justify-between gap-4">
+          <Link href={"/species/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
+          <h2 className="text-3xl font-bold">Edit Species</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]">
+
+          {/* // * Species Name */}
+          <div className="flex flex-col gap-2">
+            <Label
+              htmlFor="name"
+              value="Species Name"
+            />
+            <TextInput
+              id="name"
+
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.name}
+            />
+            {formik.touched.name && formik.errors.name ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.name}
+              </div>
+            ) : null}
+          </div>
+
+          {/* // * Species Color */}
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="color"
@@ -82,52 +155,47 @@ const SpeciesEditPage = () => {
               </div>
             ) : null}
           </div>
+
+          {/* // * Species Size */}
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="size"
               value="Size"
             />
-            <Select
+            <TextInput
               id="size"
 
+              type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.size}
-            >
-              <option>small</option>
-              <option>medium</option>
-              <option>big</option>
-
-            </Select>
+            />
             {formik.touched.size && formik.errors.size ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
                 {formik.errors.size}
               </div>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="voice"
-              value="Voice"
-            />
-            <Select
-              id="voice"
 
+          {/* //* Species Voice */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="voice" 
+            value="Voice" />
+            <TextInput
+              id="voice"
+              type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.voice}
-            >
-              <option>clear</option>
-              <option>hoarse</option>
-              <option>mute</option>
-
-            </Select>
+            />
             {formik.touched.voice && formik.errors.voice ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.voice}
               </div>
             ) : null}
           </div>
+
+          {/* //* Image Link */}  
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="imageLink"
@@ -135,7 +203,6 @@ const SpeciesEditPage = () => {
             />
             <TextInput
               id="imageLink"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -147,25 +214,29 @@ const SpeciesEditPage = () => {
               </div>
             ) : null}
           </div>
+
+          {/* //* LifeExpectancy */} 
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="age"
-              value="Age"
+              htmlFor="lifeExpectancy"
+              value="Life Expectancy"
             />
             <TextInput
-              id="age"
+              id="lifeExpectancy"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.age}
+              value={formik.values.lifeExpectancy}
             />
-            {formik.touched.age && formik.errors.age ? (
+            {formik.touched.lifeExpectancy && formik.errors.lifeExpectancy ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.age}
+                {formik.errors.lifeExpectancy}
               </div>
             ) : null}
           </div>
+
+          {/* //* Species Habitat */} 
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="babitat"
@@ -173,7 +244,6 @@ const SpeciesEditPage = () => {
             />
             <TextInput
               id="habitat"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -185,25 +255,8 @@ const SpeciesEditPage = () => {
               </div>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="total"
-              value="Total"
-            />
-            <TextInput
-              id="total"
 
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.total}
-            />
-            {formik.touched.total && formik.errors.total ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.total}
-              </div>
-            ) : null}
-          </div>
+          
           <Button type="submit">
             {spinner ? (
               <div className='flex justify-center items-center gap-4'>

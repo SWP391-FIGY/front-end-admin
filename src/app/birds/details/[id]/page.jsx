@@ -68,7 +68,7 @@ const BirdDetailPage = () => {
   // useEffect(() => {
   //   setBirdData(response.data[0]);
   // }, [response]);
-  const birdData = response? response[0] : {};
+  const birdData = response ? response[0] : {};
   console.log(birdData);
 
   // const birdDate = birdData.doB;
@@ -97,10 +97,26 @@ const BirdDetailPage = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="description" className="text-lg font-bold">
+                  Description
+                </label>
+                <p>{birdData.Description}</p>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="birdImageUrl" className="text-lg font-bold">Bird Image Url</label>
+                <img src={speciesData.birdImageUrl} alt="Bird Image Url" style={{ width: '100px', height: 'auto' }} />
+              </div>
+              <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="species" className="text-lg font-bold">
                   Species
                 </label>
                 <p>{birdData.Species.Name}</p>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="cageID" className="text-lg font-bold">
+                  Cage ID
+                </label>
+                <p>{birdData.Cage.Id}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birthDate" className="text-lg font-bold">
@@ -113,6 +129,12 @@ const BirdDetailPage = () => {
                   Gender
                 </label>
                 <p>{birdData.Gender}</p>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="lastModifyDate" className="text-lg font-bold">
+                  LastModifyDate (Month/Date/Year)
+                </label>
+                <p>{birdData.LastModifyDate}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="status" className="text-lg font-bold">

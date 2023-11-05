@@ -25,7 +25,12 @@ export const speciesColumns = [
   },
   {
     name: "Voice",
-    selector: (row) => row.voice,
+    cell: (row) => (
+      <iframe src={row.voice} 
+      style={{ width: '100px', height: 'auto' }}
+      />
+   ),
+
   },
   {
     name: "Image Link",
@@ -57,3 +62,4 @@ export const speciesColumns = [
     ),
   },
 ];
+
