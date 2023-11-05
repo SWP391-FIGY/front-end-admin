@@ -15,6 +15,7 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 
+import { feedingPlanStatus } from "../../index/planInfo"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -260,11 +261,8 @@ const PlanEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.FeedingStatus}
             >
-              <option value={1}>Upcoming</option>
-              <option value={2}>Ongoing</option>
-              <option value={3}>Fed</option>
-              <option value={4}>Overdue</option>
-              <option value={5}>Other</option>
+              <option>Status 1</option>
+              <option>Status 2</option>
             </Select>
             {formik.touched.FeedingStatus && formik.errors.FeedingStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

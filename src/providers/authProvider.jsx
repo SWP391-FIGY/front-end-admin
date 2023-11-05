@@ -15,12 +15,12 @@ const AuthProvider = ({ children }) => {
   const fetchLoggedInUser = async (token) => {
     setIsLoading(true);
     try {
-      const response = axios.post(`${API}/user/me`, {
+      axios.post(`${API}/user/me`, {
         userToken: `${token}`,
-      });
-      const data = await response.json();
+      }).then((response) => {
 
-      setUserData(data);
+        setUserData(response.data);
+      })
     } catch (error) {
       console.error(error);
       message.error("Error While Getting Logged In User Details");

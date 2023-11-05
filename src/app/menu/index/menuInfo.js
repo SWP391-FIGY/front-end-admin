@@ -218,3 +218,10 @@ export const menuDetailColumns = [
     ),
   },
 ];
+
+export const menuStatusEnum = [
+  "Active",
+  "Deactive",
+  "Cancel",
+  "Other"
+]

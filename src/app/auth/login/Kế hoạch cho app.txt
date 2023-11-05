@@ -1,19 +1,7 @@
-kế hoạch front end gồm 3 luồng
-  luồng tạo chim
-  tạo info chim, ghép feeding plan tương ứng
+làm xong purchase request crud
 
-  luồng tạo task cho ăn
-  chọn lồng, từ đó lấy feeding plan của tất cả bird trong lồng
+yêu cầu ghép status vô dropdown
 
-  luồng PR và PO
+xử lí các case update status
 
-  quản lí user
-
-  quản lí kho
-
-làm dashboard
-
-làm phân quyền, app có những role nào
-
-seed data
-
+xử lí phân quyền

@@ -53,3 +53,10 @@ export const taskColumns = [
     ),
   },
 ];
+
+export const taskStatusEnum = [
+  "Not Assign",
+  "Pending",
+  "Done",
+  "Cancel"
+]

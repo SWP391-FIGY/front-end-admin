@@ -154,3 +154,10 @@ export const cageInfo = [
   },
   
 ];
+
+export const cageStatusEnum =[
+  "Active",
+  "Deactive",
+  "Cancel",
+  "Other"
+]
