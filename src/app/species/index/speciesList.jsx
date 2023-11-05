@@ -1,77 +1,32 @@
-import { Button, Table } from "flowbite-react";
 import React from "react";
-import { speciesInfo } from "./speciesInfo";
-import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import Link from "next/link";
+import { speciesColumns, speciesInfo } from "./speciesInfo";
+import DataTable from "react-data-table-component";
+import useAxios from "@/hooks/useFetch";
+import { Spinner } from "flowbite-react";
+import { API } from "@/constants";
+import { message } from "antd";
 
 const SpeciesList = () => {
-  if (!speciesInfo) return <>No Data</>;
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/species`,
+  });
+
+  console.log("Fetched species data", response);
+  if (error) {
+    message.error('Error While Getting Species data')
+    return <>No Data</>
+  };
+  if (loading && !error)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+
   return (
     <>
-      <Table className="table-auto">
-        <Table.Head>
-          <Table.HeadCell>ID</Table.HeadCell>
-          <Table.HeadCell>Color</Table.HeadCell>
-          <Table.HeadCell>Size</Table.HeadCell>
-          <Table.HeadCell>Voice</Table.HeadCell>
-          <Table.HeadCell>Image</Table.HeadCell>
-          <Table.HeadCell>Age</Table.HeadCell>
-          <Table.HeadCell>Habitat</Table.HeadCell>
-          <Table.HeadCell>Total</Table.HeadCell>
-          <Table.HeadCell>Actions</Table.HeadCell>
-        </Table.Head>
-        <Table.Body>
-          {speciesInfo.map((species, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.Cell>
-                  <span>{index}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.color}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.size}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.voice}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <img
-                    src={species.imageLink}
-                    alt={`Species Image ${index}`}
-                    style={{ width: "100px", height: "auto" }}
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.age}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.habitat}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{species.total}</span>
-                </Table.Cell>
-                <Table.Cell className="flex flex-row gap-4">
-                  <Link href={`/species/edit/${index}`}>
-                    <Button>
-                      <FiEdit />
-                    </Button>
-                  </Link>
-                  <Link href={`/species/details/${index}`}>
-                    <Button>
-                      <FiEye />
-                    </Button>
-                  </Link>
-                  <Button color="failure">
-                    <FiTrash2 />
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+      <DataTable columns={speciesColumns} data={response} pagination />
     </>
   );
 };

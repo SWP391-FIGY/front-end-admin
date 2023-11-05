@@ -1,62 +1,59 @@
-export const speciesInfo = [
+import { Button, Dropdown } from "flowbite-react";
+import Link from "next/link";
+import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
+
+export const speciesColumns = [
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "ID",
+    selector: (row) => row.id,
+    sortable: true,
   },
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "Name",
+    selector: (row) => row.name,
+    sortable: true,
   },
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "Color",
+    selector: (row) => row.color,
+    sortable: true,
   },
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "Size",
+    selector: (row) => row.size,
+	sortable: true,
   },
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "Voice",
+    selector: (row) => row.voice,
   },
   {
-    color: "green",
-    size: "small",
-    voice: "clear",
-    imageLink:
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGFycm90fGVufDB8fDB8fHww&w=1000&q=80",
-    age: "2",
-    habitat: "rain forest",
-    total: "1",
+    name: "Image Link",
+    cell: (row) => (
+      <img src={row.imageLink} 
+      style={{ width: '100px', height: 'auto' }}
+      />
+   ),
+  },
+  {
+    name: "Life Expectancy",
+    selector: (row) => row.lifeExpectancy,
+  },
+  {
+    name: "Habitat",
+    selector: (row) => row.habitat,
+  },
+  {
+    name: "Action",
+    cell: (row) => (
+      <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
+        <Link href={`/species/edit/${row.id}`}>
+          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+        </Link>
+        <Link href={`/species/details/${row.id}`}>
+          <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
+        </Link>
+      </Dropdown>
+    ),
   },
 ];
