@@ -194,3 +194,12 @@ export const purchaseOrderDetailColumns = [
     ),
   },
 ];
+
+export const purchaseOrderStatusEnum = [
+  "Prepare",
+  "Cancel",
+  "Delivery",
+  "Overdue",
+  "Return",
+  "Done",
+]

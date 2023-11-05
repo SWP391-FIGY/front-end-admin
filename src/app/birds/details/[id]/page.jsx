@@ -6,6 +6,7 @@ import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import { birdStatusEnum } from "../../index/birdInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -117,7 +118,7 @@ const BirdDetailPage = () => {
                 <label htmlFor="status" className="text-lg font-bold">
                   Status
                 </label>
-                <p>{birdData.BirdStatus}</p>
+                <p>{birdStatusEnum[birdData.BirdStatus]}</p>
               </div>
             </div>
           </div>

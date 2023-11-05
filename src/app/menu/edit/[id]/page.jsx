@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { FiTrash2 } from "react-icons/fi";
+import { birdStatusEnum } from "@/app/birds/index/birdInfo";
+import { menuStatusEnum } from "../../index/menuInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -27,8 +29,8 @@ const MenuUpdatePage = () => {
       speciesId: 1,
       age: 3,
       size: "",
-      birdStatus: 1,
-      menuStatus: 1,
+      birdStatus: 0,
+      menuStatus: 0,
       nutritionalIngredients: "",
       menuDetails: [],
     },
@@ -159,23 +161,35 @@ const MenuUpdatePage = () => {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="birdStatus" value="Bird Status" />
-            <TextInput
+            <Select
               id="birdStatus"
-              type="number"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("birdStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.birdStatus}
-            />
+            >
+              {birdStatusEnum.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
+            </Select>
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuStatus" value="Menu Status" />
-            <TextInput
+            <Select
               id="menuStatus"
-              type="number"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("menuStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.menuStatus}
-            />
+              value={formik.values.birdStatus}
+            >
+              {menuStatusEnum.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
+            </Select>
           </div>
           <div className="flex flex-col gap-2">
             <Label

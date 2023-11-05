@@ -10,26 +10,69 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { FiTrash2 } from "react-icons/fi";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
+import axios from "axios";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const PurchaseRequestEditPage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false);
   const [selectedFood, setSelectedFood] = useState(1);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const params = useParams();
   const uid = params.id;
 
-  console.log('editing id',uid);
+  console.log("editing id", uid);
+  // Get food list
+  const {
+    response: foodResponse,
+    loading: foodLoading,
+    error: foodError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/food?select=*`,
+  });
+
+  const {
+    response: purchaseRequestResponse,
+    loading: purchaseRequestLoading,
+    error: purchaseRequestError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/purchaseRequest/?filter=ID%20eq%20${uid}&expand=purchaseRequestDetails`,
+  });
+
+  // Fetch old data to form
+  useEffect(() => {
+    if (purchaseRequestResponse) {
+      console.log(purchaseRequestResponse);
+      formik.setValues({
+        ...purchaseRequestResponse[0],
+      });
+    }
+  }, [purchaseRequestResponse]);
 
   const formik = useFormik({
     initialValues: {
-      purchaseRequestDetails: [],
+      ID: uid,
+      CreatorID: 0,
+      DateTime: new Date(),
+      Status: 0,
+      PurchaseRequestDetails: [],
     },
+    validationSchema: Yup.object({
+      CreatorID: Yup.number().min(1),
+      PurchaseRequestDetails: Yup.array().min(
+        1,
+        "Need at least 1 food in request"
+      ),
+    }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
@@ -37,10 +80,14 @@ const PurchaseRequestEditPage = () => {
       };
       console.log("Submitted");
       axios
-        .post(`${API}/cage`, payloadData)
+        .put(`${API}/purchaseRequest/${uid}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          router.push("/purchase-request/index");
+        })
+        .then((response) => {
+          message.success("Update purchase request success");
         })
         .catch((error) => {
           setSpinner(false);
@@ -55,28 +102,32 @@ const PurchaseRequestEditPage = () => {
   };
 
   const onAddFoodClick = (e) => {
-    const existingItemIndex = formik.values.purchaseRequestDetails.findIndex(
-      (item) => item.foodId === selectedFood
+    const existingItemIndex = formik.values.PurchaseRequestDetails.findIndex(
+      (item) => item.FoodID === selectedFood
     );
     if (existingItemIndex !== -1) {
-      const updatedFoodItems = [...formik.values.purchaseRequestDetails];
-      updatedFoodItems[existingItemIndex].quantity += parseInt(selectedQuantity);
-      formik.setFieldValue("purchaseRequestDetails", updatedFoodItems);
+      const updatedFoodItems = [...formik.values.PurchaseRequestDetails];
+      updatedFoodItems[existingItemIndex].Quantity +=
+        parseInt(selectedQuantity);
+      formik.setFieldValue("PurchaseRequestDetails", updatedFoodItems);
     } else {
       // If it doesn't exist, add a new item
-      formik.setFieldValue("purchaseRequestDetails", [
-        ...formik.values.purchaseRequestDetails,
+      formik.setFieldValue("PurchaseRequestDetails", [
+        ...formik.values.PurchaseRequestDetails,
         {
-          foodId: selectedFood,
-          quantity: parseInt(selectedQuantity),
+          PurchaseRequestID: uid,
+          FoodID: selectedFood,
+          Quantity: parseInt(selectedQuantity),
         },
       ]);
     }
   };
 
-  function deleteFoodItem(foodId) {
-    const updatedFoodItems = formik.values.purchaseRequestDetails.filter(item => item.foodId !== foodId);
-    formik.setFieldValue("purchaseRequestDetails", updatedFoodItems);
+  function deleteFoodItem(foodID) {
+    const updatedFoodItems = formik.values.PurchaseRequestDetails.filter(
+      (item) => item.FoodID !== foodID
+    );
+    formik.setFieldValue("PurchaseRequestDetails", updatedFoodItems);
   }
 
   useEffect(() => {
@@ -87,7 +138,10 @@ const PurchaseRequestEditPage = () => {
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
         <div className="flex flex-col justify-between gap-4">
-          <Link href={"/purchase-request/index"} className="flex flex-row gap-2">
+          <Link
+            href={"/purchase-request/index"}
+            className="flex flex-row gap-2"
+          >
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
           <h2 className="text-3xl font-bold">Edit Purchase Request</h2>
@@ -96,9 +150,6 @@ const PurchaseRequestEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
-          
-          
-
           <div className="flex flex-col gap-2">
             <Label value="Food details" />
             <Table>
@@ -110,13 +161,21 @@ const PurchaseRequestEditPage = () => {
               <Table.Body className="divide-y">
                 {/* //TODO: Get list food */}
 
-                {formik.values.purchaseRequestDetails.length > 0 &&
-                  formik.values.purchaseRequestDetails.map((item, index) => {
+                {formik.values.PurchaseRequestDetails.length > 0 &&
+                  formik.values.PurchaseRequestDetails.map((item, index) => {
+                    const foodItem = foodResponse.find(x=> x.ID == item.FoodID)
+                    console.log(foodItem);
                     return (
                       <Table.Row key={index}>
-                        <Table.Cell>{item.foodId}</Table.Cell>
-                        <Table.Cell>{item.quantity}</Table.Cell>
-                        <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2/>Delete</Table.Cell>
+                        <Table.Cell>{ foodItem.Name}</Table.Cell>
+                        <Table.Cell>{item.Quantity}</Table.Cell>
+                        <Table.Cell
+                          className="flex items-center gap-2"
+                          onClick={() => deleteFoodItem(item.FoodID)}
+                        >
+                          <FiTrash2 />
+                          Delete
+                        </Table.Cell>
                       </Table.Row>
                     );
                   })}
@@ -128,8 +187,17 @@ const PurchaseRequestEditPage = () => {
                       onChange={onFoodSelected}
                       value={selectedFood}
                     >
-                      <option value={1}>Species 1</option>
-                      <option value={2}>Species 2</option>
+                      {foodResponse && foodResponse.length > 0 ? (
+                        foodResponse.map((food, index) => {
+                          return (
+                            <option key={index} value={food.ID}>
+                              {food.Name}
+                            </option>
+                          );
+                        })
+                      ) : (
+                        <option disabled>Loading...</option>
+                      )}
                     </Select>
                   </Table.Cell>
                   <Table.Cell>

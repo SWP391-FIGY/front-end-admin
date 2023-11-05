@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2"
+import { feedingPlanStatus } from "../../index/planInfo"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -150,8 +151,9 @@ const PlanEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.feedingStatus}
             >
-              <option>Status 1</option>
-              <option>Status 2</option>
+              {feedingPlanStatus.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
             </Select>
             {formik.touched.feedingStatus && formik.errors.feedingStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

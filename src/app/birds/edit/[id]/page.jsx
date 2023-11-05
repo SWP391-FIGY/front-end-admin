@@ -20,6 +20,7 @@ import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
+import { birdStatusEnum } from "../../index/birdInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -217,8 +218,9 @@ const BirdEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.BirdStatus}
             >
-              <option value={1}>Status 1</option>
-              <option value={2}>Status 2</option>
+              {birdStatusEnum.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

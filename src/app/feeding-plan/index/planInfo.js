@@ -35,3 +35,10 @@ export const planInfo = [
         notation: "Urgent"
 	}
 ]
+
+export const feedingPlanStatus = [
+    "Upcoming",
+    "Feed",
+    "Other",
+    "Disabled"
+]

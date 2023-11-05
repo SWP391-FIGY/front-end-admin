@@ -18,6 +18,7 @@ import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -52,7 +53,7 @@ const BirdCreatePage = () => {
       DoB: moment(new Date()).format('DD/MM/YYYY'),
       LastModifyDate: moment(new Date()),
       Gender: "Male",
-      birdStatus: 1,
+      birdStatus: 0,
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),

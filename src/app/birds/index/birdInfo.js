@@ -60,3 +60,12 @@ export const birdColumns = [
     ),
   },
 ];
+
+export const birdStatusEnum = [
+  "Active",
+  "Dead",
+  "Sick",
+  "Molt",
+  "Sold",
+  "Other"
+]

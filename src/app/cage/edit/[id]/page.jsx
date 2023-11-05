@@ -16,6 +16,7 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { API } from "@/constants";
 import { message } from "antd";
+import { cageStatusEnum } from "../../index/cageInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -155,8 +156,9 @@ const CageEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.cageStatus}
             >
-              <option value={1}>In use</option>
-              <option value={2}>Maintainance</option>
+              {cageStatusEnum.map((status,index) => {
+                <option value={index}>{status}</option>
+              })}
             </Select>
             {formik.touched.cageStatus && formik.errors.cageStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">

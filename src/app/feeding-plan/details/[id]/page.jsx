@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
-import { planInfo } from "../../index/planInfo"
+import { feedingPlanStatus as feedingPlanStatusEnum, planInfo } from "../../index/planInfo"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -71,7 +71,7 @@ return (
           </div>
           <div planData="col-span-2 sm:col-span-1">
             <label htmlFor="feedingStatus" className="text-lg font-bold">Feeding Status</label>
-            <p>{planData.feedingStatus}</p>
+            <p>{feedingPlanStatusEnum[planData.feedingStatus]}</p>
           </div>
           <div className="col-span-2 sm:col-span-1">
             <label htmlFor="notation" className="text-lg font-bold">Notation</label>
