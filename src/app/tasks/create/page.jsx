@@ -18,11 +18,32 @@ import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
+import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const TaskCreatePage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false);
+
+    // Get bird list
+    const {
+      response: birdResponse,
+      loading: birdLoading,
+      error: birdError,
+    } = useAxios({
+      method: "get",
+      url: `${API}/bird/`,
+    });
+    // Get cage list
+    const {
+      response: cageResponse,
+      loading: cageLoading,
+      error: cageError,
+    } = useAxios({
+      method: "get",
+      url: `${API}/cage/`,
+    });
 
   const formik = useFormik({
     initialValues: {
@@ -86,19 +107,45 @@ const TaskCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
-          <div className="flex flex-col gap-2">
+          {/* //* Bird  */}
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="BirdId" value="Bird" />
-            <Select
-              id="BirdId"
-              name="BirdId"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.BirdId}
-            >
-              <option value={1}>Bird 1</option>
-              <option value={2}>Bird 2</option>
-              <option value={3}>Bird 3</option>
-            </Select>
+            <div className="flex w-full gap-2">
+              <div className="w-[500px]">
+              <Select
+                  id="BirdId"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("BirdId", parseInt(stringSelection));
+                  }}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.BirdId}
+                >
+                  {birdResponse && birdResponse.length > 0 ? (
+                    birdResponse.map((bird, index) => {
+                      return (
+                        <option key={index} value={bird.id}>
+                          Bird {bird.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
+                </Select>
+              </div>
+              <Link href={{pathname:"/birds/create", query: {...formik.values, 'bird-add':true}}}>
+                <Button>
+                  <div className="flex flex-row justify-center gap-2">
+                    <div className="my-auto">
+                      <HiPlus />
+                    </div>
+                    <p>Add new bird</p>
+                  </div>
+                </Button>
+              </Link>
+            </div>
+
             {formik.touched.BirdId && formik.errors.BirdId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.BirdId}
@@ -106,28 +153,34 @@ const TaskCreatePage = () => {
             ) : null}
           </div>
 
+          {/* // * Bird cage */}
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="CageId"
-                  name="CageId"
-                  onChange={formik.handleChange}
+                  id="CageID"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("CageID", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.CageId}
+                  value={formik.values.CageID}
                 >
-                  <option value={1}>Cage 1</option>
-                  <option value={2}>Cage 2</option>
-                  <option value={3}>Cage 3</option>
+                  {cageResponse && cageResponse.length > 0 ? (
+                    cageResponse.map((cage, index) => {
+                      return (
+                        <option key={index} value={cage.id}>
+                          Cage {cage.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
-              <Link
-                href={{
-                  pathname: "/cage/create",
-                  query: { ...formik.values, "bird-add": true },
-                }}
-              >
+              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">

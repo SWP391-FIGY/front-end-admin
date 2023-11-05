@@ -13,13 +13,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { message } from "antd";
 import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
+import { DatePicker, Space, message } from "antd";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -48,6 +48,25 @@ const TaskEditPage = () => {
       });
     }
   }, [taskResponse]);
+
+      // Get bird list
+      const {
+        response: birdResponse,
+        loading: birdLoading,
+        error: birdError,
+      } = useAxios({
+        method: "get",
+        url: `${API}/bird/`,
+      });
+      // Get cage list
+      const {
+        response: cageResponse,
+        loading: cageLoading,
+        error: cageError,
+      } = useAxios({
+        method: "get",
+        url: `${API}/cage/`,
+      });
 
   const formik = useFormik({
     initialValues: {
@@ -105,43 +124,89 @@ const TaskEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]">
 
-          <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="BirdId"
-              value="Bird"
-            />
-            <Select
-              id="BirdId"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.BirdId}
-            >
-                  <option value={1}>Bird 1</option>
-                  <option value={2}>Bird 2</option>
-                  <option value={3}>Bird 3</option>
-            </Select>
+          {/* //* Bird  */}
+          <div className="flex flex-col w-full gap-2">
+            <Label htmlFor="BirdId" value="Bird" />
+            <div className="flex w-full gap-2">
+              <div className="w-[500px]">
+              <Select
+                  id="BirdId"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("BirdId", parseInt(stringSelection));
+                  }}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.BirdId}
+                >
+                  {birdResponse && birdResponse.length > 0 ? (
+                    birdResponse.map((bird, index) => {
+                      return (
+                        <option key={index} value={bird.id}>
+                          Bird {bird.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
+                </Select>
+              </div>
+              <Link href={{pathname:"/birds/create", query: {...formik.values, 'bird-add':true}}}>
+                <Button>
+                  <div className="flex flex-row justify-center gap-2">
+                    <div className="my-auto">
+                      <HiPlus />
+                    </div>
+                    <p>Add new bird</p>
+                  </div>
+                </Button>
+              </Link>
+            </div>
+
             {formik.touched.BirdId && formik.errors.BirdId ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.BirdId}
               </div>
             ) : null}
           </div>
 
+          {/* // * Bird cage */}
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
-              <div className="w-full">
+              <div className="w-[500px]">
                 <Select
-                  id="CageId"
-                  onChange={formik.handleChange}
+                  id="CageID"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("CageID", parseInt(stringSelection));
+                  }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.CageId}
+                  value={formik.values.CageID}
                 >
-                  <option value={1}>Cage 1</option>
-                  <option value={2}>Cage 2</option>
-                  <option value={3}>Cage 3</option>
+                  {cageResponse && cageResponse.length > 0 ? (
+                    cageResponse.map((cage, index) => {
+                      return (
+                        <option key={index} value={cage.id}>
+                          Cage {cage.id}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
                 </Select>
               </div>
+              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
+                <Button>
+                  <div className="flex flex-row justify-center gap-2">
+                    <div className="my-auto">
+                      <HiPlus />
+                    </div>
+                    <p>Add new cage</p>
+                  </div>
+                </Button>
+              </Link>
             </div>
             {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -188,19 +253,20 @@ const TaskEditPage = () => {
             ) : null}
           </div>
           
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="DateTime" value="Date and Time" />
-            <Datepicker 
-              id="DateTime"
-              selected={formik.values.DateTime}
-              showTimeSelect
-              timeFormat="HH:mm"
-              timeIntervals={15}
-              dateFormat="dd/MM/yyyy HH:mm"
-              onChange={(date) => {
-                formik.setFieldValue("DateTime", date);
-              }}
-            />
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="DateTime" value="Date and Time" />            
+            <Space direction="vertical" size={12}>
+              <DatePicker
+                className="!important"
+                showTime
+                minuteStep={30}
+                secondStep={60}
+                autoClose
+                onSelect={(value) => {
+                  formik.setFieldValue("DateTime", value.$d);
+                }}
+              />
+            </Space>
             {formik.touched.DateTime && formik.errors.DateTime ? (
               <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.DateTime}
@@ -232,8 +298,11 @@ const TaskEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.Status}
             >
-              <option>Status 1</option>
-              <option>Status 2</option>
+              <option>Pending</option>
+              <option>Ongoing</option>
+              <option>Overdue</option>
+              <option>Upcoming</option>
+              <option>Not Assigned</option>
             </Select>
             {formik.touched.Status && formik.errors.Status ? (
               <div className="text-xs text-red-600 dark:text-red-400">
