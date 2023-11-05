@@ -217,8 +217,13 @@ const BirdEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.BirdStatus}
             >
-              <option value={1}>Status 1</option>
-              <option value={2}>Status 2</option>
+              <option value={1}>Active</option>
+              <option value={2}>Molt</option>
+              <option value={3}>Sick</option>
+              <option value={4}>Sold</option>
+              <option value={5}>Dead</option>
+              <option value={6}>Other</option>
+              <option value={7}>Cancel</option>
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
               <div className="text-xs text-red-600 dark:text-red-400">
