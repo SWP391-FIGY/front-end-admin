@@ -7,10 +7,16 @@ import { API } from "@/constants";
 import { message } from "antd";
 
 const MenuList = () => {
-  const { response, loading, error } = useAxios({
+
+  const {
+    response: mealMenuResponse,
+    loading,
+    error,
+  } = useAxios({
     method: "get",
-    url: `${API}/mealMenu`,
+    url: `${API}/mealMenu/?&expand=species,menuDetails($expand=Food)`,
   });
+  
 
   console.log("Fetched meal menu data", response);
   if (error) {

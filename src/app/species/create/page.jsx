@@ -189,7 +189,9 @@ const SpeciesCreatePage = () => {
             <TextInput
               id="lifeExpectancy"
 
-              type="text"
+              type="number"
+              min={0}
+              max={100}
               onChange={(e) => {
                 formik.setFieldValue('lifeExpectancy', parseInt(e.target.value))
               }}
