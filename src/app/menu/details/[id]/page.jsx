@@ -36,7 +36,7 @@ const MenuDetailPage = () => {
     error,
   } = useAxios({
     method: "get",
-    url: `${API}/mealMenu/?filter=ID%20eq%20${index}&expand=species,menuDetails($expand=Food)`,
+    url: `${API}/meal-menu/?filter=ID%20eq%20${index}&expand=species,menuDetails($expand=Food)`,
   });
 
   if (isNaN(index) || index < 0 || index >= menuInfo.length) {

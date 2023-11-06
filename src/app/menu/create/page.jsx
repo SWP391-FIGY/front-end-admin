@@ -83,7 +83,7 @@ const MenuCreatePage = () => {
       };
       console.log(payloadData.data);
       axios
-        .post(`${API}/mealMenu`, payloadData)
+        .post(`${API}/meal-menu`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
