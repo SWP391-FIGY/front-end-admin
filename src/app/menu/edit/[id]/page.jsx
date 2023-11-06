@@ -9,9 +9,15 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
@@ -77,8 +83,8 @@ const MenuUpdatePage = () => {
       speciesId: 1,
       daysBeforeFeeding: 1,
       size: "",
-      birdStatus: 0,
-      menuStatus: 0,
+      birdStatus: 1,
+      menuStatus: 1,
       nutritionalIngredients: "",
       menuDetails: [],
     },
@@ -100,7 +106,7 @@ const MenuUpdatePage = () => {
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
+      console.log('submit data',payloadData.data);
       axios
         .put(`${API}/mealMenu/${uid}`, payloadData.data)
         .then((response) => {
@@ -113,8 +119,9 @@ const MenuUpdatePage = () => {
         })
 
         .catch((error) => {
+          message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -150,9 +157,9 @@ const MenuUpdatePage = () => {
     formik.setFieldValue("menuDetails", updatedFoodItems);
   }
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
+  //(() => {
+  //  console.log(formik);
+  //}, [formik]);
 
   return (
     <PageLayout>
@@ -161,7 +168,7 @@ const MenuUpdatePage = () => {
           <Link href={"/menu/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Update Menu</h2>
+          <h2 className="text-3xl font-bold">Add new Menu</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
@@ -227,11 +234,13 @@ const MenuUpdatePage = () => {
             <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
             <TextInput
               id="daysBeforeFeeding"
+              id="daysBeforeFeeding"
               type="number"
               min={0}
               max={365}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              value={formik.values.daysBeforeFeeding}
               value={formik.values.daysBeforeFeeding}
             />
             {formik.touched.daysBeforeFeeding && formik.errors.daysBeforeFeeding ? (
@@ -267,10 +276,8 @@ const MenuUpdatePage = () => {
             <Label htmlFor="birdStatus" value="Bird status" />
             <Select
               id="birdStatus"
-              onChange={(e) => {
-                const stringSelection = e.target.value
-                formik.setFieldValue("birdStatus", parseInt(stringSelection));
-              }}
+              name="birdStatus"
+              onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.birdStatus}
             >
@@ -287,13 +294,12 @@ const MenuUpdatePage = () => {
 {/* // * Menu status */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuStatus" value="Menu Status" />
-            <Select
+            <select
               id="menuStatus"
-              onChange={(e) => {
-                const stringSelection = e.target.value
-                formik.setFieldValue("menuStatus", parseInt(stringSelection));
-              }}
+              name="menuStatus"
+              onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              value={formik.values.menuStatus}
               value={formik.values.menuStatus}
             >
               {menuStatusEnum.map((status, index) => {
@@ -407,4 +413,4 @@ const MenuUpdatePage = () => {
   );
 };
 
-export default MenuUpdatePage;
+export default MenuEditPage;

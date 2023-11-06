@@ -9,9 +9,15 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
 import { useAuthContext } from "@/contexts/authContext";
 import { API } from "@/constants";
@@ -25,6 +31,7 @@ import { birdStatusEnum } from "@/app/birds/index/birdInfo";
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const MenuCreatePage = () => {
+  const router = useRouter();
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
   const [selectedFood, setSelectedFood] = useState(1);
@@ -79,7 +86,7 @@ const MenuCreatePage = () => {
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
+      console.log(payloadData.data);
       axios
         .post(`${API}/mealMenu`, payloadData)
         .then((response) => {
@@ -91,8 +98,9 @@ const MenuCreatePage = () => {
           message.success("Add new Menu success");
         })
         .catch((error) => {
+          message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -128,9 +136,9 @@ const MenuCreatePage = () => {
     formik.setFieldValue("menuDetails", updatedFoodItems);
   }
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
+  //(() => {
+  //  console.log(formik);
+  //}, [formik]);
 
   return (
     <PageLayout>
@@ -205,11 +213,13 @@ const MenuCreatePage = () => {
             <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
             <TextInput
               id="daysBeforeFeeding"
+              id="daysBeforeFeeding"
               type="number"
               min={0}
               max={365}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              value={formik.values.daysBeforeFeeding}
               value={formik.values.daysBeforeFeeding}
             />
             {formik.touched.daysBeforeFeeding && formik.errors.daysBeforeFeeding ? (

@@ -157,7 +157,7 @@ const CageEditPage = () => {
               value={formik.values.cageStatus}
             >
               {cageStatusEnum.map((status,index) => {
-                <option value={index}>{status}</option>
+                return <option key={index} value={index}>{status}</option>;
               })}
             </Select>
             {formik.touched.cageStatus && formik.errors.cageStatus ? (

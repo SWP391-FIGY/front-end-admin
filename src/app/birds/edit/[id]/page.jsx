@@ -59,7 +59,6 @@ const BirdEditPage = () => {
     url: `${API}/cage/`,
   });
 
-  
   // Fetch old data to form
   useEffect(() => {
     if (birdResponse) {
@@ -98,13 +97,12 @@ const BirdEditPage = () => {
       const payloadData = {
         data: values,
       };
-      console.log('submit data',payloadData.data);
+      console.log("submit data", payloadData.data);
       axios
         .put(`${API}/bird/${birdId}`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          message.success("Update bird success");
           router.push("/birds/index");
         })
         .then((response) => {
@@ -113,14 +111,14 @@ const BirdEditPage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
 
-  useEffect(() =>{
+  useEffect(() => {
     console.log(formik);
-  },[formik])
+  }, [formik]);
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -215,14 +213,14 @@ const BirdEditPage = () => {
             <Select
               id="BirdStatus"
               onChange={(e) => {
-                const stringSelection = e.target.value
+                const stringSelection = e.target.value;
                 formik.setFieldValue("BirdStatus", parseInt(stringSelection));
               }}
               onBlur={formik.handleBlur}
               value={formik.values.BirdStatus}
             >
-              {birdStatusEnum.map((status,index) => {
-                <option value={index}>{status}</option>
+              {birdStatusEnum.map((status, index) => {
+                return <option key={index} value={index}>{status}</option>;
               })}
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
@@ -240,8 +238,11 @@ const BirdEditPage = () => {
                 <Select
                   id="SpeciesId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
-                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                    const stringSelection = e.target.value;
+                    formik.setFieldValue(
+                      "SpeciesId",
+                      parseInt(stringSelection)
+                    );
                   }}
                   onBlur={formik.handleBlur}
                   value={formik.values.SpeciesId}
@@ -275,7 +276,7 @@ const BirdEditPage = () => {
                 <Select
                   id="CageID"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("CageID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}

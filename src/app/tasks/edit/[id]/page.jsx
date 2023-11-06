@@ -87,7 +87,7 @@ const TaskEditPage = () => {
       DateTime: Yup.date()
         .min(new Date(), "Date must be today or later")
         .required("Required"),
-      Description: Yup.string().required("Required"),
+      
       Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {

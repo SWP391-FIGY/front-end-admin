@@ -269,9 +269,9 @@ const BirdCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.CageId && formik.errors.CageId ? (
+            {formik.touched.CageID && formik.errors.CageID ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.CageId}
+                {formik.errors.CageID}
               </div>
             ) : null}
           </div>

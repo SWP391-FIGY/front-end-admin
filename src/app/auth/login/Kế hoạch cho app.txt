@@ -1,7 +1,10 @@
-làm xong purchase request crud
+cách làm purchase order
+  create / id
+    get pr từ id đã nhập
+    seed data cần thiết
+    trong đó input thêm giá thực tế
+    save lại
 
-yêu cầu ghép status vô dropdown
+làm phân quyền
 
-xử lí các case update status
-
-xử lí phân quyền
+làm dash board  

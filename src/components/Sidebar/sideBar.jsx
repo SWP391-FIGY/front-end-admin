@@ -9,14 +9,21 @@ import {
   HiTable,
   HiUser,
   HiViewBoards,
-  HiUserCircle
+  HiUserCircle,
 } from "react-icons/hi";
 import { topSideBarData } from "./topSideBarData";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts/authContext";
+import { removeToken } from "@/helper";
 
 const PageSidebar = () => {
   const currentPathName = usePathname();
   const currentBasePath = currentPathName.split("/")[1];
+  const { user } = useAuthContext();
+  const handleLogout = () => {
+    removeToken();
+    router.push("/auth/login");
+  };
 
   return (
     <Sidebar aria-label="Default sidebar example" className="h-[100vh]">
@@ -68,10 +75,18 @@ const PageSidebar = () => {
         </Sidebar.Items>
         <Sidebar.Items aria-label="User info management">
           <Sidebar.ItemGroup>
-            <Sidebar.Item href="/auth/login" icon={HiUserCircle}>
-              <p>Login/Sign Up</p>
-            </Sidebar.Item>
-            
+            {user ? (
+              <>
+                <div>Hello User {user && user.name}</div>
+                <Sidebar.Item icon={HiUserCircle}>
+                  <p onClick={handleLogout}>Logout</p>
+                </Sidebar.Item>
+              </>
+            ) : (
+              <Sidebar.Item href="/auth/login" icon={HiUserCircle}>
+                <p>Login/Sign Up</p>
+              </Sidebar.Item>
+            )}
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </div>

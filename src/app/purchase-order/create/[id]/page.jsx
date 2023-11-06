@@ -14,6 +14,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { FiTrash2 } from "react-icons/fi";
+import { useParams } from "next/navigation";
+import { useAuthContext } from "@/contexts/authContext";
+import { API } from "@/constants";
+import useAxios from "@/hooks/useFetch";
+import axios from "axios";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -23,10 +28,40 @@ const PurchaseOrderCreatePage = () => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedUnit, setSelectedUnit] = useState(1);
   const [selectedNETPrice, setSelectedNETPrice] = useState(1);
-  const [selectedDeliverDate, setSelectedDeliverDate] = useState(1);
+  const [selectedDeliverDate, setSelectedDeliverDate] = useState(new Date());
+  const { user } = useAuthContext();
+  const params = useParams();
+  const uid = params.id;
 
+  console.log("editing id", uid);
+
+  // Get old Purchase Request
+  const {
+    response: purchaseRequestResponse,
+    loading,
+    error,
+  } = useAxios({
+    method: "get",
+    url: `${API}/purchaseRequest/?filter=ID%20eq%20${uid}&expand=creator,purchaseRequestDetails($expand=Food)`,
+  });
+
+
+  // Get food list
+  const {
+    response: foodResponse,
+    loading: foodLoading,
+    error: foodError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/food?select=*`,
+  });
   const formik = useFormik({
     initialValues: {
+      creatorID: 0,
+      purchaseRequestID: parseInt(uid),
+      createDate: new Date(),
+      status: 0,
+      note: "a",
       purchaseOrderDetails: [],
     },
     onSubmit: (values) => {
@@ -36,7 +71,7 @@ const PurchaseOrderCreatePage = () => {
       };
       console.log("Submitted");
       axios
-        .post(`${API}/cage`, payloadData)
+        .post(`${API}/purchaseOrder`, payloadData)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
@@ -48,6 +83,13 @@ const PurchaseOrderCreatePage = () => {
     },
   });
 
+  useEffect(() => {
+    if (user) {
+      console.log("context user", user);
+      formik.setFieldValue("creatorID", parseInt(user.id));
+    }
+  }, [user]);
+
   const onFoodSelected = (e) => {
     setSelectedFood(e.target.value);
     console.log(selectedFood);
@@ -55,29 +97,32 @@ const PurchaseOrderCreatePage = () => {
 
   const onAddFoodClick = (e) => {
     const existingItemIndex = formik.values.purchaseOrderDetails.findIndex(
-      (item) => item.foodId === selectedFood
+      (item) => item.FoodID === selectedFood
     );
     if (existingItemIndex !== -1) {
       const updatedFoodItems = [...formik.values.purchaseOrderDetails];
-      updatedFoodItems[existingItemIndex].quantity += parseInt(selectedQuantity);
+      updatedFoodItems[existingItemIndex].Quantity +=
+        parseInt(selectedQuantity);
       formik.setFieldValue("purchaseOrderDetails", updatedFoodItems);
     } else {
       // If it doesn't exist, add a new item
       formik.setFieldValue("purchaseOrderDetails", [
         ...formik.values.purchaseOrderDetails,
         {
-          foodId: selectedFood,
-          quantity: parseInt(selectedQuantity),
-          unit: parseInt(selectedUnit),
-          NETPrice: parseInt(selectedNETPrice),
-          deliverDate: selectedDeliverDate,
+          FoodID: parseInt(selectedFood),
+          Quantity: parseInt(selectedQuantity),
+          Unit: parseInt(selectedUnit),
+          NetPrice: parseInt(selectedNETPrice),
+          DeliverDate: selectedDeliverDate,
         },
       ]);
     }
   };
 
   function deleteFoodItem(foodId) {
-    const updatedFoodItems = formik.values.purchaseOrderDetails.filter(item => item.foodId !== foodId);
+    const updatedFoodItems = formik.values.purchaseOrderDetails.filter(
+      (item) => item.FoodID !== foodId
+    );
     formik.setFieldValue("purchaseOrderDetails", updatedFoodItems);
   }
 
@@ -98,9 +143,6 @@ const PurchaseOrderCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
-          
-          
-
           <div className="flex flex-col gap-2">
             <Label value="Food details" />
             <Table>
@@ -119,12 +161,18 @@ const PurchaseOrderCreatePage = () => {
                   formik.values.purchaseOrderDetails.map((item, index) => {
                     return (
                       <Table.Row key={index}>
-                        <Table.Cell>{item.foodId}</Table.Cell>
-                        <Table.Cell>{item.quantity}</Table.Cell>
-                        <Table.Cell>{item.unit}</Table.Cell>
-                        <Table.Cell>{item.NETPrice}</Table.Cell>
-                        <Table.Cell>{item.deliverDate}</Table.Cell>
-                        <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2/>Delete</Table.Cell>
+                        <Table.Cell>{foodResponse.find(f => f.ID == item.FoodID).Name}</Table.Cell>
+                        <Table.Cell>{item.Quantity}</Table.Cell>
+                        <Table.Cell>{foodResponse.find(f => f.ID == item.FoodID).Unit}</Table.Cell>
+                        <Table.Cell>{item.NetPrice}</Table.Cell>
+                        <Table.Cell>{new Date(item.DeliverDate).toDateString()}</Table.Cell>
+                        <Table.Cell
+                          className="flex items-center gap-2"
+                          onClick={() => deleteFoodItem(item.FoodID)}
+                        >
+                          <FiTrash2 />
+                          Delete
+                        </Table.Cell>
                       </Table.Row>
                     );
                   })}
@@ -136,8 +184,14 @@ const PurchaseOrderCreatePage = () => {
                       onChange={onFoodSelected}
                       value={selectedFood}
                     >
-                      <option value={1}>Species 1</option>
-                      <option value={2}>Species 2</option>
+                      {
+                        purchaseRequestResponse ? purchaseRequestResponse[0].PurchaseRequestDetails.map((item, index) => {
+                          return(
+                            <option key={index} value={item.Food.ID}>{item.Food.Name}</option>
+                          )
+                        }) :
+                        <option disabled>Loading...</option>
+                      }
                     </Select>
                   </Table.Cell>
                   <Table.Cell>
@@ -152,15 +206,7 @@ const PurchaseOrderCreatePage = () => {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <TextInput
-                      id="unit"
-                      type="number"
-                      min={1}
-                      onChange={(e) => {
-                        setSelectedUnit(e.target.value);
-                      }}
-                      value={selectedUnit}
-                    />
+                  
                   </Table.Cell>
                   <Table.Cell>
                     <TextInput
@@ -175,9 +221,9 @@ const PurchaseOrderCreatePage = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <Datepicker
-                        selected={selectedDeliverDate}
-                        onChange={(date) => setSelectedDeliverDate(date)}
-                        dateFormat="yyyy-MM-dd"
+                      selected={selectedDeliverDate}
+                      onSelectedDateChanged={(date) => {console.log(date);setSelectedDeliverDate(date.toISOString())}}
+                      dateFormat="yyyy-MM-dd"
                     />
                   </Table.Cell>
                   <Table.Cell>

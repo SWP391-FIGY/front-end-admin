@@ -1,5 +1,6 @@
 "use client";
-import { useParams } from "next/navigation";
+import { Label, Spinner } from "flowbite-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { menuInfo, menuDetailInfo } from "../../index/menuInfo";
@@ -13,7 +14,7 @@ const { default: PageLayout } = require("@/layout/pageLayout");
 
 const MenuDetailPage = () => {
   const params = useParams();
-  const index = parseInt(params.id, 10);
+  const menuId = parseInt(params.id, 10);
 
   //  useEffect(() => {
   //    axios
@@ -42,7 +43,7 @@ const MenuDetailPage = () => {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-          <p>Menu not found.</p>
+          <p>Meal menu not found.</p>
         </div>
       </PageLayout>
     );
@@ -67,9 +68,8 @@ const MenuDetailPage = () => {
           >
             <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Menu Details</h2>
+          <h2 className="text-3xl font-bold">Meal Menu Details</h2>
         </div>
-
         <div className="bg-white rounded-lg shadow p-6">
           <div className="col-span-2 sm:col-span-1">
             <label htmlFor="menuId" className="text-lg font-bold">
@@ -128,4 +128,5 @@ const MenuDetailPage = () => {
     </PageLayout>
   );
 };
+
 export default MenuDetailPage;
