@@ -1,13 +1,14 @@
 "use client";
-
-import Link from "next/link";
-import { Button } from "flowbite-react";
-import { HiPlus } from "react-icons/hi";
 import MenuList from "./menuList";
-
-const { default: PageLayout } = require("@/layout/pageLayout");
+import PageLayout from "@/layout/pageLayout";
+import { HiPlus } from "react-icons/hi";
+import { useRouter } from "next/navigation";
+import { Button } from "flowbite-react";
+import Link from "next/link";
 
 const MenuListPage = () => {
+  const router = useRouter();
+
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -19,7 +20,7 @@ const MenuListPage = () => {
                 <div className="my-auto">
                   <HiPlus />
                 </div>
-                <p>Add new menu</p>
+                <p>Add new meal menu</p>
               </div>
             </Button>
           </Link>

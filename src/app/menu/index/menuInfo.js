@@ -1,186 +1,55 @@
-import { Dropdown } from "flowbite-react";
+import { Button, Dropdown } from "flowbite-react";
 import Link from "next/link";
-import { FiEdit, FiEye, FiMoreVertical } from "react-icons/fi";
+import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
-export const menuInfo = [
-  {
-    id: 1,
-    menuName: "Menu 1",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 2,
-    menuName: "Menu 2",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 3,
-    menuName: "Menu 3",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 4,
-    menuName: "Menu 4",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 5,
-    menuName: "Menu 5",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 6,
-    menuName: "Menu 6",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 7,
-    menuName: "Menu 7",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 8,
-    menuName: "Menu 8",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 9,
-    menuName: "Menu 9",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 10,
-    menuName: "Menu 10",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 11,
-    menuName: "Menu 11",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 12,
-    menuName: "Menu 12",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-  {
-    id: 13,
-    menuName: "Menu 13",
-    age: 4,
-    size: "small",
-    birdStatus: 1,
-    menuStatus: 1,
-    nutritionalIngredients: "",
-    speciesId: 1,
-  },
-];
+const getBirdStatusText = (value) => {
+  return value === 1 ? "Assigned" : value === 2 ? "Not assigned" : "";
+};
 
-export const menuDetailInfo = [
-  {
-    id: 1,
-    menuId: 1,
-    foodId: 2,
-    quantity: 10,
-  },
-  {
-    id: 2,
-    menuId: 1,
-    foodId: 1,
-    quantity: 10,
-  },
-  {
-    id: 3,
-    menuId: 1,
-    foodId: 3,
-    quantity: 10,
-  },
-];
+const getMenuStatusText = (value) => {
+  return value === 1 ? "In use" : value === 2 ? "Not in use" : "";
+};
 
 export const menuColumns = [
+  {
+    name: "ID",
+    selector: (row) => row.id,
+    sortable: true,
+  },
   {
     name: "Name",
     selector: (row) => row.menuName,
     sortable: true,
   },
   {
-    name: "Age",
-    selector: (row) => row.age,
+    name: "Species",
+    selector: (row) => row.Species.name,
+    sortable: true,
+  },
+  {
+    name: "Days before feeding",
+    selector: (row) => row.daysBeforeFeeding,
+	sortable: true,
   },
   {
     name: "Size",
     selector: (row) => row.size,
+	sortable: true,
   },
   {
-    name: "Bird Status",
-    selector: (row) => row.birdStatus,
+    name: "Bird status",
+    selector: (row) => getBirdStatusText(row.birdStatus),
+    sortable: true,
   },
   {
-    name: "Menu Status",
-    selector: (row) => row.menuStatus,
+    name: "Menu status",
+    selector: (row) => getMenuStatusText(row.menuStatus),
+    sortable: true,
   },
   {
-    name: "Species Id",
-    selector: (row) => row.speciesId,
+    name: "Nutritional ingredients",
+    selector: (row) => row.nutritionalIngredients,
+	sortable: true,
   },
   {
     name: "Action",
@@ -196,32 +65,3 @@ export const menuColumns = [
     ),
   },
 ];
-
-export const menuDetailColumns = [
-  {
-    name: "Food",
-    selector: (row) => row.foodId,
-    sortable: true,
-  },
-  {
-    name: "Quantity",
-    selector: (row) => row.quantity,
-    sortable: true,
-  },
-  {
-    name: "Action",
-    cell: (row) => (
-      <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
-      </Dropdown>
-    ),
-  },
-];
-
-export const menuStatusEnum = [
-  "Active",
-  "Deactive",
-  "Cancel",
-  "Other"
-]

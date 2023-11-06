@@ -9,23 +9,40 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { message } from "antd";
+import { HiPlus } from "react-icons/hi";
+import moment from "moment/moment";
+import axios from "axios";
+import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const MenuCreatePage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false);
   const [selectedFood, setSelectedFood] = useState(1);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+  // Get species list
+  const {
+    response: speciesResponse,
+    loading: speciesLoading,
+    error: speciesError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/species/`,
+  });
 
   const formik = useFormik({
     initialValues: {
       menuName: "",
       speciesId: 1,
-      age: 3,
+      daysBeforeFeeding: 3,
       size: "",
       birdStatus: 1,
       menuStatus: 1,
@@ -35,22 +52,29 @@ const MenuCreatePage = () => {
     validationSchema: Yup.object({
       menuName: Yup.string().required("Required"),
       speciesId: Yup.number().required("Species is required"),
+      daysBeforeFeeding: Yup.number().max(20, "Days must be 20 or below").required("Days before feeding is required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log("Submitted");
+      console.log(payloadData.data);
       axios
-        .post(`${API}/cage`, payloadData)
+        .post(`${API}/meal-menu`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          
+          router.push("/menu/index")
+        })
+        .then((response) => {
+          message.success("Add new menu success");
         })
         .catch((error) => {
+          message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -86,9 +110,9 @@ const MenuCreatePage = () => {
     formik.setFieldValue("menuDetails", updatedFoodItems);
   }
 
-  useEffect(() => {
-    console.log(formik);
-  }, [formik]);
+  //(() => {
+  //  console.log(formik);
+  //}, [formik]);
 
   return (
     <PageLayout>
@@ -118,35 +142,66 @@ const MenuCreatePage = () => {
               </div>
             ) : null}
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="speciesId" value="Species Id" />
-            <Select
-              id="speciesId"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.speciesId}
-            >
-              <option value={1}>Species 1</option>
-              <option value={2}>Species 2</option>
-            </Select>
+
+          {/* //* Bird species */}
+          <div className="flex flex-col w-full gap-2">
+            <Label htmlFor="SpeciesId" value="Bird species" />
+            <div className="flex w-full gap-2">
+              <div className="w-[500px]">
+              <Select
+                  id="SpeciesId"
+                  onChange={(e) => {
+                    const stringSelection = e.target.value
+                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                  }}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.SpeciesId}
+                >
+                  {speciesResponse && speciesResponse.length > 0 ? (
+                    speciesResponse.map((species, index) => {
+                      return (
+                        <option key={index} value={species.id}>
+                          {species.name}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option disabled>Loading...</option>
+                  )}
+                </Select>
+              </div>
+              <Link href={"/species/create?bird-add=true"}>
+                <Button>
+                  <div className="flex flex-row justify-center gap-2">
+                    <div className="my-auto">
+                      <HiPlus />
+                    </div>
+                    <p>Add new species</p>
+                  </div>
+                </Button>
+              </Link>
+            </div>
+
             {formik.touched.speciesId && formik.errors.speciesId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.speciesId}
               </div>
             ) : null}
           </div>
+
           <div className="flex flex-col gap-2">
-            <Label htmlFor="age" value="Age" />
+            <Label htmlFor="daysBeforeFeeding" value="Days before feeding" />
             <TextInput
-              id="age"
+              id="daysBeforeFeeding"
               type="number"
               min={0}
               max={20}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.age}
+              value={formik.values.daysBeforeFeeding}
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="size" value="Size" />
             <TextInput
@@ -157,26 +212,37 @@ const MenuCreatePage = () => {
               value={formik.values.size}
             />
           </div>
+          
           <div className="flex flex-col gap-2">
             <Label htmlFor="birdStatus" value="Bird Status" />
-            <TextInput
+            <select
               id="birdStatus"
-              type="number"
+              name="birdStatus"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.birdStatus}
-            />
+            >
+              <option value="1">Assigned</option>
+              <option value="2">Not assigned</option>
+            </select>
           </div>
+
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuStatus" value="Menu Status" />
-            <TextInput
+            <select
               id="menuStatus"
-              type="number"
+              name="menuStatus"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.menuStatus}
-            />
+            >
+              <option value="1">In use</option>
+              <option value="2">Not in use</option>
+            </select>
           </div>
+
+
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="nutritionalIngredients"

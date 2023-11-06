@@ -1,39 +1,47 @@
 "use client";
-import { useParams } from "next/navigation";
+import { Label, Spinner } from "flowbite-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { menuInfo, menuDetailInfo } from "../../index/menuInfo";
-import { Table } from "flowbite-react";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const MenuDetailPage = () => {
   const params = useParams();
-  const index = parseInt(params.id, 10);
+  const menuId = parseInt(params.id, 10);
 
-  //  useEffect(() => {
-  //    axios
-  //      .get(`${API}/birds/${uid}`)
-  //      .then(response => {
-  //        setBirdData(response.data);
-  //        setLoading(false);
-  //      })
-  //      .catch(error => {
-  //        setLoading(false);
-  //        console.log('An error occurred:', error.response);
-  //      });
-  //  }, [uid]);
-  if (isNaN(index) || index < 0 || index >= menuInfo.length) {
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/meal-menu/?filter=ID%20eq%20${menuId}`,
+  });
+
+  if (isNaN(menuId) || menuId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-          <p>Menu not found.</p>
+          <p>Meal menu not found.</p>
         </div>
       </PageLayout>
     );
   }
+  if (error) {
+    message.error("Error While Getting Meal Menu Data");
+    return <>No Data</>;
+  }
+  if (loading && !error)
+    return (
+      <PageLayout>
+        <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+          <Spinner />
+        </div>
+      </PageLayout>
+    );
 
-  const menuData = menuInfo[index];
+  const menuData = response[0];
+  console.log(menuData);
 
   return (
     <PageLayout>
@@ -45,60 +53,57 @@ const MenuDetailPage = () => {
           >
             <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Menu Details</h2>
+          <h2 className="text-3xl font-bold">Meal Menu Details</h2>
         </div>
-
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Name</label>
-              <p>{menuData.menuName}</p>
+              <label htmlFor="id" className="text-lg font-bold">
+                ID
+              </label>
+              <p>{menuData.id}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Age</label>
-              <p>{menuData.age}</p>
+              <label htmlFor="name" className="text-lg font-bold">
+                Name
+              </label>
+              <p>{menuData.name}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Size</label>
+              <label htmlFor="speciesId" className="text-lg font-bold">
+                Species ID
+              </label>
+              <p>{menuData.speciesId}</p>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label htmlFor="daysBeforeFeeding" className="text-lg font-bold">
+                Days before feeding
+              </label>
+              <p>{menuData.daysBeforeFeeding}</p>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label htmlFor="size" className="text-lg font-bold">
+                Size
+              </label>
               <p>{menuData.size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Bird status</label>
+              <label htmlFor="birdStatus" className="text-lg font-bold">
+                Bird status
+              </label>
               <p>{menuData.birdStatus}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Menu Status</label>
+              <label htmlFor="menuStatus" className="text-lg font-bold">
+                Menu status
+              </label>
               <p>{menuData.menuStatus}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">
-                Nutritional Ingredients
+              <label htmlFor="nutritionalIngredients" className="text-lg font-bold">
+                Nutritional ingredients
               </label>
               <p>{menuData.nutritionalIngredients}</p>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Species Id</label>
-              <p>{menuData.speciesId}</p>
-            </div>
-            <div className="col-span-2 ">
-              <label className="text-lg font-bold">Species Id</label>
-              <Table>
-                <Table.Head>
-                  <Table.HeadCell>Food Name</Table.HeadCell>
-                  <Table.HeadCell>Quantity</Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                  {menuDetailInfo.length > 0 &&
-                    menuDetailInfo.map((item, index) => {
-                      return (
-                        <Table.Row key={index}>
-                          <Table.Cell>{item.foodId}</Table.Cell>
-                          <Table.Cell>{item.quantity}</Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                </Table.Body>
-              </Table>
             </div>
           </div>
         </div>
@@ -106,4 +111,5 @@ const MenuDetailPage = () => {
     </PageLayout>
   );
 };
+
 export default MenuDetailPage;
