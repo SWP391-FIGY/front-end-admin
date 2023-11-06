@@ -103,6 +103,7 @@ const BirdEditPage = () => {
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+          message.success("Update bird success");
           router.push("/birds/index");
         })
         .then((response) => {
@@ -111,7 +112,7 @@ const BirdEditPage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error);
+          console.log("An error occurred:", error.response);
         });
     },
   });

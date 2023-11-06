@@ -83,8 +83,8 @@ const MenuUpdatePage = () => {
       speciesId: 1,
       daysBeforeFeeding: 1,
       size: "",
-      birdStatus: 1,
-      menuStatus: 1,
+      birdStatus: 0,
+      menuStatus: 0,
       nutritionalIngredients: "",
       menuDetails: [],
     },
@@ -168,7 +168,7 @@ const MenuUpdatePage = () => {
           <Link href={"/menu/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Add new Menu</h2>
+          <h2 className="text-3xl font-bold">Update Menu</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
@@ -234,13 +234,11 @@ const MenuUpdatePage = () => {
             <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
             <TextInput
               id="daysBeforeFeeding"
-              id="daysBeforeFeeding"
               type="number"
               min={0}
               max={365}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.daysBeforeFeeding}
               value={formik.values.daysBeforeFeeding}
             />
             {formik.touched.daysBeforeFeeding && formik.errors.daysBeforeFeeding ? (
@@ -277,7 +275,10 @@ const MenuUpdatePage = () => {
             <Select
               id="birdStatus"
               name="birdStatus"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("birdStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.birdStatus}
             >
@@ -294,13 +295,16 @@ const MenuUpdatePage = () => {
 {/* // * Menu status */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuStatus" value="Menu Status" />
-            <select
+            <Select
               id="menuStatus"
               name="menuStatus"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("menuStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.menuStatus}
-              value={formik.values.menuStatus}
+              
             >
               {menuStatusEnum.map((status, index) => {
                 <option value={index}>{status}</option>
@@ -413,4 +417,4 @@ const MenuUpdatePage = () => {
   );
 };
 
-export default MenuEditPage;
+export default MenuUpdatePage;
