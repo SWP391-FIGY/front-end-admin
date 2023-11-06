@@ -32,6 +32,26 @@ const MenuEditPage = () => {
   const uid = params.id;
   const menuId = parseInt(params.id, 10);
 
+  //Fetch old task data
+  const {
+    response: menuResponse,
+    loading: menuLoading,
+    error: menuError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}&select=*`,
+  });
+ 
+  //Fetch old data to form
+  useEffect(() => {
+    if (menuResponse) {
+      console.log(menuResponse);
+      formik.setValues({
+        ...menuResponse[0],
+      });
+    }
+  }, [menuResponse]);
+
   // Get species list
   const {
     response: speciesResponse,

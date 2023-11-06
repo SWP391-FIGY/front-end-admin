@@ -15,7 +15,7 @@ const MenuDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/meal-menu/?filter=ID%20eq%20${menuId}`,
+    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}`,
   });
 
   if (isNaN(menuId) || menuId < 0) {
