@@ -1,4 +1,5 @@
 import { Button, Dropdown } from "flowbite-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
@@ -35,7 +36,7 @@ export const speciesColumns = [
   {
     name: "Image Link",
     cell: (row) => (
-      <img src={row.imageLink} 
+      <Image src={row.imageLink} 
       style={{ width: '100px', height: 'auto' }}
       />
    ),

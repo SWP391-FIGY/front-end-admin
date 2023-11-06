@@ -18,7 +18,7 @@ const MenuList = () => {
   });
   
 
-  console.log("Fetched meal menu data", response);
+  console.log("Fetched meal menu data", mealMenuResponse);
   if (error) {
     message.error('Error While Getting Meal Menu data')
     return <>No Data</>
@@ -32,7 +32,7 @@ const MenuList = () => {
 
   return (
     <>
-      <DataTable columns={menuColumns} data={response} pagination />
+      <DataTable columns={menuColumns} data={mealMenuResponse} pagination />
     </>
   );
 };

@@ -51,7 +51,7 @@ const LoginPage = () => {
           setUser(response.data.userInfo);
           setToken(response.data.token);
 
-          router.push("/");
+          router.push("/birds/index");
           // Handle success.
           setSpinner(false);
         })

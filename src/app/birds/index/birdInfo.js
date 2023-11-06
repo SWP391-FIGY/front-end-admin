@@ -1,4 +1,5 @@
 import { Button, Dropdown } from "flowbite-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
@@ -25,7 +26,7 @@ export const birdColumns = [
   {
     name: "Image",
     cell: (row) => (
-       <img src={row.BirdImageUrl} />
+       <Image src={row.BirdImageUrl} />
       //<img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
     ),
   },

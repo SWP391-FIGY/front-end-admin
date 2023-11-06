@@ -20,11 +20,7 @@ import axios from "axios";
 import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
 import { useAuthContext } from "@/contexts/authContext";
-import { API } from "@/constants";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
-import { message } from "antd";
 import { birdStatusEnum } from "@/app/birds/index/birdInfo";
 
 
@@ -179,10 +175,10 @@ const MenuCreatePage = () => {
                   id="SpeciesId"
                   onChange={(e) => {
                     const stringSelection = e.target.value
-                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                    formik.setFieldValue("speciesId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.SpeciesId}
+                  value={formik.values.speciesId}
                 >
                   {speciesResponse && speciesResponse.length > 0 ? (
                     speciesResponse.map((species, index) => {
@@ -209,7 +205,7 @@ const MenuCreatePage = () => {
 
           {/* //* minimum day Before feeding */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
+            <Label htmlFor="daysBeforeFeeding" value="Days Before Feeding" />
             <TextInput
               id="daysBeforeFeeding"
               type="number"

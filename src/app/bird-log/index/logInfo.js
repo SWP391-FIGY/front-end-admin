@@ -28,7 +28,7 @@ export const logColumns = [
     selector: (row) => row.description,
 	sortable: true,
   },
-z``
+
   {
     name: "Action",
     cell: (row) => (

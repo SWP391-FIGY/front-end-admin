@@ -9,19 +9,15 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { usePathname, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { message } from "antd";
-import { HiPlus } from "react-icons/hi";
-import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
 import useAxios from "@/hooks/useFetch";
-import { API } from "@/constants";
-import axios from "axios";
 import { birdStatusEnum } from "@/app/birds/index/birdInfo";
 import { menuStatusEnum } from "../../index/menuInfo";
 
