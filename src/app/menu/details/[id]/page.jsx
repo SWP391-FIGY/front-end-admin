@@ -4,6 +4,10 @@ import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { menuInfo, menuDetailInfo } from "../../index/menuInfo";
 import { Table } from "flowbite-react";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
+import DataTable from "react-data-table-component";
+import moment from "moment";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -23,6 +27,17 @@ const MenuDetailPage = () => {
   //        console.log('An error occurred:', error.response);
   //      });
   //  }, [uid]);
+
+
+  const {
+    response: menuResponse,
+    loading,
+    error,
+  } = useAxios({
+    method: "get",
+    url: `${API}/mealMenu/?filter=ID%20eq%20${index}&expand=species,menuDetails($expand=Food)`,
+  });
+
   if (isNaN(index) || index < 0 || index >= menuInfo.length) {
     return (
       <PageLayout>
@@ -33,7 +48,14 @@ const MenuDetailPage = () => {
     );
   }
 
-  const menuData = menuInfo[index];
+  console.log(menuResponse);
+
+  const menuData = menustResponse
+    ? pmenuesponse[0]
+    : null;
+
+
+
 
   return (
     <PageLayout>
@@ -49,57 +71,57 @@ const MenuDetailPage = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
+          <div className="col-span-2 sm:col-span-1">
+            <label htmlFor="menuId" className="text-lg font-bold">
+              Menu Id
+            </label>
+            <p>{menuData.id}</p>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Name</label>
+              <label htmlFor="menuName" className="text-lg font-bold">Name</label>
               <p>{menuData.menuName}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Age</label>
-              <p>{menuData.age}</p>
+              <label htmlFor="species" className="text-lg font-bold">
+                Species
+              </label>
+              <p>{menuData.Species.Name}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Size</label>
+              <label htmlFor="daysBeforeFeeding" className="text-lg font-bold">Min days Before Feeding</label>
+              <p>{menuData.daysBeforeFeeding}</p>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label htmlFor="size" className="text-lg font-bold">Size</label>
               <p>{menuData.size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Bird status</label>
+              <label htmlFor="birdStatus" className="text-lg font-bold">Bird status</label>
               <p>{menuData.birdStatus}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Menu Status</label>
+              <label htmlFor="menuStatus" className="text-lg font-bold">Menu Status</label>
               <p>{menuData.menuStatus}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">
+              <label htmlFor="nutritionalIngredients" className="text-lg font-bold">
                 Nutritional Ingredients
               </label>
               <p>{menuData.nutritionalIngredients}</p>
             </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Species Id</label>
-              <p>{menuData.speciesId}</p>
-            </div>
+
+            
             <div className="col-span-2 ">
-              <label className="text-lg font-bold">Species Id</label>
-              <Table>
-                <Table.Head>
-                  <Table.HeadCell>Food Name</Table.HeadCell>
-                  <Table.HeadCell>Quantity</Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                  {menuDetailInfo.length > 0 &&
-                    menuDetailInfo.map((item, index) => {
-                      return (
-                        <Table.Row key={index}>
-                          <Table.Cell>{item.foodId}</Table.Cell>
-                          <Table.Cell>{item.quantity}</Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                </Table.Body>
-              </Table>
-            </div>
+                <label className="text-lg font-bold">List Food</label>
+                <DataTable
+                  columns={menuDetailColumns}
+                  data={menuData.menuDetails}
+                  pagination
+                />
+              </div>
+            
+            
           </div>
         </div>
       </div>

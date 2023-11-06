@@ -5,6 +5,15 @@ import { menuColumns, menuInfo } from "./menuInfo";
 
 const MenuList = () => {
 
+  const {
+    response: mealMenuResponse,
+    loading,
+    error,
+  } = useAxios({
+    method: "get",
+    url: `${API}/mealMenu/?&expand=species,menuDetails($expand=Food)`,
+  });
+
   if (!menuInfo) return <>No Data</>;
   return (
     <>

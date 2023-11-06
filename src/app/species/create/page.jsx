@@ -189,7 +189,9 @@ const SpeciesCreatePage = () => {
             <TextInput
               id="lifeExpectancy"
 
-              type="text"
+              type="number"
+              min={0}
+              max={100}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.lifeExpectancy}
