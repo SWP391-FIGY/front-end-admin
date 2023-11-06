@@ -36,27 +36,7 @@ const MenuUpdatePage = () => {
   const uid = params.id;
 
   console.log("editing id", uid);
-
-  //Fetch old task data
-  const {
-    response: menuResponse,
-    loading: menuLoading,
-    error: menuError,
-  } = useAxios({
-    method: "get",
-    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}&select=*`,
-  });
- 
-  //Fetch old data to form
-  useEffect(() => {
-    if (menuResponse) {
-      console.log(menuResponse);
-      formik.setValues({
-        ...menuResponse[0],
-      });
-    }
-  }, [menuResponse]);
-
+  
   // Get species list
   const {
     response: speciesResponse,
@@ -254,13 +234,11 @@ const MenuUpdatePage = () => {
             <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
             <TextInput
               id="daysBeforeFeeding"
-              id="daysBeforeFeeding"
               type="number"
               min={0}
               max={365}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.daysBeforeFeeding}
               value={formik.values.daysBeforeFeeding}
             />
             {formik.touched.daysBeforeFeeding && formik.errors.daysBeforeFeeding ? (
@@ -311,15 +289,15 @@ const MenuUpdatePage = () => {
               </div>
             ) : null}
           </div>
-{/* // * Menu status */}
+
+          {/* // * Menu status */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuStatus" value="Menu Status" />
-            <select
+            <Select
               id="menuStatus"
               name="menuStatus"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.menuStatus}
               value={formik.values.menuStatus}
             >
               {menuStatusEnum.map((status, index) => {
