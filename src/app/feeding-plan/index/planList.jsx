@@ -1,69 +1,36 @@
-import { Button, Table } from "flowbite-react";
 import React from "react";
-import { planInfo } from "./planInfo";
-import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { planColumns, planInfo } from "./planInfo";
+import DataTable from "react-data-table-component";
+import useAxios from "@/hooks/useFetch";
+import { Spinner } from "flowbite-react";
+import { API } from "@/constants";
+import { message } from "antd";
 
 const PlanList = () => {
-  const router = useRouter();
-  if (!planInfo) return <>No Data</>;
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/feedingplan?expand=bird,menu`,
+  });
+
+  console.log("Fetched feeding plan data", response);
+  if (error) {
+    message.error('Error While Getting Feeding Plan data')
+    return <>No Data</>
+  };
+  if (loading && !error)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+
   return (
     <>
-      <Table className="table-auto">
-        <Table.Head>
-          <Table.HeadCell>ID</Table.HeadCell>
-          <Table.HeadCell>Menu ID</Table.HeadCell>
-          <Table.HeadCell>Bird ID</Table.HeadCell>
-          <Table.HeadCell>Date & Time</Table.HeadCell>
-          <Table.HeadCell>Feeding Status</Table.HeadCell>
-          <Table.HeadCell>Notation</Table.HeadCell>
-        </Table.Head>
-        <Table.Body>
-          {planInfo.map((plan, index) => {
-            return (
-              <Table.Row key={index}>
-                <Table.Cell>
-                  <span>{index}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{plan.menuId}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{plan.birdId}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{plan.dateAndTime}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{plan.feedingStatus}</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>{plan.notation}</span>
-                </Table.Cell>
-                <Table.Cell className="flex flex-row gap-4">
-                  <Link href={`edit/${index}`}>
-                    <Button>
-                      <FiEdit />
-                    </Button>
-                  </Link>
-                  <Link href={`details/${index}`}>
-                    <Button>
-                      <FiEye />
-                    </Button>
-                  </Link>
-                  <Button color="failure">
-                    <FiTrash2 />
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+      <DataTable columns={planColumns} data={response} pagination />
     </>
   );
 };
 
 export default PlanList;
+
 

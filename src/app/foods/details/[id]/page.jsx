@@ -28,7 +28,7 @@ const FoodDetailPage = () => {
     );
   }
   if (error) {
-    message.error("Error While Getting Task data");
+    message.error("Error While Getting Food Data");
     return <>No Data</>;
   }
   if (loading && !error)

@@ -69,10 +69,12 @@ const BirdEditPage = () => {
     }
   }, [birdResponse]);
 
+  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
       Id: birdId,
       Description: "",
+      BirdImageUrl: '',
       SpeciesId: 1,
       CageID: 1,
       DoB: moment(new Date()),
@@ -82,6 +84,8 @@ const BirdEditPage = () => {
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
+      BirdImageUrl: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
+      SpeciesId: Yup.number().required("Required"),
       SpeciesId: Yup.number().required("Required"),
       CageID: Yup.number().required("Required"),
       DoB: Yup.date()

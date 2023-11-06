@@ -37,14 +37,17 @@ export const birdColumns = [
   {
     name: "Last Modified",
     selector: (row) => row.LastModifyDate,
+    sortable: true,
   },
   {
     name: "Species",
     selector: (row) => row.Species.Name,
+    sortable: true,
   },
   {
     name: "Cage",
     selector: (row) => row.Cage.ID,
+    sortable: true,
   },
   {
     name: "Action",
@@ -67,5 +70,6 @@ export const birdStatusEnum = [
   "Sick",
   "Molt",
   "Sold",
-  "Other"
+  "Other",
+  "Cancel"
 ]

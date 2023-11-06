@@ -25,12 +25,14 @@ const SpeciesCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false)
 
+  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
       name: '',
       color: '',
       size: '',
       voice: '',
+      imageLink: '',
       lifeExpectancy: '',
       habitat: '',
     },
@@ -38,7 +40,8 @@ const SpeciesCreatePage = () => {
       name: Yup.string().required('Required'),
       color: Yup.string().required('Required'),
       size: Yup.string().required('Required'),
-      voice: Yup.string().required('Required'),
+      voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
+      imageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
       lifeExpectancy: Yup.number().max(100, "Life expectancy must be 100 or below").required('Required'),
       habitat: Yup.string().required('Required'),
     }),
