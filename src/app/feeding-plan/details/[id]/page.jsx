@@ -16,7 +16,7 @@ const PlanDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/FeedingPlan/?filter=ID%20eq%20${planId}&expand=bird,menu`,
+    url: `${API}/FeedingPlan/?filter=ID%20eq%20${planId}&expand=bird,mealMenu`,
   });
 
   //  useEffect(() => {
@@ -90,49 +90,54 @@ const PlanDetailPage = () => {
     const formattedTime = `${hour}:${minute}`;
     return `${formattedDate} ${formattedTime}`;
   };
-  
+
 
 
   const planData = response ? response[0] : {};
   console.log(planData);
 
-return (
-  <PageLayout>
-    <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-      <div className='flex flex-col gap-4'>
-        <Link href={'/tasks/index'} className="flex items-center gap-2 text-blue-500 hover:underline">
-          <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
-        </Link>
-        <h2 className='text-3xl font-bold'>Feeding Plan Details</h2>
-      </div>
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2 sm:col-span-1">
-            <label htmlFor="birdId" className="text-lg font-bold">Menu ID</label>
-            <p>{planData.menuId}</p>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <label htmlFor="cageId" className="text-lg font-bold">Bird ID</label>
-            <p>{planData.birdId}</p>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <label htmlFor="status" className="text-lg font-bold">Date and Time</label>
-            <p>{formattedDateAndTime(planData.dateAndTime)}</p>
-          </div>
-          <div planData="col-span-2 sm:col-span-1">
-            <label htmlFor="feedingStatus" className="text-lg font-bold">Feeding Status</label>
-            <p>{planData.feedingStatus}</p>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <label htmlFor="notation" className="text-lg font-bold">Notation</label>
-            <p>{planData.notation}</p>
+  return (
+    <PageLayout>
+      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
+        <div className='flex flex-col gap-4'>
+          <Link href={'/tasks/index'} className="flex items-center gap-2 text-blue-500 hover:underline">
+            <HiOutlineArrowSmallLeft className="text-xl" /> Back to list
+          </Link>
+          <h2 className='text-3xl font-bold'>Feeding Plan Details</h2>
+        </div>
+        {planData ? (
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="menu" className="text-lg font-bold">
+                  Menu
+                </label>
+                <p>{planData.MealMenu.MenuName}</p>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="birdId" className="text-lg font-bold">Bird ID</label>
+                <p>{planData.birdId}</p>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <label htmlFor="dateTime" className="text-lg font-bold">Date and Time</label>
+                <p>{formattedDateAndTime(planData.dateAndTime)}</p>
+              </div>
+              <div planData="col-span-2 sm:col-span-1">
+                <label htmlFor="feedingStatus" className="text-lg font-bold">Feeding Status</label>
+                <p>{planData.feedingStatus}</p>
+              </div>
+              <label htmlFor="description" className="text-lg font-bold">
+                Description
+              </label>
+              <p>{planData.Description}</p>
+            </div>
           </div>
         ) : (
           <>No data</>
         )}
-          
-        </div>
-      </PageLayout>
+
+      </div>
+    </PageLayout>
   );
 
 
