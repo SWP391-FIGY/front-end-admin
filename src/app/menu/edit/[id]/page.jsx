@@ -171,7 +171,7 @@ const MenuUpdatePage = () => {
               value={formik.values.birdStatus}
             >
               {birdStatusEnum.map((status,index) => {
-                <option value={index}>{status}</option>
+                <option key={index} value={index}>{status}</option>
               })}
             </Select>
           </div>
@@ -187,7 +187,7 @@ const MenuUpdatePage = () => {
               value={formik.values.birdStatus}
             >
               {menuStatusEnum.map((status,index) => {
-                <option value={index}>{status}</option>
+                return <option  key={index} value={index}>{status}</option>;
               })}
             </Select>
           </div>

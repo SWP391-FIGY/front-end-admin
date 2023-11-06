@@ -152,7 +152,7 @@ const PlanEditPage = () => {
               value={formik.values.feedingStatus}
             >
               {feedingPlanStatus.map((status,index) => {
-                <option value={index}>{status}</option>
+                return <option  key={index} value={index}>{status}</option>;
               })}
             </Select>
             {formik.touched.feedingStatus && formik.errors.feedingStatus ? (

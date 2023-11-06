@@ -33,7 +33,7 @@ const CageCreatePage = () => {
       color: "Black",
       area: "A",
       type: "Type 1",
-      cageStatus: 1,
+      cageStatus: 0,
       capacity: 5,
     },
     validationSchema: Yup.object({
@@ -42,7 +42,6 @@ const CageCreatePage = () => {
       color: Yup.string().required("Required"),
       area: Yup.string().required("Required"),
       type: Yup.string().required("Required"),
-      cageStatus: Yup.string().required("Required"),
       capacity: Yup.number().min(1, "Capacity must greater than 0"),
     }),
     onSubmit: (values) => {
@@ -156,23 +155,7 @@ const CageCreatePage = () => {
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="cageStatus" value="Cage status" />
-            <Select
-              id="cageStatus"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.cageStatus}
-            >
-              <option value={1}>In use</option>
-              <option value={2}>Maintainance</option>
-            </Select>
-            {formik.touched.cageStatus && formik.errors.cageStatus ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.cageStatus}
-              </div>
-            ) : null}
-          </div>
+          
           <div className="flex flex-col gap-2">
             <Label htmlFor="capacity" value="Cage capacity" />
             <TextInput

@@ -27,7 +27,7 @@ const PurchaseRequestCreatePage = () => {
   const [spinner, setSpinner] = useState(false);
   const [selectedFood, setSelectedFood] = useState(1);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { user, setUser } = useAuthContext();
+  const { user, } = useAuthContext();
   // Get food list
   const {
     response: foodResponse,

@@ -187,7 +187,9 @@ const SpeciesCreatePage = () => {
               id="lifeExpectancy"
 
               type="text"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.setFieldValue('lifeExpectancy', parseInt(e.target.value))
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.lifeExpectancy}
             />
