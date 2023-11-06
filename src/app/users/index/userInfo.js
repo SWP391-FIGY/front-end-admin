@@ -46,3 +46,9 @@ export const userColumns = [
     ),
   },
 ];
+
+export const userRoleEnums = [
+  "Admin",
+  "Manager",
+  "Staff"
+]

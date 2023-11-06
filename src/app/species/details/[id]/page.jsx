@@ -4,10 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
-import { speciesInfo } from "../../index/speciesInfo"
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
-import { speciesStatusEnum } from "../../index/birdInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -17,10 +15,10 @@ const SpeciesDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/species/?filter=ID%20eq%20${speciesId}`,
+    url: `${API}/species/?filter=ID%20eq%20${speciesId}&select=*`,
   });
 
-  if (isNaN(speciesId) || speciesId < 0 || speciesId >= speciesInfo.length) {
+  if (isNaN(speciesId) || speciesId < 0) {
     return (
       <PageLayout>
         <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
@@ -83,31 +81,31 @@ const SpeciesDetailPage = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="color" className="text-lg font-bold">Name</label>
-              <p>{speciesData.name}</p>
+              <p>{speciesData.Name}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="color" className="text-lg font-bold">Color</label>
-              <p>{speciesData.color}</p>
+              <p>{speciesData.Color}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="size" className="text-lg font-bold">Size</label>
-              <p>{speciesData.size}</p>
+              <p>{speciesData.Size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="voice" className="text-lg font-bold">Voice</label>
-              <iframe src={speciesData.voice} alt="voice" style={{ width: '100px', height: 'auto' }}/>
+              <iframe src={speciesData.Voice} alt="voice" style={{ width: '100px', height: 'auto' }}/>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="imageLink" className="text-lg font-bold">Image</label>
-              <img src={speciesData.imageLink} alt="Species Image" style={{ width: '100px', height: 'auto' }} />
+              <img src={speciesData.ImageLink} alt="Species Image" style={{ width: '100px', height: 'auto' }} />
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="lifeExpectancy" className="text-lg font-bold">lifeExpectancy</label>
-              <p>{speciesData.lifeExpectancy}</p>
+              <p>{speciesData.LifeExpectancy}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="habitat" className="text-lg font-bold">Habitat</label>
-              <p>{speciesData.habitat}</p>
+              <p>{speciesData.Habitat}</p>
             </div>
             
           </div>

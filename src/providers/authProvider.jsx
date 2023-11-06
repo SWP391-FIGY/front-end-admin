@@ -5,10 +5,12 @@ import { getToken } from "@/helper";
 import { API, BEARER, USER_INFO } from "@/constants";
 import { AuthContext } from "@/contexts/authContext";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
 
   const authToken = getToken();
 
@@ -24,6 +26,8 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error(error);
       message.error("Error While Getting Logged In User Details");
+      
+      router.push('/auth/index')
     } finally {
       setIsLoading(false);
     }

@@ -10,13 +10,12 @@ import {
   HiShoppingCart,
   HiOutlineClipboardList,
   HiUserCircle,
-
 } from "react-icons/hi";
-import {FaAppleWhole} from 'react-icons/fa6'
-import {GiCage} from 'react-icons/gi'
-import {PiBirdFill, PiBowlFoodFill} from 'react-icons/pi'
+import { FaAppleWhole } from "react-icons/fa6";
+import { GiCage } from "react-icons/gi";
+import { PiBirdFill, PiBowlFoodFill } from "react-icons/pi";
 import { MdPets } from "react-icons/md";
-import { BsUiChecksGrid } from 'react-icons/bs'
+import { BsUiChecksGrid } from "react-icons/bs";
 
 export const topSideBarData = [
   {
@@ -95,12 +94,12 @@ export const topSideBarData = [
         icon: HiOutlineClipboardList,
         allowRole: [],
       },
-      {
-        title: "User",
-        href: "/users/index",
-        icon: HiUserCircle,
-        allowRole: [],
-      },
     ],
+  },
+  {
+    title: "User",
+    href: "/users/index",
+    icon: HiUserCircle,
+    allowRole: [],
   },
 ];

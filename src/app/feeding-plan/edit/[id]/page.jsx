@@ -8,11 +8,9 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2"
 import { message } from "antd";
-import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
-import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 import { planStatusEnum } from "../../index/planInfo";
 

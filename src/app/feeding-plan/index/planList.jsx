@@ -9,7 +9,7 @@ import { message } from "antd";
 const PlanList = () => {
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/feedingplan?expand=bird,menu`,
+    url: `${API}/feedingplan?expand=bird,mealMenu`,
   });
 
   console.log("Fetched feeding plan data", response);

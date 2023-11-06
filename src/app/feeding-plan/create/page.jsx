@@ -1,21 +1,28 @@
-'use client'
-import { Button, Label, Select, TextInput, Spinner, Datepicker } from "flowbite-react"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { usePathname } from "next/navigation"
+"use client";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Spinner,
+  Datepicker,
+} from "flowbite-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link"
-import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2"
+import Link from "next/link";
+import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2";
 import { message } from "antd";
-import { HiPlus } from "react-icons/hi";
 import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
+import useAxios from "@/hooks/useFetch";
 
-const { default: PageLayout } = require("@/layout/pageLayout")
+const { default: PageLayout } = require("@/layout/pageLayout");
 
 const PlanCreatePage = () => {
-  const [spinner, setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false);
 
   // Get Meal Menu list
   const {
@@ -36,25 +43,25 @@ const PlanCreatePage = () => {
     url: `${API}/bird/`,
   });
 
-
   const formik = useFormik({
     initialValues: {
       MenuId: 1,
       BirdId: 1,
       Description: "",
-      DateAndTime: "",
+      DateTime: "",
       FeedingStatus: 1,
     },
     validationSchema: Yup.object({
       MenuId: Yup.number().required("Required"),
       BirdId: Yup.number().required("Required"),
       Description: Yup.string().required("Required"),
-      DateAndTime: Yup.date().min(new Date().toLocaleDateString(), "The date must after today").required("Required"),
+      DateTime: Yup.date()
+        .min(new Date().toLocaleDateString(), "The date must after today")
+        .required("Required"),
       FeedingStatus: Yup.number().required("Required"),
-
     }),
-    onSubmit: values => {
-      setSpinner(true)
+    onSubmit: (values) => {
+      setSpinner(true);
       const payloadData = {
         data: values,
       };
@@ -62,19 +69,18 @@ const PlanCreatePage = () => {
       console.log(payloadData.data);
       axios
         .post(`${API}/feedingPlan`, payloadData.data)
-        .then(response => {
+        .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          router.push("/feeding-plan/index")
-
+          router.push("/feeding-plan/index");
         })
         .then((response) => {
           message.success("Add new feeding plan success");
         })
-        .catch(error => {
+        .catch((error) => {
           message.error("An error occurred");
-          setSpinner(false)
-          console.log('An error occurred:', error.response)
+          setSpinner(false);
+          console.log("An error occurred:", error.response);
         });
     },
   });
@@ -84,28 +90,26 @@ const PlanCreatePage = () => {
   }, [formik]);
   return (
     <PageLayout>
-      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-      <div className='flex flex-col justify-between gap-4'>
-          <Link href={'/feeding-plan/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Add new feeding plan</h2>
-
+      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+        <div className="flex flex-col justify-between gap-4">
+          <Link href={"/feeding-plan/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
+          <h2 className="text-3xl font-bold">Add new feeding plan</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]">
- {/* //* Plan Menu */}
+          className="flex flex-col gap-4 w-[600px]"
+        >
+          {/* //* Plan Menu */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="MenuId"
-              value="Menu ID"
-            />
+            <Label htmlFor="MenuId" value="Menu ID" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
-
                 <Select
                   id="MenuId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("MenuId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -124,7 +128,12 @@ const PlanCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{ pathname: "/menu/create", query: { ...formik.values, 'bird-add': true } }}>
+              <Link
+                href={{
+                  pathname: "/menu/create",
+                  query: { ...formik.values, "bird-add": true },
+                }}
+              >
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">
@@ -136,13 +145,13 @@ const PlanCreatePage = () => {
               </Link>
             </div>
             {formik.touched.MenuId && formik.errors.MenuId ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.MenuId}
               </div>
             ) : null}
           </div>
-{/* //* Plan Bird Id */}
-<div className="flex flex-col w-full gap-2">
+          {/* //* Plan Bird Id */}
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="BirdId" value="Bird ID" />
 
             <div className="flex w-full gap-2">
@@ -150,7 +159,7 @@ const PlanCreatePage = () => {
                 <Select
                   id="BirdId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("BirdId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -169,7 +178,12 @@ const PlanCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{ pathname: "/birds/create", query: { ...formik.values, 'bird-add': true } }}>
+              <Link
+                href={{
+                  pathname: "/birds/create",
+                  query: { ...formik.values, "bird-add": true },
+                }}
+              >
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">
@@ -188,17 +202,17 @@ const PlanCreatePage = () => {
           </div>
           {/* //* Plan Date Time */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="dateAndTime" value="Date and Time" />
+            <Label htmlFor="DateTime" value="Date and Time" />
             <Datepicker
-              id="dateAndTime"
-              selected={formik.values.dateAndTime}
+              id="DateTime"
+              selected={formik.values.DateTime}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
               dateFormat="dd/MM/yyyy HH:mm"
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
-                formik.setFieldValue("dateAndTime", date);
+                formik.setFieldValue("DateTime", date);
                 console.log("value", formik.values);
                 console.log("errors", formik.errors);
               }}
@@ -207,9 +221,9 @@ const PlanCreatePage = () => {
                 console.log(e);
               }}
             />
-            {formik.touched.dateAndTime && formik.errors.dateAndTime ? (
+            {formik.touched.DateTime && formik.errors.DateTime ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.dateAndTime}
+                {formik.errors.DateTime}
               </div>
             ) : null}
           </div>
@@ -219,8 +233,11 @@ const PlanCreatePage = () => {
             <Select
               id="FeedingStatus"
               onChange={(e) => {
-                const stringSelection = e.target.value
-                formik.setFieldValue("FeedingStatus", parseInt(stringSelection));
+                const stringSelection = e.target.value;
+                formik.setFieldValue(
+                  "FeedingStatus",
+                  parseInt(stringSelection)
+                );
               }}
               onBlur={formik.handleBlur}
               value={formik.values.FeedingStatus}
@@ -257,8 +274,8 @@ const PlanCreatePage = () => {
 
           <Button type="submit">
             {spinner ? (
-              <div className='flex justify-center items-center gap-4'>
-                <Spinner aria-label='Spinner button example' />
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
                 <p>Loading...</p>
               </div>
             ) : (

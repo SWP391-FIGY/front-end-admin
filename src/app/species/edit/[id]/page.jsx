@@ -55,24 +55,24 @@ const SpeciesEditPage = () => {
   const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
   const formik = useFormik({
     initialValues: {
-      id: speciesId,
-      name:'',
-      color: '',
-      size: '',
-      voice: '',
-      imageLink: '',
-      lifeExpectancy: '',
-      habitat: '',
+      ID: speciesId,
+      Name:'',
+      Color: '',
+      Size: '',
+      Voice: '',
+      ImageLink: '',
+      LifeExpectancy: '',
+      Habitat: '',
       
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Required'),
-      color: Yup.string().required('Required'),
-      size: Yup.string().required('Required'),
-      voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
-      imageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
-      lifeExpectancy: Yup.number().lessThan(100, 'LifeExpectancy must be lower than 100').positive('LifeExpectancy must be higher than 0').integer('LifeExpectancy must be an integer').required('Required'),
-      habitat: Yup.string().required('Required'),
+      Name: Yup.string().required('Required'),
+      Color: Yup.string().required('Required'),
+      Size: Yup.string().required('Required'),
+      Voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
+      ImageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
+      LifeExpectancy: Yup.number().lessThan(100, 'LifeExpectancy must be lower than 100').positive('LifeExpectancy must be higher than 0').integer('LifeExpectancy must be an integer').required('Required'),
+      Habitat: Yup.string().required('Required'),
       
     }),
     onSubmit: values => {
@@ -117,20 +117,20 @@ const SpeciesEditPage = () => {
           {/* // * Species Name */}
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="name"
+              htmlFor="Name"
               value="Species Name"
             />
             <TextInput
-              id="name"
+              id="Name"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
+              value={formik.values.Name}
             />
-            {formik.touched.name && formik.errors.name ? (
+            {formik.touched.Name && formik.errors.Name ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.name}
+                {formik.errors.Name}
               </div>
             ) : null}
           </div>
@@ -138,20 +138,20 @@ const SpeciesEditPage = () => {
           {/* // * Species Color */}
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="color"
+              htmlFor="Color"
               value="Color"
             />
             <TextInput
-              id="color"
+              id="Color"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.color}
+              value={formik.values.Color}
             />
-            {formik.touched.color && formik.errors.color ? (
+            {formik.touched.Color && formik.errors.Color ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.color}
+                {formik.errors.Color}
               </div>
             ) : null}
           </div>
@@ -159,38 +159,38 @@ const SpeciesEditPage = () => {
           {/* // * Species Size */}
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="size"
+              htmlFor="Size"
               value="Size"
             />
             <TextInput
-              id="size"
+              id="Size"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.size}
+              value={formik.values.Size}
             />
-            {formik.touched.size && formik.errors.size ? (
+            {formik.touched.Size && formik.errors.Size ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.size}
+                {formik.errors.Size}
               </div>
             ) : null}
           </div>
 
           {/* //* Species Voice */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="voice" 
+            <Label htmlFor="Voice" 
             value="Voice" />
             <TextInput
-              id="voice"
+              id="Voice"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.voice}
+              value={formik.values.Voice}
             />
-            {formik.touched.voice && formik.errors.voice ? (
+            {formik.touched.Voice && formik.errors.Voice ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.voice}
+                {formik.errors.Voice}
               </div>
             ) : null}
           </div>
@@ -198,19 +198,19 @@ const SpeciesEditPage = () => {
           {/* //* Image Link */}  
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="imageLink"
+              htmlFor="ImageLink"
               value="Image"
             />
             <TextInput
-              id="imageLink"
+              id="ImageLink"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.imageLink}
+              value={formik.values.ImageLink}
             />
-            {formik.touched.imageLink && formik.errors.imageLink ? (
+            {formik.touched.ImageLink && formik.errors.ImageLink ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.imageLink}
+                {formik.errors.ImageLink}
               </div>
             ) : null}
           </div>
@@ -218,20 +218,20 @@ const SpeciesEditPage = () => {
           {/* //* LifeExpectancy */} 
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="lifeExpectancy"
+              htmlFor="LifeExpectancy"
               value="Life Expectancy"
             />
             <TextInput
-              id="lifeExpectancy"
+              id="LifeExpectancy"
 
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.lifeExpectancy}
+              value={formik.values.LifeExpectancy}
             />
-            {formik.touched.lifeExpectancy && formik.errors.lifeExpectancy ? (
+            {formik.touched.LifeExpectancy && formik.errors.LifeExpectancy ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.lifeExpectancy}
+                {formik.errors.LifeExpectancy}
               </div>
             ) : null}
           </div>
@@ -239,19 +239,19 @@ const SpeciesEditPage = () => {
           {/* //* Species Habitat */} 
           <div className="flex flex-col gap-2">
             <Label
-              htmlFor="babitat"
+              htmlFor="Habitat"
               value="Habitat"
             />
             <TextInput
-              id="habitat"
+              id="Habitat"
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.habitat}
+              value={formik.values.Habitat}
             />
-            {formik.touched.habitat && formik.errors.habitat ? (
+            {formik.touched.Habitat && formik.errors.Habitat ? (
               <div className='text-xs text-red-600 dark:text-red-400'>
-                {formik.errors.habitat}
+                {formik.errors.Habitat}
               </div>
             ) : null}
           </div>
