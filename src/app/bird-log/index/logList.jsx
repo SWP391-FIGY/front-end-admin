@@ -1,26 +1,20 @@
 import React from "react";
-import { menuColumns, menuInfo } from "./menuInfo";
+import { logColumns, logInfo } from "./logInfo";
 import DataTable from "react-data-table-component";
 import useAxios from "@/hooks/useFetch";
 import { Spinner } from "flowbite-react";
 import { API } from "@/constants";
 import { message } from "antd";
 
-const MenuList = () => {
-
-  const {
-    response: mealMenuResponse,
-    loading,
-    error,
-  } = useAxios({
+const LogList = () => {
+  const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/mealMenu/?&expand=species,menuDetails($expand=Food)`,
+    url: `${API}/log`,
   });
-  
 
-  console.log("Fetched meal menu data", response);
+  console.log("Fetched bird log data", response);
   if (error) {
-    message.error('Error While Getting Meal Menu data')
+    message.error('Error While Getting Bird Log data')
     return <>No Data</>
   };
   if (loading && !error)
@@ -32,9 +26,9 @@ const MenuList = () => {
 
   return (
     <>
-      <DataTable columns={menuColumns} data={response} pagination />
+      <DataTable columns={logColumns} data={response} pagination />
     </>
   );
 };
 
-export default MenuList;
+export default LogList;

@@ -2,6 +2,7 @@ import { Button, Dropdown } from "flowbite-react";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
+
 const getBirdStatusText = (value) => {
   return value === 1 ? "Assigned" : value === 2 ? "Not assigned" : "";
 };
@@ -9,16 +10,20 @@ const getBirdStatusText = (value) => {
 const getMenuStatusText = (value) => {
   return value === 1 ? "In use" : value === 2 ? "Not in use" : "";
 };
-
 export const menuColumns = [
   {
-    name: "ID",
-    selector: (row) => row.id,
+    name: "Id",
+    selector: (row) => row.ID,
     sortable: true,
   },
   {
     name: "Name",
-    selector: (row) => row.menuName,
+    selector: (row) => row.MenuName,
+    sortable: true,
+  },
+  {
+    name: "Species",
+    selector: (row) => row.Species.Name,
     sortable: true,
   },
   {
@@ -27,9 +32,9 @@ export const menuColumns = [
     sortable: true,
   },
   {
-    name: "Days before feeding",
+    name: "Min Days Before Feeding",
     selector: (row) => row.daysBeforeFeeding,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Size",
@@ -47,6 +52,7 @@ export const menuColumns = [
     sortable: true,
   },
   {
+
     name: "Nutritional ingredients",
     selector: (row) => row.nutritionalIngredients,
 	sortable: true,
@@ -65,3 +71,24 @@ export const menuColumns = [
     ),
   },
 ];
+
+export const menuDetailColumns = [
+  {
+    name: "Food",
+    selector: (row) => row.Food.Name,
+    sortable: true,
+  },
+  {
+    name: "Quantity",
+    selector: (row) => row.Quantity,
+    sortable: true,
+  },
+  
+];
+
+export const menuStatusEnum = [
+  "Active",
+  "Deactive",
+  "Cancel",
+  "Other"
+]

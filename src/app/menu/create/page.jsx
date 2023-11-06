@@ -19,6 +19,14 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import { FiTrash2 } from "react-icons/fi";
+import { useAuthContext } from "@/contexts/authContext";
+import { API } from "@/constants";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import useAxios from "@/hooks/useFetch";
+import { message } from "antd";
+import { birdStatusEnum } from "@/app/birds/index/birdInfo";
+
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -38,21 +46,39 @@ const MenuCreatePage = () => {
     url: `${API}/species/`,
   });
 
+  // Get food list
+  const {
+    response: foodResponse,
+    loading: foodLoading,
+    error: foodError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/food?select=*`,
+  });
+
   const formik = useFormik({
     initialValues: {
       menuName: "",
       speciesId: 1,
-      daysBeforeFeeding: 3,
+      daysBeforeFeeding: 1,
       size: "",
-      birdStatus: 1,
-      menuStatus: 1,
+      birdStatus: 0,
+      menuStatus: 0,
       nutritionalIngredients: "",
       menuDetails: [],
     },
     validationSchema: Yup.object({
       menuName: Yup.string().required("Required"),
       speciesId: Yup.number().required("Species is required"),
-      daysBeforeFeeding: Yup.number().max(20, "Days must be 20 or below").required("Days before feeding is required"),
+      daysBeforeFeeding: Yup.number().min(1, "Minimum Day Before Feeding Must Be 1 Day Or More").required("Required"),
+      size: Yup.string().required("Required"),
+      birdStatus: Yup.number().required("Required"),
+      menuStatus: Yup.number().required("Required"),
+      nutritionalIngredients: Yup.string().required("Required"),
+      menuDetails: Yup.array().min(
+        1,
+        "Need at least 1 food in Menu"
+      ),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -61,15 +87,14 @@ const MenuCreatePage = () => {
       };
       console.log(payloadData.data);
       axios
-        .post(`${API}/meal-menu`, payloadData.data)
+        .post(`${API}/mealMenu`, payloadData)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
-          
-          router.push("/menu/index")
+          router.push("/menu/index");
         })
         .then((response) => {
-          message.success("Add new menu success");
+          message.success("Add new Menu success");
         })
         .catch((error) => {
           message.error("An error occurred");
@@ -127,6 +152,8 @@ const MenuCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
+
+          {/* // * Menu Name */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="menuName" value="Menu name" />
             <TextInput
@@ -148,7 +175,7 @@ const MenuCreatePage = () => {
             <Label htmlFor="SpeciesId" value="Bird species" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
-              <Select
+                <Select
                   id="SpeciesId"
                   onChange={(e) => {
                     const stringSelection = e.target.value
@@ -170,16 +197,7 @@ const MenuCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={"/species/create?bird-add=true"}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new species</p>
-                  </div>
-                </Button>
-              </Link>
+
             </div>
 
             {formik.touched.speciesId && formik.errors.speciesId ? (
@@ -189,18 +207,25 @@ const MenuCreatePage = () => {
             ) : null}
           </div>
 
+          {/* //* minimum day Before feeding */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="daysBeforeFeeding" value="Days before feeding" />
+            <Label htmlFor="daysBeforeFeeding" value="daysBeforeFeeding" />
             <TextInput
               id="daysBeforeFeeding"
               type="number"
               min={0}
-              max={20}
+              max={365}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.daysBeforeFeeding}
             />
+            {formik.touched.daysBeforeFeeding && formik.errors.daysBeforeFeeding ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.daysBeforeFeeding}
+              </div>
+            ) : null}
           </div>
+          {/* //* Bird Size */}
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="size" value="Size" />
@@ -211,38 +236,39 @@ const MenuCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.size}
             />
+            {formik.touched.size && formik.errors.size ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.size}
+              </div>
+            ) : null}
           </div>
-          
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="birdStatus" value="Bird Status" />
-            <select
+
+
+          {/* // * Bird status */}
+          <div className="flex flex-col w-[500px] gap-2">
+            <Label htmlFor="birdStatus" value="Bird status" />
+            <Select
               id="birdStatus"
-              name="birdStatus"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const stringSelection = e.target.value
+                formik.setFieldValue("birdStatus", parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.birdStatus}
             >
-              <option value="1">Assigned</option>
-              <option value="2">Not assigned</option>
-            </select>
+              {birdStatusEnum.map((status, index) => {
+                <option value={index}>{status}</option>
+              })}
+            </Select>
+            {formik.touched.birdStatus && formik.errors.birdStatus ? (
+              <div className="text-xs text-red-600 dark:text-red-400">
+                {formik.errors.birdStatus}
+              </div>
+            ) : null}
           </div>
 
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="menuStatus" value="Menu Status" />
-            <select
-              id="menuStatus"
-              name="menuStatus"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.menuStatus}
-            >
-              <option value="1">In use</option>
-              <option value="2">Not in use</option>
-            </select>
-          </div>
-
-
+          {/* //* nutritional Ingredients */}
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="nutritionalIngredients"
@@ -255,6 +281,11 @@ const MenuCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.nutritionalIngredients}
             />
+            {formik.touched.nutritionalIngredients && formik.errors.nutritionalIngredients ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.nutritionalIngredients}
+              </div>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -274,7 +305,7 @@ const MenuCreatePage = () => {
                       <Table.Row key={index}>
                         <Table.Cell>{item.foodId}</Table.Cell>
                         <Table.Cell>{item.quantity}</Table.Cell>
-                        <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2/>Delete</Table.Cell>
+                        <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2 />Delete</Table.Cell>
                       </Table.Row>
                     );
                   })}
@@ -286,8 +317,17 @@ const MenuCreatePage = () => {
                       onChange={onFoodSelected}
                       value={selectedFood}
                     >
-                      <option value={1}>Species 1</option>
-                      <option value={2}>Species 2</option>
+                      {foodResponse && foodResponse.length > 0 ? (
+                        foodResponse.map((food, index) => {
+                          return (
+                            <option key={index} value={food.ID}>
+                              {food.Name}
+                            </option>
+                          );
+                        })
+                      ) : (
+                        <option disabled>Loading...</option>
+                      )}
                     </Select>
                   </Table.Cell>
                   <Table.Cell>

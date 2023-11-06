@@ -42,7 +42,9 @@ const SpeciesCreatePage = () => {
       size: Yup.string().required('Required'),
       voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
       imageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
-      lifeExpectancy: Yup.number().max(100, "Life expectancy must be 100 or below").required('Required'),
+      lifeExpectancy: Yup.number().max(100, "Life expectancy must be 100 or below")
+      .positive("Age must be higher than 0")
+      .integer("Age must be an integer").required('Required'),
       habitat: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
@@ -189,7 +191,9 @@ const SpeciesCreatePage = () => {
             <TextInput
               id="lifeExpectancy"
 
-              type="text"
+              type="number"
+              min={0}
+              max={100}
               onChange={(e) => {
                 formik.setFieldValue('lifeExpectancy', parseInt(e.target.value))
               }}
