@@ -26,7 +26,7 @@ const UserList = () => {
 
   return (
     <>
-      <DataTable columns={userColumns} data={response} pagination />
+      <DataTable columns={userColumns} data={response} pagination className="overflow-auto" />
     </>
   );
 };

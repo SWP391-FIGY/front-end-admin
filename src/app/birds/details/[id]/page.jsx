@@ -20,7 +20,7 @@ const BirdDetailPage = () => {
     url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
   });
 
-  if (isNaN(birdId) || birdId < 0 || birdId >= birdInfo.length) {
+  if (isNaN(birdId) || birdId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">

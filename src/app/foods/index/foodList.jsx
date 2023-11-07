@@ -26,7 +26,7 @@ const FoodList = () => {
 
   return (
     <>
-      <DataTable columns={foodColumns} data={response} pagination />
+      <DataTable columns={foodColumns} data={response} pagination className="overflow-auto" />
     </>
   );
 };

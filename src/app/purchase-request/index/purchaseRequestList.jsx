@@ -20,7 +20,7 @@ const PurchaseRequestList = () => {
       <DataTable
         columns={purchaseRequestColumns}
         data={purchaseRequestResponse}
-        className="opacity-100"
+        className="opacity-100 overflow-auto"
         pagination
       />
     </>

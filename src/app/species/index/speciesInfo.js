@@ -2,6 +2,7 @@ import { Button, Dropdown } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
+import { GiSoundOn } from "react-icons/gi";
 
 export const speciesColumns = [
   {
@@ -22,24 +23,21 @@ export const speciesColumns = [
   {
     name: "Size",
     selector: (row) => row.size,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Voice",
     cell: (row) => (
-      <iframe src={row.voice} 
-      style={{ width: '100px', height: 'auto' }}
-      />
-   ),
-
+      <Link href={row.voice}>
+        <GiSoundOn/>
+      </Link>
+    ),
   },
   {
     name: "Image Link",
     cell: (row) => (
-      <Image src={row.imageLink} 
-      style={{ width: '100px', height: 'auto' }}
-      />
-   ),
+      <Image src={row.imageLink} style={{ width: "100px", height: "auto" }} />
+    ),
   },
   {
     name: "Life Expectancy",
@@ -63,4 +61,3 @@ export const speciesColumns = [
     ),
   },
 ];
-

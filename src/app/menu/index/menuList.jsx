@@ -32,7 +32,7 @@ const MenuList = () => {
 
   return (
     <>
-      <DataTable columns={menuColumns} data={mealMenuResponse} pagination />
+      <DataTable columns={menuColumns} data={mealMenuResponse} pagination className="overflow-auto" />
     </>
   );
 };

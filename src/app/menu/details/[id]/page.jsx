@@ -3,7 +3,6 @@ import { Label, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { menuInfo, menuDetailInfo } from "../../index/menuInfo";
 import { Table } from "flowbite-react";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
@@ -39,7 +38,7 @@ const MenuDetailPage = () => {
     url: `${API}/meal-menu/?filter=ID%20eq%20${index}&expand=species,menuDetails($expand=Food)`,
   });
 
-  if (isNaN(index) || index < 0 || index >= menuInfo.length) {
+  if (isNaN(index) || index < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">

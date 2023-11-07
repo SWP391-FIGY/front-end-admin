@@ -26,7 +26,7 @@ const PlanList = () => {
 
   return (
     <>
-      <DataTable columns={planColumns} data={response} pagination />
+      <DataTable columns={planColumns} data={response} pagination className="overflow-auto" />
     </>
   );
 };
