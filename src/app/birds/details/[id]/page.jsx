@@ -7,6 +7,7 @@ import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import { birdStatusEnum } from "../../index/birdInfo";
+import Image from "next/image";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -19,7 +20,7 @@ const BirdDetailPage = () => {
     url: `${API}/bird/?filter=ID%20eq%20${birdId}&expand=cage,species`,
   });
 
-  if (isNaN(birdId) || birdId < 0 || birdId >= birdInfo.length) {
+  if (isNaN(birdId) || birdId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -110,7 +111,7 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birdImageUrl" className="text-lg font-bold">Bird Image Url</label>
-                <img src={speciesData.birdImageUrl} alt="Bird Image Url" style={{ width: '100px', height: 'auto' }} />
+                <Image src={speciesData.birdImageUrl} alt="Bird Image Url" width={100} height={100} />
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="species" className="text-lg font-bold">

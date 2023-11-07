@@ -26,7 +26,7 @@ const BirdList = () => {
 
   return (
     <>
-      <DataTable columns={birdColumns} data={response} pagination />
+      <DataTable columns={birdColumns} data={response} pagination className="overflow-auto" />
     </>
   );
 };

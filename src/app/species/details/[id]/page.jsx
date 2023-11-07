@@ -6,6 +6,7 @@ import Link from "next/link"
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
+import Image from "next/image"
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -97,7 +98,7 @@ const SpeciesDetailPage = () => {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="imageLink" className="text-lg font-bold">Image</label>
-              <img src={speciesData.ImageLink} alt="Species Image" style={{ width: '100px', height: 'auto' }} />
+              <Image src={speciesData.ImageLink} alt="Species Image"  width= {100} height={100}/>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="lifeExpectancy" className="text-lg font-bold">lifeExpectancy</label>

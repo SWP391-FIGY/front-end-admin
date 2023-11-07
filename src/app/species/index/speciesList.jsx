@@ -26,7 +26,7 @@ const SpeciesList = () => {
 
   return (
     <>
-      <DataTable columns={speciesColumns} data={response} pagination />
+      <DataTable columns={speciesColumns} data={response} pagination className="overflow-auto" />
     </>
   );
 };

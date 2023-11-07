@@ -6,7 +6,6 @@ import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import {
   feedingPlanStatus as feedingPlanStatusEnum,
-  planInfo,
 } from "../../index/planInfo";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
@@ -35,7 +34,7 @@ const PlanDetailPage = () => {
   //      });
   //  }, [uid]);
 
-  if (isNaN(planId) || planId < 0 || planId >= planInfo.length) {
+  if (isNaN(planId) || planId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
