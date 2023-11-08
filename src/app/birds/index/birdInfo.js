@@ -1,4 +1,5 @@
 import { Button, Dropdown } from "flowbite-react";
+import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
@@ -8,11 +9,13 @@ export const birdColumns = [
     name: "Id",
     selector: (row) => row.ID,
     sortable: true,
+    width: '50px',
   },
   {
     name: "Birthdate",
     selector: (row) => row.DoB,
     sortable: true,
+    width: '100px',
   },
   {
     name: "Gender",
@@ -22,23 +25,24 @@ export const birdColumns = [
   {
     name: "Description",
     selector: (row) => row.Description,
+    wrap:true,
   },
   {
     name: "Image",
     cell: (row) => (
-       <Image src={row.BirdImageUrl} />
-      //<img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
+       <Image src={row.BirdImageUrl} width={200} height={200} classname="object-cover h-48 w-96"/>
     ),
   },
   {
     name: "Status",
-    selector: (row) => row.BirdStatus,
+    selector: (row) => birdStatusEnum[row.BirdStatus],
     sortable: true,
   },
   {
     name: "Last Modified",
-    selector: (row) => row.LastModifyDate,
+    selector: (row) => moment(row.LastModifyDate).format('DD/MM/YYYY'),
     sortable: true,
+    wrap:true,
   },
   {
     name: "Species",

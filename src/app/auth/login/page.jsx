@@ -7,7 +7,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  linkWithRedirect,
 } from "firebase/auth";
 import { useFormik } from "formik";
 import * as Yup from "yup";

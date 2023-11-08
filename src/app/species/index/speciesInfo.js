@@ -36,7 +36,7 @@ export const speciesColumns = [
   {
     name: "Image Link",
     cell: (row) => (
-      <Image src={row.imageLink} style={{ width: "100px", height: "auto" }} />
+      <Image src={row.imageLink} width={100} height={100} />
     ),
   },
   {

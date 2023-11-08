@@ -1,11 +1,16 @@
 "use client";
-import BirdList from "./birdList";
+//import BirdList from "./birdList";
 import PageLayout from "@/layout/pageLayout";
 import { HiPlus } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { Button } from "flowbite-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
+const DynamicBirdList = dynamic(() => import('./birdList'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
 const BirdListPage = () => {
   const router = useRouter();
 
@@ -25,7 +30,7 @@ const BirdListPage = () => {
             </Button>
           </Link>
         </div>
-        <BirdList />
+        <DynamicBirdList />
       </div>
     </PageLayout>
   );
