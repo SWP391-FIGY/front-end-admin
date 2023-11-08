@@ -264,7 +264,6 @@ const MenuUpdatePage = () => {
           </div>
 
 
-
           {/* // * Bird status */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="birdStatus" value="Bird status" />

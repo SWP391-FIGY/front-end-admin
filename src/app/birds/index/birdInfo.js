@@ -30,7 +30,7 @@ export const birdColumns = [
   {
     name: "Image",
     cell: (row) => (
-       <Image src={row.BirdImageUrl} width={200} height={200} classname="object-cover h-48 w-96"/>
+       <Image src={row.BirdImageUrl} width={100} height={100} classname="object-cover h-48 w-96"/>
     ),
   },
   {

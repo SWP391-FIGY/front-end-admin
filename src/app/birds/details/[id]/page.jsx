@@ -99,9 +99,9 @@ const BirdDetailPage = () => {
             <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birdId" className="text-lg font-bold">
-                  BirdId
+                  Bird Id
                 </label>
-                <p>{birdData.id}</p>
+                <p>{birdData.ID}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="description" className="text-lg font-bold">
@@ -111,7 +111,7 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birdImageUrl" className="text-lg font-bold">Bird Image Url</label>
-                <Image src={speciesData.birdImageUrl} alt="Bird Image Url" width={100} height={100} />
+                <Image src={birdData.BirdImageUrl} alt="Bird Image Url" width={100} height={100} />
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="species" className="text-lg font-bold">
@@ -121,9 +121,9 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="cageID" className="text-lg font-bold">
-                  Cage ID
+                  Cage
                 </label>
-                <p>{birdData.Cage.Id}</p>
+                <p>{birdData.Cage.ID}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birthDate" className="text-lg font-bold">
