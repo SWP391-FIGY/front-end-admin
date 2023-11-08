@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { birdColumns, birdInfo } from "./birdInfo";
 import DataTable from "react-data-table-component";
 import useAxios from "@/hooks/useFetch";
@@ -7,6 +7,7 @@ import { API } from "@/constants";
 import { message } from "antd";
 
 const BirdList = () => {
+  const [keyword, setKeyword] = useState("");
   const { response, loading, error } = useAxios({
     method: "get",
     url: `${API}/bird?expand=cage,species`,
@@ -46,13 +47,31 @@ const BirdList = () => {
 
   return (
     <>
+      <div className="flex flex-row">
+        <input
+          type="text"
+          value={keyword}
+          onChange={(e) => {
+            setKeyword(e.target.value);
+            console.log(keyword);
+          }}
+          name="search"
+          placeholder="Enter your search"
+        />
+      </div>
       <DataTable
         columns={birdColumns}
-        data={response}
+        data={
+          keyword && keyword.length > 0
+            ? response.filter(
+                (x) =>
+                  x.Gender.includes(keyword) || x.Description.includes(keyword)
+              )
+            : response
+        }
         pagination
         className="overflow-auto"
         customStyles={customStyles}
-        
       />
     </>
   );
