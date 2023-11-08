@@ -15,7 +15,7 @@ export const planColumns = [
   },
   {
     name: "Meal Menu Name",
-    selector: (row) => row.Menu.MenuName,
+    selector: (row) => row.MealMenu.MenuName,
     sortable: true,
   },
   {
@@ -24,7 +24,7 @@ export const planColumns = [
   },  
   {
     name: "DateTime",
-    selector: (row) => row.DateTime,
+    selector: (row) => formatDateTime(row.DateTime),
     sortable: true,
   },
   {
@@ -55,5 +55,18 @@ export const planStatusEnum = [
   "Other",
   "Cancel"
 ]
+
+function formatDateTime(DateTime) {
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true, // Display in 12-hour format
+  };
+  return new Date(DateTime).toLocaleString("en-US", options);
+}
 
 
