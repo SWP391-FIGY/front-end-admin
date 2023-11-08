@@ -1,163 +1,61 @@
-export const cageInfo = [
-  {
-    id: 1,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "In use",
-    capacity: 5,
-  },
-  {
-    id: 2,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "Maintainance",
-    capacity: 10,
-  },
-  {
-    id: 3,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "In use",
-    capacity: 5,
-  },
-  {
-    id: 4,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 5,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "In use",
-    capacity: 10,
-  },
-  {
-    id: 6,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 7,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 8,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "In use",
-    capacity: 10,
-  },
-  {
-    id: 9,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 10,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "In use",
-    capacity: 10,
-  },
-  {
-    id: 11,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "In use",
-    capacity: 5,
-  },
-  {
-    id: 12,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "Maintainance",
-    capacity: 10,
-  },
-  {
-    id: 13,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "In use",
-    capacity: 5,
-  },
-  {
-    id: 14,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 15,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "In use",
-    capacity: 10,
-  },
-  {
-    id: 16,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 1",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  {
-    id: 17,
-    size: "90 x 60 x 90",
-    color: "Black",
-    area: "300",
-    type: "Type 2",
-    cageStatus: "Maintainance",
-    capacity: 5,
-  },
-  
-];
+import { Button, Dropdown } from "flowbite-react";
+import Link from "next/link";
+import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
-export const cageStatusEnum =[
-  "Active",
-  "Deactive",
-  "Cancel",
-  "Other"
-]
+export const cageColumns = [
+  {
+    name: "ID",
+    selector: (row) => row.id,
+    sortable: true,
+  },
+  {
+    name: "Size",
+    selector: (row) => row.size,
+    sortable: true,
+  },
+  {
+    name: "Color",
+    selector: (row) => row.color,
+    sortable: true,
+  },
+  {
+    name: "Area",
+    selector: (row) => row.area,
+	sortable: true,
+  },
+  {
+    name: "Type",
+    selector: (row) => row.type,
+	sortable: true,
+  },
+  {
+    name: "Status",
+    selector: (row) => {
+      const statusMapping = {
+        1: "In use",
+        2: "Maintenance",
+        3: "Broken",
+        4: "Not in use"
+      };
+      return statusMapping[row.cageStatus] || "Unknown";
+    },
+    sortable: true,
+  },
+  {
+    name: "Capacity",
+    selector: (row) => row.capacity,
+  },
+  {
+    name: "Action",
+    cell: (row) => (
+      <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
+        <Link href={`/cage/edit/${row.id}`}>
+          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+        </Link>
+        <Link href={`/cage/details/${row.id}`}>
+          <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
+        </Link>
+      </Dropdown>
+    ),
+  },
+];

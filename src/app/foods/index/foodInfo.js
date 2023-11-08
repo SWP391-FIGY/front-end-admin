@@ -30,7 +30,10 @@ export const foodColumns = [
   },
   {
     name: "Standard Price",
-    selector: (row) => row.standardPrice,
+    selector: (row) => `${row.standardPrice.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 3,
+    })} VND`,
     sortable: true,
   },
   {
