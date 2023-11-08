@@ -8,6 +8,7 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import { birdStatusEnum } from "../../index/birdInfo";
 import Image from "next/image";
+import moment from "moment";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -101,7 +102,7 @@ const BirdDetailPage = () => {
                 <label htmlFor="birdId" className="text-lg font-bold">
                   BirdId
                 </label>
-                <p>{birdData.id}</p>
+                <p>{birdData.ID}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="description" className="text-lg font-bold">
@@ -111,7 +112,7 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birdImageUrl" className="text-lg font-bold">Bird Image Url</label>
-                <Image src={speciesData.birdImageUrl} alt="Bird Image Url" width={100} height={100} />
+                <Image src={birdData.BirdImageUrl} alt="Bird Image Url" width={100} height={100} />
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="species" className="text-lg font-bold">
@@ -123,13 +124,13 @@ const BirdDetailPage = () => {
                 <label htmlFor="cageID" className="text-lg font-bold">
                   Cage ID
                 </label>
-                <p>{birdData.Cage.Id}</p>
+                <p>{birdData.Cage.ID}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birthDate" className="text-lg font-bold">
                   Birth date (Month/Date/Year)
                 </label>
-                <p>{birdData.DoB}</p>
+                <p>{moment(birdData.DoB).format("DD/MM/YYYY")}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="gender" className="text-lg font-bold">
@@ -139,9 +140,9 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="lastModifyDate" className="text-lg font-bold">
-                  LastModifyDate (Month/Date/Year)
+                  Last Modify Date
                 </label>
-                <p>{birdData.LastModifyDate}</p>
+                <p>{moment(birdData.LastModifyDate).format("DD/MM/YYYY")}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="status" className="text-lg font-bold">
