@@ -117,6 +117,14 @@ const PurchaseRequestCreatePage = () => {
     formik.setFieldValue("purchaseRequestDetails", updatedFoodItems);
   }
 
+  const foodNameMap = {};
+
+  if (foodResponse && foodResponse.length > 0) {
+    foodResponse.forEach((food) => {
+      foodNameMap[food.ID] = food.Name;
+    });
+  }
+
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -139,7 +147,7 @@ const PurchaseRequestCreatePage = () => {
             <Table>
               <Table.Head>
                 <Table.HeadCell>Food</Table.HeadCell>
-                <Table.HeadCell>Quantity</Table.HeadCell>
+                <Table.HeadCell>Quantity (per unit)</Table.HeadCell>
                 <Table.HeadCell></Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
@@ -149,7 +157,7 @@ const PurchaseRequestCreatePage = () => {
                   formik.values.purchaseRequestDetails.map((item, index) => {
                     return (
                       <Table.Row key={index}>
-                        <Table.Cell>{item.foodId}</Table.Cell>
+                        <Table.Cell>{foodNameMap[item.foodId]}</Table.Cell>
                         <Table.Cell>{item.quantity}</Table.Cell>
                         <Table.Cell
                           className="flex items-center gap-2"

@@ -165,7 +165,7 @@ const FoodCreatePage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="standardPrice"
-              value="Standard price"
+              value="Standard price (VND)"
             />
             <TextInput
               id="standardPrice"

@@ -21,7 +21,7 @@ export const speciesColumns = [
     sortable: true,
   },
   {
-    name: "Size",
+    name: "Size (cm)",
     selector: (row) => row.size,
     sortable: true,
   },

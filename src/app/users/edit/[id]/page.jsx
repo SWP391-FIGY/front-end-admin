@@ -161,6 +161,7 @@ const UserEditPage = () => {
               </div>
             ) : null}
           </div>
+
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="phoneNumber"
@@ -180,6 +181,52 @@ const UserEditPage = () => {
               </div>
             ) : null}
           </div>
+
+          <div className="flex flex-col gap-2">
+            <Label
+              htmlFor="role"
+              value="Role"
+            />
+            <Select
+              id="role"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.role}
+            >
+              <option value="1">Admin</option>
+              <option value="2">Manager</option>
+              <option value="3">Staff</option>
+
+            </Select>
+            {formik.touched.role && formik.errors.role ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.role}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label
+              htmlFor="status"
+              value="Status"
+            />
+            <Select
+              id="status"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.status}
+            >
+              <option value="1">Activated</option>
+              <option value="2">Deactivated</option>
+
+            </Select>
+            {formik.touched.status && formik.errors.status ? (
+              <div className='text-xs text-red-600 dark:text-red-400'>
+                {formik.errors.status}
+              </div>
+            ) : null}
+          </div>
+
           <Button type="submit">
             {spinner ? (
               <div className='flex justify-center items-center gap-4'>

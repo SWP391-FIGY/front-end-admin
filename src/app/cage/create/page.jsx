@@ -33,7 +33,7 @@ const CageCreatePage = () => {
       color: "Black",
       area: "A",
       type: "Type 1",
-      cageStatus: 0,
+      cageStatus: 4,
       capacity: 5,
     },
     validationSchema: Yup.object({
@@ -95,7 +95,7 @@ const CageCreatePage = () => {
         >
           
           <div className="flex flex-col gap-2">
-            <Label htmlFor="size" value="Cage size" />
+            <Label htmlFor="size" value="Cage size (cm)" />
             <TextInput
               id="size"
               type="text"
@@ -124,21 +124,33 @@ const CageCreatePage = () => {
               </div>
             ) : null}
           </div>
+
           <div className="flex flex-col gap-2">
-            <Label htmlFor="area" value="Cage area" />
-            <TextInput
+            <Label
+              htmlFor="area"
+              value="Area"
+            />
+            <Select
               id="area"
-              type="text"
+
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.area}
-            />
+            >
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option>D</option>
+              <option>E</option>
+
+            </Select>
             {formik.touched.area && formik.errors.area ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
+              <div className='text-xs text-red-600 dark:text-red-400'>
                 {formik.errors.area}
               </div>
             ) : null}
           </div>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="type" value="Cage type" />
             <TextInput

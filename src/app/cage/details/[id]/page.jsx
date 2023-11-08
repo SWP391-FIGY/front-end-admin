@@ -1,31 +1,24 @@
 "use client";
-import { useParams } from "next/navigation";
+import { Label, Spinner } from "flowbite-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { cageInfo,} from "../../index/cageInfo";
-import { birdInfo } from "../../../birds/index/birdInfo";
-import { Table } from "flowbite-react";
+import useAxios from "@/hooks/useFetch";
+import { API } from "@/constants";
+import { useParams } from "next/navigation";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const CageDetailPage = () => {
   const params = useParams();
-  const index = parseInt(params.id, 10);
-  
+  const cageId = parseInt(params.id, 10);
 
-  //  useEffect(() => {
-  //    axios
-  //      .get(`${API}/birds/${uid}`)
-  //      .then(response => {
-  //        setBirdData(response.data);
-  //        setLoading(false);
-  //      })
-  //      .catch(error => {
-  //        setLoading(false);
-  //        console.log('An error occurred:', error.response);
-  //      });
-  //  }, [uid]);
-  if (isNaN(index) || index < 0 || index >= cageInfo.length) {
+  const { response, loading, error } = useAxios({
+    method: "get",
+    url: `${API}/cage/?filter=ID%20eq%20${cageId}`,
+  });
+
+  if (isNaN(cageId) || cageId < 0) {
     return (
       <PageLayout>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -34,9 +27,32 @@ const CageDetailPage = () => {
       </PageLayout>
     );
   }
+  if (error) {
+    message.error("Error While Getting Cage Data");
+    return <>No Data</>;
+  }
+  if (loading && !error)
+    return (
+      <PageLayout>
+        <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+          <Spinner />
+        </div>
+      </PageLayout>
+    );
 
-  const cageData = cageInfo[index];
-  
+  const cageData = response[0];
+  console.log(cageData);
+
+  const getStatusLabel = (status) => {
+    const statusMapping = {
+      1: "In use",
+      2: "Maintenance",
+      3: "Broken",
+      4: "Not in use"
+    };
+    return statusMapping[status] || "Unknown";
+  };
+
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -49,42 +65,55 @@ const CageDetailPage = () => {
           </Link>
           <h2 className="text-3xl font-bold">Cage Details</h2>
         </div>
-
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Cage Id</label>
+              <label htmlFor="id" className="text-lg font-bold">
+                ID
+              </label>
               <p>{cageData.id}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Size</label>
+              <label htmlFor="size" className="text-lg font-bold">
+                Size
+              </label>
               <p>{cageData.size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Color</label>
+              <label htmlFor="color" className="text-lg font-bold">
+                Color
+              </label>
               <p>{cageData.color}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Type</label>
-              <p>{cageData.type}</p>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Area</label>
+              <label htmlFor="area" className="text-lg font-bold">
+                Area
+              </label>
               <p>{cageData.area}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Cage Status</label>
-              <p>{cageData.cageStatus}</p>
+              <label htmlFor="type" className="text-lg font-bold">
+                Type
+              </label>
+              <p>{cageData.type}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Capacity</label>
+              <label htmlFor="cageStatus" className="text-lg font-bold">
+                Status
+              </label>
+              <p>{getStatusLabel(cageData.cageStatus)}</p>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label htmlFor="capacity" className="text-lg font-bold">
+                Capacity
+              </label>
               <p>{cageData.capacity}</p>
             </div>
-            
           </div>
         </div>
       </div>
     </PageLayout>
   );
 };
+
 export default CageDetailPage;

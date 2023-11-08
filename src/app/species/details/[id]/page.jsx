@@ -89,7 +89,7 @@ const SpeciesDetailPage = () => {
               <p>{speciesData.Color}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="size" className="text-lg font-bold">Size</label>
+              <label htmlFor="size" className="text-lg font-bold">Size (cm)</label>
               <p>{speciesData.Size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">

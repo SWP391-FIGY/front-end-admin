@@ -1,18 +1,23 @@
 "use client";
-
-import Link from "next/link";
 import CageList from "./cageList";
-import { Button } from "flowbite-react";
+import PageLayout from "@/layout/pageLayout";
 import { HiPlus } from "react-icons/hi";
-
-const { default: PageLayout } = require("@/layout/pageLayout");
+import { useRouter } from "next/navigation";
+import { Button } from "flowbite-react";
+import Link from "next/link";
 
 const CageListPage = () => {
+  const router = useRouter();
+
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
         <div className="flex flex-row justify-between">
           <h2 className="text-3xl font-bold">Cage List</h2>
+          <form action="/search" method="get">
+            <input type="text" name="search" placeholder="Enter your search"/>
+            <button type="submit">Search</button>
+          </form>
           <Link href={"/cage/create"}>
             <Button>
               <div className="flex flex-row justify-center gap-4">
