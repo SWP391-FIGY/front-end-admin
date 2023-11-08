@@ -155,7 +155,7 @@ const PurchaseRequestEditPage = () => {
             <Table>
               <Table.Head>
                 <Table.HeadCell>Food</Table.HeadCell>
-                <Table.HeadCell>Quantity</Table.HeadCell>
+                <Table.HeadCell>Quantity (per unit)</Table.HeadCell>
                 <Table.HeadCell></Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
