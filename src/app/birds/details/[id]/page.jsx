@@ -100,7 +100,7 @@ const BirdDetailPage = () => {
             <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="birdId" className="text-lg font-bold">
-                  BirdId
+                  Bird Id
                 </label>
                 <p>{birdData.ID}</p>
               </div>
@@ -122,7 +122,7 @@ const BirdDetailPage = () => {
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="cageID" className="text-lg font-bold">
-                  Cage ID
+                  Cage
                 </label>
                 <p>{birdData.Cage.ID}</p>
               </div>

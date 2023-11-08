@@ -6,12 +6,35 @@ import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import DataTable from "react-data-table-component";
+import { birdColumns } from "@/app/birds/index/birdInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
+
+const BirdTable = ({ birdData }) => {
+  return (
+    <div className="bg-white rounded-lg shadow p-6 mt-4">
+      <h3 className="text-2xl font-bold mb-4">Birds in Cage</h3>
+      <DataTable
+        columns={birdColumns}
+        data={birdData}
+        pagination
+        //customStyles={customStyles}
+      />
+    </div>
+  );
+};
 
 const CageDetailPage = () => {
   const params = useParams();
   const cageId = parseInt(params.id, 10);
+
+  const { response: birdResponse, loading: birdLoading, error: birdError } = useAxios({
+    method: "get",
+    url: `${API}/bird/?filter=Cage/ID eq ${cageId}&$expand=Cage,Species`,
+  });
+
+  const birdData = birdResponse || [];
 
   const { response, loading, error } = useAxios({
     method: "get",
@@ -111,6 +134,7 @@ const CageDetailPage = () => {
             </div>
           </div>
         </div>
+        <BirdTable birdData={birdData} />
       </div>
     </PageLayout>
   );
