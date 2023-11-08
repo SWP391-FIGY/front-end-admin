@@ -101,10 +101,7 @@ const CageEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]">
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="size"
-              value="Size"
-            />
+            <Label htmlFor="size" value="Cage size (cm)" />
             <TextInput
               id="size"
 

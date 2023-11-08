@@ -160,7 +160,7 @@ const SpeciesEditPage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="Size"
-              value="Size"
+              value="Size (cm)"
             />
             <TextInput
               id="Size"
