@@ -26,7 +26,7 @@ export const birdColumns = [
   {
     name: "Image",
     cell: (row) => (
-       <Image src={row.BirdImageUrl} />
+       <Image src={row.BirdImageUrl} width={100} height={100}/>
       //<img src={'https://lzd-img-global.slatic.net/g/p/f7b20a2fb888c62c1ba20b3c156ba6f0.jpg_720x720q80.jpg'} />
     ),
   },

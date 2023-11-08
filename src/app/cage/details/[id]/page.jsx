@@ -57,7 +57,7 @@ const CageDetailPage = () => {
               <p>{cageData.id}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label className="text-lg font-bold">Size</label>
+              <label className="text-lg font-bold">Size (cm)</label>
               <p>{cageData.size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">

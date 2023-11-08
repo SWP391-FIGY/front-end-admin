@@ -85,7 +85,7 @@ const CageEditPage = () => {
         >
           
           <div className="flex flex-col gap-2">
-            <Label htmlFor="size" value="Cage size" />
+            <Label htmlFor="size" value="Cage size (cm)" />
             <TextInput
               id="size"
               type="text"

@@ -30,7 +30,7 @@ const CageList = () => {
       <Table className="table-auto">
         <Table.Head>
           <Table.HeadCell>Id</Table.HeadCell>
-          <Table.HeadCell>Size</Table.HeadCell>
+          <Table.HeadCell>Size (cm)</Table.HeadCell>
           <Table.HeadCell>Color</Table.HeadCell>
           <Table.HeadCell>Area</Table.HeadCell>
           <Table.HeadCell>Type</Table.HeadCell>
