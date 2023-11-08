@@ -12,6 +12,7 @@
     "antd": "^5.10.2",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.0",
+    "dayjs": "^1.11.10",
     "encoding": "^0.1.13",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",

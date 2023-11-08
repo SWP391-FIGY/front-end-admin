@@ -9,14 +9,14 @@ import { message } from "antd";
 const TaskList = () => {
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/task`,
+    url: `${API}/task?expand=staff`,
   });
 
   console.log("Fetched task data", response);
   if (error) {
-    message.error('Error While Getting Task data')
-    return <>No Data</>
-  };
+    message.error("Error While Getting Task data");
+    return <>No Data</>;
+  }
   if (loading && !error)
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -24,9 +24,28 @@ const TaskList = () => {
       </div>
     );
 
+  const customStyles = {
+    headCells: {
+      style: {
+        paddingLeft: "3px", // override the cell padding for data cells
+        paddingRight: "3px",
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "3px", // override the cell padding for data cells
+        paddingRight: "3px",
+      },
+    },
+  };
   return (
     <>
-      <DataTable columns={taskColumns} data={response} pagination />
+      <DataTable
+        columns={taskColumns}
+        data={response}
+        pagination
+        customStyles={customStyles}
+      />
     </>
   );
 };

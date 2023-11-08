@@ -1,10 +1,5 @@
-cách làm purchase order
-  create / id
-    get pr từ id đã nhập
-    seed data cần thiết
-    trong đó input thêm giá thực tế
-    save lại
+bird cần có
+feeding plan
+menu của bird
+log của bird đó
 
-làm phân quyền
-
-làm dash board  
