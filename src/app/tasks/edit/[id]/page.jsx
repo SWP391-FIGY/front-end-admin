@@ -21,11 +21,11 @@ import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 import { DatePicker, Space, message } from "antd";
 
-const { default: PageLayout } = require("@/layout/pageLayout")
+const { default: PageLayout } = require("@/layout/pageLayout");
 
 const TaskEditPage = () => {
   const router = useRouter();
-  const [spinner, setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false);
   const params = useParams();
   const taskId = parseInt(params.id, 10);
 
@@ -38,7 +38,7 @@ const TaskEditPage = () => {
     method: "get",
     url: `${API}/task/?filter=ID%20eq%20${taskId}&select=*`,
   });
- 
+
   //Fetch old data to form
   useEffect(() => {
     if (taskResponse) {
@@ -46,27 +46,31 @@ const TaskEditPage = () => {
       formik.setValues({
         ...taskResponse[0],
       });
+      formik.setFieldTouched("CageId")
+      formik.setFieldTouched("StaffId")
+
+
     }
   }, [taskResponse]);
 
-      // Get bird list
-      const {
-        response: birdResponse,
-        loading: birdLoading,
-        error: birdError,
-      } = useAxios({
-        method: "get",
-        url: `${API}/bird/`,
-      });
-      // Get cage list
-      const {
-        response: cageResponse,
-        loading: cageLoading,
-        error: cageError,
-      } = useAxios({
-        method: "get",
-        url: `${API}/cage/`,
-      });
+  // Get bird list
+  const {
+    response: birdResponse,
+    loading: birdLoading,
+    error: birdError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/bird/`,
+  });
+  // Get cage list
+  const {
+    response: cageResponse,
+    loading: cageLoading,
+    error: cageError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/cage/`,
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -80,22 +84,19 @@ const TaskEditPage = () => {
       Status: "Pending",
     },
     validationSchema: Yup.object({
-      BirdId: Yup.number().required("Required"),
-      CageId: Yup.number().required("Required"),
-      StaffId: Yup.number().required("Required"),
+      CageId: Yup.number(),
+      StaffId: Yup.number(),
       TaskName: Yup.string().required("Required"),
       DateTime: Yup.date()
         .min(new Date(), "Date must be today or later")
         .required("Required"),
-      
-      Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log('submit data',payloadData.data);
+      console.log("submit data", payloadData.data);
       axios
         .put(`${API}/task/${taskId}`, payloadData.data)
         .then((response) => {
@@ -112,32 +113,43 @@ const TaskEditPage = () => {
     },
   });
 
+  useEffect(() => {
+    console.log(formik)  
+    
+  }, [formik])
+  
   return (
     <PageLayout>
-      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-      <div className='flex flex-col justify-between gap-4'>
-          <Link href={'/tasks/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Edit task</h2>
-
+      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+        <div className="flex flex-col justify-between gap-4">
+          <Link href={"/tasks/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
+          <h2 className="text-3xl font-bold">Edit task</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]">
-
+          className="flex flex-col gap-4 w-[600px]"
+        >
           {/* //* Bird  */}
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="BirdId" value="Bird" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
-              <Select
+                <Select
                   id="BirdId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("BirdId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
                   value={formik.values.BirdId}
                 >
+                  {birdResponse && birdResponse.length > 0 && (
+                    <option value={null}>
+                      None
+                    </option>
+                  )}
                   {birdResponse && birdResponse.length > 0 ? (
                     birdResponse.map((bird, index) => {
                       return (
@@ -151,16 +163,6 @@ const TaskEditPage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{pathname:"/birds/create", query: {...formik.values, 'bird-add':true}}}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new bird</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
 
             {formik.touched.BirdId && formik.errors.BirdId ? (
@@ -178,7 +180,7 @@ const TaskEditPage = () => {
                 <Select
                   id="CageID"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("CageID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -197,16 +199,6 @@ const TaskEditPage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new cage</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
             {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -216,22 +208,19 @@ const TaskEditPage = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="StaffId"
-              value="Staff"
-            />
+            <Label htmlFor="StaffId" value="Staff" />
             <Select
               id="StaffId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.StaffId}
             >
-                  <option value={1}>Staff 1</option>
-                  <option value={2}>Staff 2</option>
-                  <option value={3}>Staff 3</option>
+              <option value={1}>Staff 1</option>
+              <option value={2}>Staff 2</option>
+              <option value={3}>Staff 3</option>
             </Select>
             {formik.touched.StaffId && formik.errors.StaffId ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.StaffId}
               </div>
             ) : null}
@@ -252,9 +241,9 @@ const TaskEditPage = () => {
               </div>
             ) : null}
           </div>
-          
+
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DateTime" value="Date and Time" />            
+            <Label htmlFor="DateTime" value="Date and Time" />
             <Space direction="vertical" size={12}>
               <DatePicker
                 className="!important"
@@ -273,7 +262,7 @@ const TaskEditPage = () => {
               </div>
             ) : null}
           </div>
-          
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="Description" value="Description" />
             <TextInput
@@ -289,7 +278,7 @@ const TaskEditPage = () => {
               </div>
             ) : null}
           </div>
-          
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="Status" value="Task Status" />
             <Select
@@ -298,6 +287,7 @@ const TaskEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.Status}
             >
+              <option>Done</option>
               <option>Pending</option>
               <option>Ongoing</option>
               <option>Overdue</option>
@@ -313,8 +303,8 @@ const TaskEditPage = () => {
 
           <Button type="submit">
             {spinner ? (
-              <div className='flex justify-center items-center gap-4'>
-                <Spinner aria-label='Spinner button example' />
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
                 <p>Loading...</p>
               </div>
             ) : (

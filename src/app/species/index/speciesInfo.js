@@ -40,7 +40,7 @@ export const speciesColumns = [
     ),
   },
   {
-    name: "Life Expectancy",
+    name: "Life Expectancy (Year)",
     selector: (row) => row.lifeExpectancy,
   },
   {
