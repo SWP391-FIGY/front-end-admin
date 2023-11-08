@@ -280,7 +280,7 @@ const MenuUpdatePage = () => {
               value={formik.values.BirdStatus}
             >
               {birdStatusEnum.map((status, index) => {
-                return <option value={index}>{status}</option>;
+                return <option key={index} value={index}>{status}</option>;
               })}
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
@@ -304,7 +304,7 @@ const MenuUpdatePage = () => {
               value={formik.values.MenuStatus}
             >
               {menuStatusEnum.map((status, index) => {
-                return <option value={index}>{status}</option>;
+                return <option key={index} value={index}>{status}</option>;
               })}
             </Select>
             {formik.touched.MenuStatus && formik.errors.MenuStatus ? (
