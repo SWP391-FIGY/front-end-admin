@@ -42,6 +42,7 @@ const TaskDetailPage = () => {
 
   const taskData = response[0];
   console.log(taskData);
+  const formattedDateTime = formatDateTime(taskData.dateTime);
 
   return (
     <PageLayout>
@@ -91,7 +92,7 @@ const TaskDetailPage = () => {
               <label htmlFor="dateTime" className="text-lg font-bold">
                 Date Time
               </label>
-              <p>{taskData.dateTime}</p>
+              <p>{formattedDateTime}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="description" className="text-lg font-bold">
@@ -113,3 +114,16 @@ const TaskDetailPage = () => {
 };
 
 export default TaskDetailPage;
+
+function formatDateTime(dateTime) {
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true, // Display in 12-hour format
+  };
+  return new Date(dateTime).toLocaleString("en-US", options);
+}

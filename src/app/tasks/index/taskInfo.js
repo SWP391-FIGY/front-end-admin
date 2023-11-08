@@ -28,7 +28,7 @@ export const taskColumns = [
   },
   {
     name: "Date & Time",
-    selector: (row) => row.dateTime,
+    selector: (row) => formatDateTime(row.dateTime),
     sortable: true,
   },
   {
@@ -60,3 +60,16 @@ export const taskStatusEnum = [
   "Done",
   "Cancel"
 ]
+
+function formatDateTime(dateTime) {
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true, // Display in 12-hour format
+  };
+  return new Date(dateTime).toLocaleString("en-US", options);
+}
