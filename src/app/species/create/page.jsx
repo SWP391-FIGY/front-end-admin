@@ -186,7 +186,7 @@ const SpeciesCreatePage = () => {
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="lifeExpectancy"
-              value="Life Expectancy"
+              value="Life Expectancy (Year)"
             />
             <TextInput
               id="lifeExpectancy"

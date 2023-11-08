@@ -101,8 +101,8 @@ const SpeciesDetailPage = () => {
               <Image src={speciesData.ImageLink} alt="Species Image"  width= {100} height={100}/>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="lifeExpectancy" className="text-lg font-bold">lifeExpectancy</label>
-              <p>{speciesData.LifeExpectancy}</p>
+              <label htmlFor="lifeExpectancy" className="text-lg font-bold">Life Expectancy (Year)</label>
+              <p>{speciesData.LifeExpectancy} Years</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="habitat" className="text-lg font-bold">Habitat</label>

@@ -56,10 +56,10 @@ export const menuColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/menu/edit/${row.id}`}>
+        <Link href={`/menu/edit/${row.ID}`}>
           <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
         </Link>
-        <Link href={`/menu/details/${row.id}`}>
+        <Link href={`/menu/details/${row.ID}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>
       </Dropdown>
