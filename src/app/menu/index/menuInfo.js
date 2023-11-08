@@ -8,7 +8,7 @@ const getBirdStatusText = (value) => {
 };
 
 const getMenuStatusText = (value) => {
-  return value === 1 ? "In use" : value === 2 ? "Not in use" : "";
+  return value === 1 ? "In use" : value === 2 ? "Not in use" : value === 3 ? "Being revised" : "";
 };
 export const menuColumns = [
   {
@@ -24,37 +24,32 @@ export const menuColumns = [
   {
     name: "Species",
     selector: (row) => row.Species.Name,
-    sortable: true,
-  },
-  {
-    name: "Species",
-    selector: (row) => row.Species.name,
-    sortable: true,
+    sortable: true, 
   },
   {
     name: "Min Days Before Feeding",
-    selector: (row) => row.daysBeforeFeeding,
+    selector: (row) => row.DaysBeforeFeeding,
     sortable: true,
   },
   {
-    name: "Size",
-    selector: (row) => row.size,
+    name: "Size (cm)",
+    selector: (row) => row.Size,
 	sortable: true,
   },
   {
     name: "Bird status",
-    selector: (row) => getBirdStatusText(row.birdStatus),
+    selector: (row) => getBirdStatusText(row.BirdStatus),
     sortable: true,
   },
   {
     name: "Menu status",
-    selector: (row) => getMenuStatusText(row.menuStatus),
+    selector: (row) => getMenuStatusText(row.MenuStatus),
     sortable: true,
   },
   {
 
     name: "Nutritional ingredients",
-    selector: (row) => row.nutritionalIngredients,
+    selector: (row) => row.NutritionalIngredients,
 	sortable: true,
   },
   {
