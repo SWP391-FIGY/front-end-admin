@@ -25,11 +25,26 @@ export const userColumns = [
   },
   {
     name: "Role",
-    selector: (row) => row.role,
+    selector: (row) => {
+      const statusMapping = {
+        0: "Super admin",
+        1: "Admin",
+        2: "Manager",
+        3: "Staff"
+      };
+      return statusMapping[row.role] || "Unknown";
+    },
+    sortable: true,
   },
   {
     name: "Status",
-    selector: (row) => row.status,
+    selector: (row) => {
+      const statusMapping = {
+        1: "Activated",
+        2: "Deactivated",
+      };
+      return statusMapping[row.status] || "Unknown";
+    },
     sortable: true,
   },
   {
