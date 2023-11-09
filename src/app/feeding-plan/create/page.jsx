@@ -46,14 +46,14 @@ const PlanCreatePage = () => {
 
   const formik = useFormik({
     initialValues: {
-      MenuId: 1,
+      MealMealMenuId: 1,
       BirdId: 1,
       Description: "",
       DateTime: "",
       FeedingStatus: 1,
     },
     validationSchema: Yup.object({
-      MenuId: Yup.number().required("Required"),
+      MealMealMenuId: Yup.number().required("Required"),
       BirdId: Yup.number().required("Required"),
       Description: Yup.string().required("Required"),
       DateTime: Yup.date()
@@ -81,7 +81,7 @@ const PlanCreatePage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -104,17 +104,17 @@ const PlanCreatePage = () => {
         >
           {/* //* Plan Menu */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="MenuId" value="Menu ID" />
+            <Label htmlFor="MealMenuId" value="Menu ID" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="MenuId"
+                  id="MealMenuId"
                   onChange={(e) => {
                     const stringSelection = e.target.value;
-                    formik.setFieldValue("MenuId", parseInt(stringSelection));
+                    formik.setFieldValue("MealMenuId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.MenuId}
+                  value={formik.values.MealMenuId}
                 >
                   {mealMenuResponse && mealMenuResponse.length > 0 ? (
                     mealMenuResponse.map((mealMenu, index) => {
@@ -145,9 +145,9 @@ const PlanCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.MenuId && formik.errors.MenuId ? (
+            {formik.touched.MealMenuId && formik.errors.MealMenuId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.MenuId}
+                {formik.errors.MealMenuId}
               </div>
             ) : null}
           </div>
