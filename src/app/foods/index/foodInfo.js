@@ -6,7 +6,7 @@ import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 export const foodColumns = [
   {
     name: "ID",
-    selector: (row) => row.ID,
+    selector: (row) => row.id,
     sortable: true,
   },
   {
