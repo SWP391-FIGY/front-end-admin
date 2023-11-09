@@ -53,7 +53,7 @@ const TaskCreatePage = () => {
     error: staffError,
   } = useAxios({
     method: "get",
-    url: `${API}/user/`,
+    url: `${API}/user/?filter=role ne 0`,
   });
 
   const formik = useFormik({
@@ -197,9 +197,17 @@ const TaskCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.StaffId}
             >
-              <option value={1}>Staff 1</option>
-              <option value={2}>Staff 2</option>
-              <option value={3}>Staff 3</option>
+              {staffResponse && staffResponse.length > 0 ? (
+                staffResponse.map((staff, index) => {
+                  return (
+                    <option key={index} value={staff.id}>
+                      Staff {staff.name}
+                    </option>
+                  );
+                })
+              ) : (
+                <option disabled>Loading...</option>
+              )}
             </Select>
             {formik.touched.StaffId && formik.errors.StaffId ? (
               <div className="text-xs text-red-600 dark:text-red-400">

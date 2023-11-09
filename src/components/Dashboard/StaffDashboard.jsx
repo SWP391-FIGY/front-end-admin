@@ -6,6 +6,7 @@ import { Spinner } from "flowbite-react";
 import moment from "moment";
 import React from "react";
 import DataTable from "react-data-table-component";
+import { BirdPieChart } from "../PieChart/birdPieChartData";
 
 const StaffDashboard = () => {
   const user = getUserInfo();
@@ -22,8 +23,8 @@ const StaffDashboard = () => {
   const twoDaysFromToday = today.setDate(today.getDate() + 2);
   console.log("Task list", taskResponse);
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col w-[50%]">
+    <div className="flex flex-row gap-4 ">
+      <div className="flex flex-col gap-4 w-[50%]">
         <h2 className="text-3xl font-bold">Task List</h2>
         {taskResponse && (
           <DataTable
@@ -47,7 +48,10 @@ const StaffDashboard = () => {
         {taskLoading && <Spinner />}
         {taskError && <div>Error</div>}
       </div>
-      <div className="flex flex-col w-[50%]"></div>
+      <div className="flex flex-col w-[50%] gap-4 ">
+        <h2 className="text-3xl font-bold">Bird Record</h2>
+        <BirdPieChart />
+      </div>
     </div>
   );
 };
