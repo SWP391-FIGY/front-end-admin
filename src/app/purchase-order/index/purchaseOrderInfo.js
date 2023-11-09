@@ -136,7 +136,18 @@ export const purchaseOrderColumns = [
   },
   {
     name: "Status",
-    selector: (row) => row.status,
+    selector: (row) => {
+      const statusMapping = {
+        1: "Prepare",
+        2: "Cancel",
+        3: "Delivering",
+        4: "Overdue",
+        5: "Returned",
+        6: "Done"
+      };
+      return statusMapping[row.status] || "Unknown";
+    },
+    sortable: true,
   },
   {
     name: "Note",
