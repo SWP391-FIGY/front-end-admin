@@ -11,27 +11,27 @@ export const foodColumns = [
   },
   {
     name: "Name",
-    selector: (row) => row.Name,
+    selector: (row) => row.name,
     sortable: true,
   },
   {
     name: "Nutritional Ingredients",
-    selector: (row) => row.NutritionalIngredients,
+    selector: (row) => row.nutritionalIngredients,
     sortable: true,
   },
   {
     name: "Storage Condition",
-    selector: (row) => row.StorageCondition,
+    selector: (row) => row.storageCondition,
 	sortable: true,
   },
   {
     name: "Unit",
-    selector: (row) => row.Unit,
+    selector: (row) => row.unit,
 	sortable: true,
   },
   {
     name: "Standard Price",
-    selector: (row) => `${row.StandardPrice.toLocaleString(undefined, {
+    selector: (row) => `${row.standardPrice.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 3,
     })} VND`,
