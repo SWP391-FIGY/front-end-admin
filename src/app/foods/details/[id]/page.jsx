@@ -109,7 +109,7 @@ const FoodDetailPage = () => {
         </div>
         <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
           <div className="flex flex-row justify-between">
-            <h2 className="text-3xl font-bold">Food's Inventory Log</h2>
+            <h2 className="text-3xl font-bold">Food&apos;s Inventory Log</h2>
 
             <Link href={"/foods/create"}>
               <Button>
@@ -126,6 +126,8 @@ const FoodDetailPage = () => {
           {foodData && foodData.InventoryLog && <DataTable
             columns={inventoryLogColumns}
             data={foodData.InventoryLog}
+            defaultSortFieldId={1}
+            defaultSortAsc={false}
           />}
         </div>
       </div>

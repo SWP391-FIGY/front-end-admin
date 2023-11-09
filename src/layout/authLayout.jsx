@@ -15,9 +15,8 @@ const AuthLayout = ({ children, allowedRoles }) => {
     return <>{children}</>;
   }
 
-  router
-    .push("/auth/login")
-    .then((result) => message.error("You are not allow to do this"));
+  router.push("/auth/login");
+  message.error("You are not allow to do this");
 };
 
 export default AuthLayout;

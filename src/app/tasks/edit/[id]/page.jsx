@@ -46,12 +46,20 @@ const TaskEditPage = () => {
       formik.setValues({
         ...taskResponse[0],
       });
-      formik.setFieldTouched("CageId")
-      formik.setFieldTouched("StaffId")
-
-
+      formik.setFieldTouched("CageId");
+      formik.setFieldTouched("StaffId");
     }
   }, [taskResponse]);
+
+  //Get user data
+  const {
+    response: staffResponse,
+    loading: staffLoading,
+    error: staffError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/user/?filter=role ne 0`,
+  });
 
   // Get bird list
   const {
@@ -114,10 +122,9 @@ const TaskEditPage = () => {
   });
 
   useEffect(() => {
-    console.log(formik)  
-    
-  }, [formik])
-  
+    console.log(formik);
+  }, [formik]);
+
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -146,9 +153,7 @@ const TaskEditPage = () => {
                   value={formik.values.BirdId}
                 >
                   {birdResponse && birdResponse.length > 0 && (
-                    <option value={null}>
-                      None
-                    </option>
+                    <option value={null}>None</option>
                   )}
                   {birdResponse && birdResponse.length > 0 ? (
                     birdResponse.map((bird, index) => {
@@ -215,9 +220,17 @@ const TaskEditPage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.StaffId}
             >
-              <option value={1}>Staff 1</option>
-              <option value={2}>Staff 2</option>
-              <option value={3}>Staff 3</option>
+              {staffResponse && staffResponse.length > 0 ? (
+                staffResponse.map((staff, index) => {
+                  return (
+                    <option key={index} value={staff.id}>
+                      Staff {staff.name}
+                    </option>
+                  );
+                })
+              ) : (
+                <option disabled>Loading...</option>
+              )}
             </Select>
             {formik.touched.StaffId && formik.errors.StaffId ? (
               <div className="text-xs text-red-600 dark:text-red-400">

@@ -17,6 +17,7 @@ import { getUserInfo, removeToken, removeUserInfo } from "@/helper";
 import { userRoleEnums } from "@/app/users/index/userInfo";
 
 const PageSidebar = () => {
+  const router = useRouter()
   const currentPathName = usePathname();
   const currentBasePath = currentPathName.split("/")[1];
   const userInfo = getUserInfo()
