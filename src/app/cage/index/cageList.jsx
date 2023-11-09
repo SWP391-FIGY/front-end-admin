@@ -26,11 +26,7 @@ const CageList = () => {
     );
 
     const customStyles = {
-      rows: {
-        style: {
-          minHeight: "200px", // override the row height
-        },
-      },
+
       headCells: {
         style: {
           paddingLeft: "3px", // override the cell padding for data cells

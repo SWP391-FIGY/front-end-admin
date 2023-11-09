@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { taskColumns, taskInfo } from "./taskInfo";
 import DataTable from "react-data-table-component";
 import useAxios from "@/hooks/useFetch";
 import { Spinner } from "flowbite-react";
 import { API } from "@/constants";
 import { message } from "antd";
+import { getUserInfo } from "@/helper";
+import { userRoleEnums } from "@/app/users/index/userInfo";
 
 const TaskList = () => {
   const [keyword, setKeyword] = useState("");
@@ -12,6 +14,18 @@ const TaskList = () => {
     method: "get",
     url: `${API}/task?expand=staff`,
   });
+
+  const [taskData, setTaskData] = useState([]);
+
+  const user = getUserInfo();
+  useEffect(() => {
+    if (user && response && response.length > 0) {
+      userRoleEnums[user.role] === "Staff"
+        ? setTaskData(response.filter((x) => x.Staff.Role == user.id))
+        : setTaskData(response)
+       
+    }
+  }, [response]);
 
   console.log("Fetched task data", response);
   if (error) {
@@ -63,13 +77,13 @@ const TaskList = () => {
           columns={taskColumns}
           data={
             keyword && keyword.length > 0
-              ? response.filter((x) => {
+              ? taskData.filter((x) => {
                   const idMatch = x.id.toString().includes(keyword);
                   //const birdIdMatch = (x.birdId != null && x.birdId.toString().includes(keyword));
                   const nameMatch = x.taskName.toLowerCase().includes(keyword.toLowerCase());
                   return idMatch || nameMatch;
                 })
-              : response
+              : taskData
           }
           pagination
           className="overflow-auto"

@@ -160,6 +160,7 @@ const BirdEditPage = () => {
             <Label htmlFor="Gender" value="Bird gender" />
             <Select
               id="Gender"
+              disabled
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.Gender}
@@ -238,6 +239,7 @@ const BirdEditPage = () => {
               <div className="w-[500px]">
                 <Select
                   id="SpeciesId"
+                  disabled
                   onChange={(e) => {
                     const stringSelection = e.target.value;
                     formik.setFieldValue(

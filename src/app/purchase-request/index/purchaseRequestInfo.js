@@ -28,9 +28,9 @@ export const purchaseRequestColumns = [
   {
     name: "Action",
     cell: (row) => (
-      <Dropdown arrowIcon={false} inline label={<FiMoreVertical />} placement="bottom" className="absolute top-[100%] left-0 z-3">
+      <Dropdown arrowIcon={false} inline label={<FiMoreVertical />} placement="bottom">
         <Link href={`/purchase-request/edit/${row.ID}`}>
-          <Dropdown.Item icon={FiEdit} className="min-w-[250px]">Edit</Dropdown.Item>
+          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
         </Link>
         <Link href={`/purchase-request/details/${row.ID}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>

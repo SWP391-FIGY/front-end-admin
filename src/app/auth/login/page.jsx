@@ -16,7 +16,7 @@ import { useState } from "react";
 import GoogleButton from "react-google-button";
 import Link from "next/link";
 import { useAuthContext } from "@/contexts/authContext";
-import { setToken } from "@/helper";
+import { setToken, setUserInfo } from "@/helper";
 import axios from "axios";
 import { API } from "@/constants";
 import { message } from "antd";
@@ -47,7 +47,7 @@ const LoginPage = () => {
         .then((response) => {
           console.log(response);
           // Navigation to homepage
-          setUser(response.data.userInfo);
+          setUserInfo(JSON.stringify(response.data.userInfo));
           setToken(response.data.token);
 
           router.push("/birds/index");
@@ -73,7 +73,7 @@ const LoginPage = () => {
         console.log(auth.currentUser);
         message.info("Validating info", 0);
         axios
-          .post(`${API}/user/firebase`, {firebaseToken: trueToken})
+          .post(`${API}/user/firebase`, { firebaseToken: trueToken })
           .then((response) => {
             console.log(response);
             // Navigation to homepage
@@ -89,52 +89,6 @@ const LoginPage = () => {
         setSpinner(false);
         console.log("An error occurred:", error.response);
       });
-  };
-
-  const handleCreateAccount = async () => {
-    createUserWithEmailAndPassword(
-      auth,
-      "datlt.mdc@gmail.com",
-      "somenewPassword"
-    )
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        console.log(user);
-        console.log(auth);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(error);
-      });
-  };
-
-  const handleLoginPassword = async () => {
-    signInWithEmailAndPassword(auth, "datlt.mdc@gmail.com", "somenewPassword")
-      .then(async (userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        console.log(user);
-        console.log(auth);
-
-        const currentUser = auth.currentUser;
-        //const credential = await linkWithRedirect(currentUser, googleProvider);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(error);
-      });
-  };
-
-  const handleLogout = async () => {
-    signOut(auth);
-    console.log(auth);
   };
 
   return (
@@ -188,18 +142,6 @@ const LoginPage = () => {
               {formik.errors.password}
             </div>
           ) : null}
-
-          <div className="flex flex-col gap-2 items-end">
-            <Link
-              href="/auth/resetPassword"
-              className="text-gray-500 italic text-sm"
-            >
-              Fotgot password?
-            </Link>
-            <Link href="/auth/register" className="italic text-sm">
-              or Register?
-            </Link>
-          </div>
 
           <Button type="submit" color="dark" size="sm">
             {spinner ? (

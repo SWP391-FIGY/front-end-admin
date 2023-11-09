@@ -13,15 +13,16 @@ import {
 } from "react-icons/hi";
 import { topSideBarData } from "./topSideBarData";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthContext } from "@/contexts/authContext";
-import { removeToken } from "@/helper";
+import { getUserInfo, removeToken, removeUserInfo } from "@/helper";
+import { userRoleEnums } from "@/app/users/index/userInfo";
 
 const PageSidebar = () => {
   const currentPathName = usePathname();
   const currentBasePath = currentPathName.split("/")[1];
-  const { user } = useAuthContext();
+  const userInfo = getUserInfo()
   const handleLogout = () => {
     removeToken();
+    removeUserInfo()
     router.push("/auth/login");
   };
 
@@ -74,20 +75,27 @@ const PageSidebar = () => {
           </Sidebar.ItemGroup>
         </Sidebar.Items>
         <Sidebar.Items aria-label="User info management">
-          <Sidebar.ItemGroup>
-            {user ? (
-              <>
-                <div>Hello User {user && user.name}</div>
+          {userInfo ? (
+            <>
+              <Sidebar.ItemGroup>
+                <Sidebar.Item>
+                  <div>Role {userRoleEnums[userInfo.role]}</div>
+                </Sidebar.Item>
+                <Sidebar.Item>
+                  <div>Hello User {userInfo && userInfo.name}</div>
+                </Sidebar.Item>
                 <Sidebar.Item icon={HiUserCircle}>
                   <p onClick={handleLogout}>Logout</p>
                 </Sidebar.Item>
-              </>
-            ) : (
+              </Sidebar.ItemGroup>
+            </>
+          ) : (
+            <Sidebar.ItemGroup>
               <Sidebar.Item href="/auth/login" icon={HiUserCircle}>
-                <p>Login/Sign Up</p>
+                <p>Login</p>
               </Sidebar.Item>
-            )}
-          </Sidebar.ItemGroup>
+            </Sidebar.ItemGroup>
+          )}
         </Sidebar.Items>
       </div>
     </Sidebar>

@@ -33,7 +33,7 @@ const UserCreatePage = () => {
       email: "",
       Password: "",
       phoneNumber: "",
-      role: 3,
+      role: 2,
       status: 1,
     },
     validationSchema: Yup.object({

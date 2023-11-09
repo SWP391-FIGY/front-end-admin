@@ -20,6 +20,8 @@ import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
+import { getUserInfo } from "@/helper";
+import { userRoleEnums } from "../../index/userInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout")
 
@@ -28,6 +30,10 @@ const UserEditPage = () => {
   const [spinner, setSpinner] = useState(false)
   const params = useParams();
   const userId = parseInt(params.id, 10);
+
+  //Handle user role
+  const user = getUserInfo();
+  const disabledRole = !user || userRoleEnums[user.role] != "Admin"
 
   //Fetch old user data
   const {
@@ -189,13 +195,13 @@ const UserEditPage = () => {
             />
             <Select
               id="role"
+              disabled={disabledRole}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.role}
-            >
-              <option value="1">Admin</option>
-              <option value="2">Manager</option>
-              <option value="3">Staff</option>
+            >              
+              <option value="1">Manager</option>
+              <option value="2">Staff</option>
 
             </Select>
             {formik.touched.role && formik.errors.role ? (

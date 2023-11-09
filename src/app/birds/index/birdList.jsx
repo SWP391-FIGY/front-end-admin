@@ -65,7 +65,7 @@ const BirdList = () => {
           keyword && keyword.length > 0
             ? response.filter(
                 (x) =>
-                  x.Gender.includes(keyword) || x.Description.includes(keyword)
+                  x.ID.includes(keyword) || x.Description.includes(keyword)
               )
             : response
         }

@@ -21,6 +21,7 @@ import useAxios from "@/hooks/useFetch";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
+// TODO: Show menu detail when selected
 const PlanCreatePage = () => {
   const [spinner, setSpinner] = useState(false);
 
@@ -31,7 +32,7 @@ const PlanCreatePage = () => {
     error: mealMenuError,
   } = useAxios({
     method: "get",
-    url: `${API}/MealMenu/`,
+    url: `${API}/MealMenu/?expand=menuDetails($expand=food)`,
   });
   // Get bird list
   const {

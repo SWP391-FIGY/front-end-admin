@@ -2,4 +2,14 @@ bird cần có
 feeding plan
 menu của bird
 log của bird đó
+  add log khi update bird
+    cage 
+  show log cua bird trong bird detail
+
+ve inventory log
+  tao inventory log trong food, chon food, lay total cu tu inventory log gan day cua food do
+  ko update
+  view tai food detail
+
+
 

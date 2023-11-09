@@ -26,24 +26,35 @@ const TaskCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
 
-    // Get bird list
-    const {
-      response: birdResponse,
-      loading: birdLoading,
-      error: birdError,
-    } = useAxios({
-      method: "get",
-      url: `${API}/bird/`,
-    });
-    // Get cage list
-    const {
-      response: cageResponse,
-      loading: cageLoading,
-      error: cageError,
-    } = useAxios({
-      method: "get",
-      url: `${API}/cage/`,
-    });
+  // Get bird list
+  const {
+    response: birdResponse,
+    loading: birdLoading,
+    error: birdError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/bird/`,
+  });
+  // Get cage list
+  const {
+    response: cageResponse,
+    loading: cageLoading,
+    error: cageError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/cage/`,
+  });
+
+  // Get staff list
+  // TODO: Nho cho dieu kien ve role
+  const {
+    response: staffResponse,
+    loading: staffLoading,
+    error: staffError,
+  } = useAxios({
+    method: "get",
+    url: `${API}/user/`,
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -62,7 +73,7 @@ const TaskCreatePage = () => {
       TaskName: Yup.string().required("Required"),
       DateTime: Yup.date()
         .min(new Date(), "Date must be today or later")
-        .required("Required"),      
+        .required("Required"),
       Status: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
@@ -110,11 +121,11 @@ const TaskCreatePage = () => {
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="BirdId" value="Bird" />
             <div className="flex w-full gap-2">
-              <div className="w-[500px]">
-              <Select
+              <div className="w-full">
+                <Select
                   id="BirdId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("BirdId", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -133,16 +144,6 @@ const TaskCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{pathname:"/birds/create", query: {...formik.values, 'bird-add':true}}}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new bird</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
 
             {formik.touched.BirdId && formik.errors.BirdId ? (
@@ -156,11 +157,11 @@ const TaskCreatePage = () => {
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="CageId" value="Bird cage" />
             <div className="flex w-full gap-2">
-              <div className="w-[500px]">
+              <div className="w-full">
                 <Select
                   id="CageID"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("CageID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -179,16 +180,6 @@ const TaskCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
-                <Button>
-                  <div className="flex flex-row justify-center gap-2">
-                    <div className="my-auto">
-                      <HiPlus />
-                    </div>
-                    <p>Add new cage</p>
-                  </div>
-                </Button>
-              </Link>
             </div>
             {formik.touched.CageId && formik.errors.CageId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
@@ -217,7 +208,7 @@ const TaskCreatePage = () => {
             ) : null}
           </div>
 
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="TaskName" value="Task name" />
             <TextInput
               id="TaskName"
@@ -234,7 +225,7 @@ const TaskCreatePage = () => {
           </div>
 
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DateTime" value="Date and Time" />            
+            <Label htmlFor="DateTime" value="Date and Time" />
             <Space direction="vertical" size={12}>
               <DatePicker
                 className="!important"
@@ -254,7 +245,7 @@ const TaskCreatePage = () => {
             ) : null}
           </div>
 
-          <div className="flex flex-col w-[500px] gap-2">
+          <div className="flex flex-col w-full gap-2">
             <Label htmlFor="Description" value="Description" />
             <TextInput
               id="Description"

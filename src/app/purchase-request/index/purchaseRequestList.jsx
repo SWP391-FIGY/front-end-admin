@@ -28,7 +28,7 @@ const PurchaseRequestList = () => {
     const customStyles = {
       rows: {
         style: {
-          minHeight: "200px", // override the row height
+          minHeight: "80px", // override the row height
         },
       },
       headCells: {

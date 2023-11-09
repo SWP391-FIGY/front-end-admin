@@ -21,7 +21,7 @@ export const userColumns = [
   {
     name: "Phone Number",
     selector: (row) => row.phoneNumber,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Role",
@@ -30,7 +30,7 @@ export const userColumns = [
         0: "Super admin",
         1: "Admin",
         2: "Manager",
-        3: "Staff"
+        3: "Staff",
       };
       return statusMapping[row.role] || "Unknown";
     },
@@ -39,11 +39,7 @@ export const userColumns = [
   {
     name: "Status",
     selector: (row) => {
-      const statusMapping = {
-        1: "Activated",
-        2: "Deactivated",
-      };
-      return statusMapping[row.status] || "Unknown";
+      userStatusEnums[row.status]
     },
     sortable: true,
   },
@@ -62,8 +58,6 @@ export const userColumns = [
   },
 ];
 
-export const userRoleEnums = [
-  "Admin",
-  "Manager",
-  "Staff"
-]
+export const userRoleEnums = ["Admin", "Manager", "Staff"];
+
+export const userStatusEnums = ["Activated", "Deactivated"];

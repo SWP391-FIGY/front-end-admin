@@ -40,7 +40,7 @@ const PlanEditPage = () => {
     error: mealMenuError,
   } = useAxios({
     method: "get",
-    url: `${API}/MealMenu/`,
+    url: `${API}/MealMenu/?expand=menuDetails($expand=food)`,
   });
   // Get bird list
   const {
