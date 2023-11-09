@@ -119,8 +119,8 @@ const PlanCreatePage = () => {
                   {mealMenuResponse && mealMenuResponse.length > 0 ? (
                     mealMenuResponse.map((mealMenu, index) => {
                       return (
-                        <option key={index} value={mealMenu.id}>
-                          {mealMenu.menuName}
+                        <option key={index} value={mealMenu.ID}>
+                          {mealMenu.MenuName}
                         </option>
                       );
                     })
