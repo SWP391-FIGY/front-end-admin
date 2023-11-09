@@ -61,49 +61,49 @@ const FoodDetailPage = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="id" className="text-lg font-bold">
+              <label htmlFor="ID" className="text-lg font-bold">
                 ID
               </label>
-              <p>{foodData.id}</p>
+              <p>{foodData.ID}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="name" className="text-lg font-bold">
+              <label htmlFor="Name" className="text-lg font-bold">
                 Name
               </label>
-              <p>{foodData.name}</p>
+              <p>{foodData.Name}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label
-                htmlFor="nutritionalIngredients"
+                htmlFor="NutritionalIngredients"
                 className="text-lg font-bold"
               >
                 Nutritional Ingredients
               </label>
-              <p>{foodData.nutritionalIngredients}</p>
+              <p>{foodData.NutritionalIngredients}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="storageCondition" className="text-lg font-bold">
+              <label htmlFor="StorageCondition" className="text-lg font-bold">
                 Storage Condition
               </label>
-              <p>{foodData.storageCondition}</p>
+              <p>{foodData.StorageCondition}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="unit" className="text-lg font-bold">
+              <label htmlFor="Unit" className="text-lg font-bold">
                 Unit
               </label>
-              <p>{foodData.unit}</p>
+              <p>{foodData.Unit}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="standardPrice" className="text-lg font-bold">
+              <label htmlFor="StandardPrice" className="text-lg font-bold">
                 Standard Price
               </label>
-              <p>{foodData.standardPrice}</p>
+              <p>{foodData.StandardPrice}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <label htmlFor="safetyThreshold" className="text-lg font-bold">
+              <label htmlFor="SafetyThreshold" className="text-lg font-bold">
                 Safety Threshold
               </label>
-              <p>{foodData.safetyThreshold}</p>
+              <p>{foodData.SafetyThreshold}</p>
             </div>
           </div>
         </div>
