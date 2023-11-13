@@ -126,12 +126,23 @@ const MenuDetailPage = () => {
               <label htmlFor="foodList" className="text-lg font-bold">
                 Food List
               </label>
-              <ul>
-                {menuData.menuDetails &&
-                  menuData.menuDetails.map((detail) => (
-                    <li key={detail.ID}>{detail.Food.Name}</li>
-                  ))}
-              </ul>
+              <table className="w-full mt-4">
+                <thead>
+                  <tr>
+                    <th className="border p-2">Food ID</th>
+                    <th className="border p-2">Food Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {menuData.menuDetails &&
+                    menuData.menuDetails.map((detail) => (
+                      <tr key={detail.ID}>
+                        <td className="border p-2">{detail.Food.ID}</td>
+                        <td className="border p-2">{detail.Food.Name}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
