@@ -138,8 +138,8 @@ const TaskEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
-        <Label value="Task ID" />
-        <div>{formik.values.Id}</div>
+          <Label value="Task ID" />
+          <div>{formik.values.Id}</div>
           {/* //* Bird  */}
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="BirdId" value="Bird" />
@@ -154,6 +154,7 @@ const TaskEditPage = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.BirdId}
                 >
+                  <option value={null}>None</option>
                   {birdResponse && birdResponse.length > 0 && (
                     <option value={null}>None</option>
                   )}

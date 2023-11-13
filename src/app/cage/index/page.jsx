@@ -17,7 +17,7 @@ const CageListPage = () => {
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
         <div className="flex flex-row justify-between">
           <h2 className="text-3xl font-bold">Cage List</h2>
-          {user && userRoleEnums[user.role] === "Manager" && (
+          {user && userRoleEnums[user.role] !== "Staff" && (
             <Link href={"/cage/create"}>
               <Button>
                 <div className="flex flex-row justify-center gap-4">

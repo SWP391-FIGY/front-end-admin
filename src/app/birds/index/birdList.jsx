@@ -62,11 +62,14 @@ const BirdList = () => {
       <DataTable
         columns={birdColumns}
         data={
-          keyword && keyword.length > 0
-            ? response.filter(
-                (x) =>
-                  x.ID.includes(keyword) || x.Description.includes(keyword)
-              )
+          response && response.length > 0 && keyword && keyword.length > 0
+            ? response.filter((x) => {
+                console.log("filter item", x);
+                const idMatch = x.ID.toString().includes(keyword);
+                const descMatch = x.Description.includes(keyword);
+
+                return idMatch || descMatch;
+              })
             : response
         }
         pagination

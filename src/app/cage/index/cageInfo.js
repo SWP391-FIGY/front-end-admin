@@ -52,7 +52,7 @@ export const cageColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        {user && userRoleEnums[user.role] === "Manager" && (
+        {user && userRoleEnums[user.role] !== "Staff" && (
           <Link href={`/cage/edit/${row.id}`}>
             <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
           </Link>

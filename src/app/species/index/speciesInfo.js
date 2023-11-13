@@ -19,6 +19,7 @@ export const speciesColumns = [
     name: "Color",
     selector: (row) => row.color,
     sortable: true,
+    wrap:true,
   },
   {
     name: "Size (cm)",
@@ -46,6 +47,7 @@ export const speciesColumns = [
   {
     name: "Habitat",
     selector: (row) => row.habitat,
+    wrap:true,
   },
   {
     name: "Action",

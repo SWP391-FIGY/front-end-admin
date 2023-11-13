@@ -22,19 +22,20 @@ export const foodColumns = [
   {
     name: "Storage Condition",
     selector: (row) => row.storageCondition,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Unit",
     selector: (row) => row.unit,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Standard Price",
-    selector: (row) => `${row.standardPrice.toLocaleString(undefined, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 3,
-    })} VND`,
+    selector: (row) =>
+      `${row.standardPrice.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3,
+      })} VND`,
     sortable: true,
   },
   {
@@ -45,9 +46,11 @@ export const foodColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/foods/edit/${row.id}`}>
-          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        </Link>
+        {user && userRoleEnums[user.role] !== "Staff" && (
+          <Link href={`/foods/edit/${row.id}`}>
+            <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+          </Link>
+        )}
         <Link href={`/foods/details/${row.id}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>
@@ -73,4 +76,4 @@ export const inventoryLogColumns = [
     name: "Status",
     selector: (row) => row.Status,
   },
-]
+];

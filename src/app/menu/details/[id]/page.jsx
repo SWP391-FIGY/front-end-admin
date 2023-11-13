@@ -131,14 +131,18 @@ const MenuDetailPage = () => {
                   <tr>
                     <th className="border p-2">Food ID</th>
                     <th className="border p-2">Food Name</th>
+                    <th className="border p-2">Quantity</th>
+                    <th className="border p-2">Unit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {menuData.menuDetails &&
-                    menuData.menuDetails.map((detail) => (
+                  {menuData.MenuDetails &&
+                    menuData.MenuDetails.map((detail) => (
                       <tr key={detail.ID}>
                         <td className="border p-2">{detail.Food.ID}</td>
                         <td className="border p-2">{detail.Food.Name}</td>
+                        <td className="border p-2">{detail.Quantity}</td>
+                        <td className="border p-2">{detail.Food.Unit}</td>
                       </tr>
                     ))}
                 </tbody>

@@ -195,7 +195,7 @@ const PurchaseOrderCreatePage = () => {
                           (item, index) => {
                             return (
                               <option key={index} value={item.FoodID}>
-                                {item.Food.Name}
+                                {item.Food.Name} ({item.Food.Unit})
                               </option>
                             );
                           }

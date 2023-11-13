@@ -23,7 +23,7 @@ const BirdListPage = () => {
         <div className="flex flex-row justify-between">
           <h2 className="text-3xl font-bold">Bird List</h2>
 
-          {user && userRoleEnums[user.role] === "Manager" && (
+          {user && userRoleEnums[user.role] !== "Staff" && (
             <Link href={"/birds/create"}>
               <Button>
                 <div className="flex flex-row justify-center gap-4">

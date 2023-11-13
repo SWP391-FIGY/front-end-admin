@@ -131,6 +131,9 @@ const TaskCreatePage = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.BirdId}
                 >
+                  <option value={null}>
+                    None
+                  </option>
                   {birdResponse && birdResponse.length > 0 ? (
                     birdResponse.map((bird, index) => {
                       return (

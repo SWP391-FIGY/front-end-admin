@@ -21,7 +21,7 @@ const TaskList = () => {
   useEffect(() => {
     if (user && response && response.length > 0) {
       userRoleEnums[user.role] === "Staff"
-        ? setTaskData(response.filter((x) => x.Staff.Role == user.role))
+        ? setTaskData(response.filter((x) => x.Staff.ID == user.id))
         : setTaskData(response)
        
     }
@@ -78,7 +78,7 @@ const TaskList = () => {
           data={
             keyword && keyword.length > 0
               ? taskData.filter((x) => {
-                  const idMatch = x.id.toString().includes(keyword);
+                  const idMatch = x.ID.toString().includes(keyword);
                   //const birdIdMatch = (x.birdId != null && x.birdId.toString().includes(keyword));
                   const nameMatch = x.taskName.toLowerCase().includes(keyword.toLowerCase());
                   return idMatch || nameMatch;

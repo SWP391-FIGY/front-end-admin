@@ -8,40 +8,41 @@ export const taskColumns = [
     name: "ID",
     selector: (row) => row.ID,
     sortable: true,
-    width: '50px',
+    width: "50px",
   },
   {
     name: "Bird ID",
     selector: (row) => row.BirdID,
     sortable: true,
-    width: '70px',
+    width: "70px",
   },
   {
     name: "Cage",
-    selector: (row) => row.CageID,    
+    selector: (row) => row.CageID,
     sortable: true,
-    width: '70px',
+    width: "70px",
   },
   {
     name: "Staff",
     selector: (row) => row.Staff.Name,
-    width: '80px',
+    width: "80px",
+    wrap: true,
   },
   {
     name: "Task Name",
     selector: (row) => row.TaskName,
   },
   {
-    name: "Date & Time",
-    selector: (row) => moment(row.DateTime).format('DD/MM/YYYY HH:mm'),
+    name: "Deadline",
+    selector: (row) => moment(row.DateTime).format("DD/MM/YYYY HH:mm"),
     sortable: true,
-    width: '150px',
+    width: "150px",
   },
   {
     name: "Description",
     selector: (row) => row.Description,
-    width: '150px',
-    wrap:true,
+    width: "150px",
+    wrap: true,
   },
   {
     name: "Status",
@@ -51,9 +52,11 @@ export const taskColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/tasks/edit/${row.ID}`}>
-          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        </Link>
+        {user && userRoleEnums[user.role] !== "Staff" && (
+          <Link href={`/tasks/edit/${row.ID}`}>
+            <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+          </Link>
+        )}
         <Link href={`/tasks/details/${row.ID}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>
@@ -62,12 +65,7 @@ export const taskColumns = [
   },
 ];
 
-export const taskStatusEnum = [
-  "Not Assign",
-  "Pending",
-  "Done",
-  "Cancel"
-]
+export const taskStatusEnum = ["Not Assign", "Pending", "Done", "Cancel"];
 
 function formatDateTime(dateTime) {
   const options = {
