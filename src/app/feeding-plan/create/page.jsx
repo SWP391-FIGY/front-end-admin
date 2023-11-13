@@ -83,6 +83,7 @@ const PlanCreatePage = () => {
           message.error("An error occurred");
           setSpinner(false);
           console.log("An error occurred:", error);
+          console.log("An error occurred:", error);
         });
     },
   });

@@ -32,7 +32,7 @@ export const menuColumns = [
     sortable: true,
   },
   {
-    name: "Size (cm)",
+    name: "Size",
     selector: (row) => row.Size,
 	sortable: true,
   },

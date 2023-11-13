@@ -82,14 +82,14 @@ const PlanDetailPage = () => {
       </PageLayout>
     );
 
-  const formattedDateAndTime = (dateStr) => {
-    const [date, time] = dateStr.split(" ");
-    const [day, month, year] = date.split("/").map(Number);
-    const [hour, minute] = time.split(":").map(Number);
-    const formattedDate = `${day}/${month}/${year}`;
-    const formattedTime = `${hour}:${minute}`;
-    return `${formattedDate} ${formattedTime}`;
-  };
+//  const formattedDateAndTime = (dateStr) => {
+//    const [date, time] = dateStr.split(" ");
+//    const [day, month, year] = date.split("/").map(Number);
+//    const [hour, minute] = time.split(":").map(Number);
+//    const formattedDate = `${day}/${month}/${year}`;
+//    const formattedTime = `${hour}:${minute}`;
+//    return `${formattedDate} ${formattedTime}`;
+//  };
 
   const planData = response ? response[0] : {};
   console.log(planData);
@@ -119,21 +119,21 @@ const PlanDetailPage = () => {
                 <label htmlFor="birdId" className="text-lg font-bold">
                   Bird ID
                 </label>
-                <p>{planData.birdId}</p>
+                <p>{planData.BirdID}</p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label htmlFor="dateTime" className="text-lg font-bold">
                   Date and Time
                 </label>
-                <p>{formattedDateAndTime(planData.dateAndTime)}</p>
+                <p>{planData.DateTime}</p>
               </div>
               <div planData="col-span-2 sm:col-span-1">
                 <label htmlFor="feedingStatus" className="text-lg font-bold">
                   Feeding Status
                 </label>
-                <p>{planData.feedingStatus}</p>
+                <p>{planData.FeedingStatus}</p>
               </div>
-              <label htmlFor="description" className="text-lg font-bold">
+              <label htmlFor="Description" className="text-lg font-bold">
                 Description
               </label>
               <p>{planData.Description}</p>
