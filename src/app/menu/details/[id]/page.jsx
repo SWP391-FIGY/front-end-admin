@@ -15,7 +15,7 @@ const MenuDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}`,
+    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}&expand=species`,
   });
 
   if (isNaN(menuId) || menuId < 0) {
@@ -78,49 +78,49 @@ const MenuDetailPage = () => {
               <label htmlFor="id" className="text-lg font-bold">
                 ID
               </label>
-              <p>{menuData.id}</p>
+              <p>{menuData.ID}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="menuName" className="text-lg font-bold">
                 Name
               </label>
-              <p>{menuData.menuName}</p>
+              <p>{menuData.MenuName}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="speciesID" className="text-lg font-bold">
                 Species
               </label>
-              <p>{menuData.speciesID}</p>
+              <p>{menuData.Species.Name}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="daysBeforeFeeding" className="text-lg font-bold">
                 Min Days Before Feeding
               </label>
-              <p>{menuData.daysBeforeFeeding}</p>
+              <p>{menuData.DaysBeforeFeeding}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="size" className="text-lg font-bold">
                 Size
               </label>
-              <p>{menuData.size}</p>
+              <p>{menuData.Size}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="birdStatus" className="text-lg font-bold">
                 Bird Status
               </label>
-              <p>{getBirdStatus(menuData.birdStatus)}</p>
+              <p>{getBirdStatus(menuData.BirdStatus)}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="menuStatus" className="text-lg font-bold">
                 Menu Status
               </label>
-              <p>{getMenuStatus(menuData.menuStatus)}</p>
+              <p>{getMenuStatus(menuData.MenuStatus)}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="nutritionalIngredients" className="text-lg font-bold">
                 Nutritional Ingredients
               </label>
-              <p>{menuData.nutritionalIngredients}</p>
+              <p>{menuData.NutritionalIngredients}</p>
             </div>
           </div>
         </div>

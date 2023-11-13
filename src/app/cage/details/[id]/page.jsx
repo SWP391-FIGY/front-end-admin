@@ -8,6 +8,8 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import DataTable from "react-data-table-component";
 import { birdColumns } from "@/app/birds/index/birdInfo";
+import { taskColumns } from "@/app/tasks/index/taskInfo";
+
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -25,6 +27,20 @@ const BirdTable = ({ birdData }) => {
   );
 };
 
+const TaskTable = ({ taskData }) => {
+  return (
+    <div className="bg-white rounded-lg shadow p-6 mt-4">
+      <h3 className="text-2xl font-bold mb-4">Tasks</h3>
+      <DataTable
+        columns={taskColumns}
+        data={taskData}
+        pagination
+        //customStyles={customStyles}
+      />
+    </div>
+  );
+};
+
 const CageDetailPage = () => {
   const params = useParams();
   const cageId = parseInt(params.id, 10);
@@ -35,6 +51,13 @@ const CageDetailPage = () => {
   });
 
   const birdData = birdResponse || [];
+
+  const { response: taskResponse, loading: taskLoading, error: taskError } = useAxios({
+    method: "get",
+    url: `${API}/task/?filter=Cage/ID eq ${cageId}&$expand=Cage,Staff,Bird`,
+  });
+
+  const taskData = taskResponse || [];
 
   const { response, loading, error } = useAxios({
     method: "get",
@@ -135,6 +158,8 @@ const CageDetailPage = () => {
           </div>
         </div>
         <BirdTable birdData={birdData} />
+
+        <TaskTable taskData={taskData} />
       </div>
     </PageLayout>
   );
