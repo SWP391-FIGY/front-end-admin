@@ -1,5 +1,5 @@
 "use client";
-import { Label, Spinner } from "flowbite-react";
+import { Label, Spinner, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
@@ -122,27 +122,31 @@ const MenuDetailPage = () => {
               </label>
               <p>{menuData.NutritionalIngredients}</p>
             </div>
-            <div className="col-span-2">
-              <label htmlFor="foodList" className="text-lg font-bold">
-                Food List
+                        {/* Food Details */}
+                        <div className="col-span-2">
+              <label htmlFor="foodDetails" className="text-lg font-bold">
+                Food Details
               </label>
-              <table className="w-full mt-4">
-                <thead>
-                  <tr>
-                    <th className="border p-2">Food ID</th>
-                    <th className="border p-2">Food Name</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <Table>
+                <Table.Head>
+                  <Table.HeadCell>Food</Table.HeadCell>
+                  <Table.HeadCell>Quantity</Table.HeadCell>
+                  <Table.HeadCell>Unit</Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
                   {menuData.menuDetails &&
-                    menuData.menuDetails.map((detail) => (
-                      <tr key={detail.ID}>
-                        <td className="border p-2">{detail.Food.ID}</td>
-                        <td className="border p-2">{detail.Food.Name}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+                    menuData.menuDetails.map((item, index) => {
+                      const { food } = item;
+                      return (
+                        <Table.Row key={index}>
+                          <Table.Cell>{food.Name}</Table.Cell>
+                          <Table.Cell>{item.Quantity}</Table.Cell>
+                          <Table.Cell>{food.Unit}</Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                </Table.Body>
+              </Table>
             </div>
           </div>
         </div>
