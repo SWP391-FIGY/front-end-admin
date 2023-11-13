@@ -7,7 +7,7 @@ import AuthLayout from "@/layout/authLayout";
 import PageLayout from "@/layout/pageLayout";
 import { Spinner } from "flowbite-react";
 import Image from "next/image";
-import { userRoleEnums } from "./users/index/userInfo";
+import { userRoleEnums } from "../users/index/userInfo";
 
 export default function Home() {
   const user = getUserInfo();
