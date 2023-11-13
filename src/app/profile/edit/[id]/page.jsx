@@ -21,7 +21,7 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 import { getUserInfo } from "@/helper";
-import { userRoleEnums } from "../../index/userInfo";
+import { userRoleEnums } from "@/app/users/index/userInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 

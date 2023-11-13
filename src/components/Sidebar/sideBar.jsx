@@ -123,7 +123,9 @@ const PageSidebar = () => {
                   <div>Role {userRoleEnums[userInfo.role]}</div>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <div>Manage Account</div>
+                <div onClick={() => router.push(`/profile/edit/${userInfo.id}`)}>
+                  Manage Account
+                </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item>
