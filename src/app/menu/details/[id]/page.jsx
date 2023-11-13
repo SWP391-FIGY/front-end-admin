@@ -134,14 +134,14 @@ const MenuDetailPage = () => {
                   <Table.HeadCell>Unit</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
-                  {menuData.menuDetails &&
-                    menuData.menuDetails.map((item, index) => {
-                      const { food } = item;
+                  {menuData.MenuDetails &&
+                    menuData.MenuDetails.map((item, index) => {
+                      const { Food } = item;
                       return (
                         <Table.Row key={index}>
-                          <Table.Cell>{food.Name}</Table.Cell>
+                          <Table.Cell>{Food.Name}</Table.Cell>
                           <Table.Cell>{item.Quantity}</Table.Cell>
-                          <Table.Cell>{food.Unit}</Table.Cell>
+                          <Table.Cell>{Food.Unit}</Table.Cell>
                         </Table.Row>
                       );
                     })}
