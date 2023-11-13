@@ -9,12 +9,35 @@ import { useParams } from "next/navigation";
 import { birdStatusEnum } from "../../index/birdInfo";
 import Image from "next/image";
 import moment from "moment";
+import DataTable from "react-data-table-component";
+import { planColumns } from "@/app/feeding-plan/index/planInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
+
+const PlanTable = ({ planData }) => {
+  return (
+    <div className="bg-white rounded-lg shadow p-6 mt-4">
+      <h3 className="text-2xl font-bold mb-4">Feeding Plan For Bird</h3>
+      <DataTable
+        columns={planColumns}
+        data={planData}
+        pagination
+        //customStyles={customStyles}
+      />
+    </div>
+  );
+};
 
 const BirdDetailPage = () => {
   const params = useParams();
   const birdId = parseInt(params.id, 10);
+
+  const { response: planResponse, loading: planLoading, error: planError } = useAxios({
+    method: "get",
+    url: `${API}/feedingplan/?filter=Bird/ID eq ${birdId}&$expand=MealMenu,Bird`,
+  });
+
+  const planData = planResponse || [];
 
   const { response, loading, error } = useAxios({
     method: "get",
@@ -155,6 +178,7 @@ const BirdDetailPage = () => {
         ) : (
           <>No data</>
         )}
+        <PlanTable planData={planData} />
       </div>
     </PageLayout>
   );
