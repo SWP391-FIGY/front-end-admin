@@ -13,7 +13,7 @@ export const birdColumns = [
   },
   {
     name: "Birthdate",
-    selector: (row) => row.DoB,
+    selector: (row) => moment(row.DoB).format('DD/MM/YYYY'),
     sortable: true,
     width: '100px',
   },
