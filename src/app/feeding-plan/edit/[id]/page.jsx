@@ -119,6 +119,8 @@ const PlanEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
+          <Label value="Feeding plan ID" />
+          <div>{formik.values.Id}</div>
           {/* //* Plan Menu */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="MenuId" value="Menu for Bird" />

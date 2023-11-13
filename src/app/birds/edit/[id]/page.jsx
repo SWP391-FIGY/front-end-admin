@@ -69,12 +69,13 @@ const BirdEditPage = () => {
     }
   }, [birdResponse]);
 
-  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
+  const urlRegExp =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const formik = useFormik({
     initialValues: {
-      Id: birdId,
+      ID: birdId,
       Description: "",
-      BirdImageUrl: '',
+      BirdImageUrl: "",
       SpeciesId: 1,
       CageID: 1,
       DoB: moment(new Date()),
@@ -84,12 +85,14 @@ const BirdEditPage = () => {
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
-      BirdImageUrl: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
+      BirdImageUrl: Yup.string()
+        .matches(urlRegExp, "Image link is not valid")
+        .required("Required"),
       SpeciesId: Yup.number().required("Required"),
       SpeciesId: Yup.number().required("Required"),
       CageID: Yup.number().required("Required"),
       DoB: Yup.date()
-        .max(new Date().toLocaleDateString(), "Birth date must before today")
+        .max(new Date(), "Birth date must before today")
         .required("Required"),
     }),
     onSubmit: (values) => {
@@ -133,6 +136,8 @@ const BirdEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
+          <Label value="Bird ID" />
+          <div>{formik.values.ID}</div>
           {/* // * Bird birthDate */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="DoB" value="Birthdate" />
@@ -222,7 +227,11 @@ const BirdEditPage = () => {
               value={formik.values.BirdStatus}
             >
               {birdStatusEnum.map((status, index) => {
-                return <option key={index} value={index}>{status}</option>;
+                return (
+                  <option key={index} value={index}>
+                    {status}
+                  </option>
+                );
               })}
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (

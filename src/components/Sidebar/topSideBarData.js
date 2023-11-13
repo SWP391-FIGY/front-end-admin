@@ -20,7 +20,7 @@ import { BsUiChecksGrid } from "react-icons/bs";
 export const topSideBarData = [
   {
     title: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: HiChartPie,
     allowRole: ["Manager", "Staff"],
   },

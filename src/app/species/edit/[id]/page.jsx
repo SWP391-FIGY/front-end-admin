@@ -21,11 +21,10 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 
-
-const { default: PageLayout } = require("@/layout/pageLayout")
+const { default: PageLayout } = require("@/layout/pageLayout");
 
 const SpeciesEditPage = () => {
-  const [spinner, setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false);
   const params = useParams();
   const router = useRouter();
   const speciesId = parseInt(params.id, 10);
@@ -40,7 +39,6 @@ const SpeciesEditPage = () => {
     url: `${API}/species/?filter=ID%20eq%20${speciesId}&$select=*`,
   });
 
-  
   // Fetch old data to form
   useEffect(() => {
     if (speciesResponse) {
@@ -51,39 +49,45 @@ const SpeciesEditPage = () => {
     }
   }, [speciesResponse]);
 
-  
-  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
+  const urlRegExp =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const formik = useFormik({
     initialValues: {
       ID: speciesId,
-      Name:'',
-      Color: '',
-      Size: '',
-      Voice: '',
-      ImageLink: '',
-      LifeExpectancy: '',
-      Habitat: '',
-      
+      Name: "",
+      Color: "",
+      Size: "",
+      Voice: "",
+      ImageLink: "",
+      LifeExpectancy: "",
+      Habitat: "",
     },
     validationSchema: Yup.object({
-      Name: Yup.string().required('Required'),
-      Color: Yup.string().required('Required'),
-      Size: Yup.string().required('Required'),
-      Voice: Yup.string().matches(urlRegExp, 'Voice link is not valid').required('Required'),
-      ImageLink: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
-      LifeExpectancy: Yup.number().lessThan(100, 'LifeExpectancy must be lower than 100').positive('LifeExpectancy must be higher than 0').integer('LifeExpectancy must be an integer').required('Required'),
-      Habitat: Yup.string().required('Required'),
-      
+      Name: Yup.string().required("Required"),
+      Color: Yup.string().required("Required"),
+      Size: Yup.string().required("Required"),
+      Voice: Yup.string()
+        .matches(urlRegExp, "Voice link is not valid")
+        .required("Required"),
+      ImageLink: Yup.string()
+        .matches(urlRegExp, "Image link is not valid")
+        .required("Required"),
+      LifeExpectancy: Yup.number()
+        .lessThan(100, "LifeExpectancy must be lower than 100")
+        .positive("LifeExpectancy must be higher than 0")
+        .integer("LifeExpectancy must be an integer")
+        .required("Required"),
+      Habitat: Yup.string().required("Required"),
     }),
-    onSubmit: values => {
-      setSpinner(true)
+    onSubmit: (values) => {
+      setSpinner(true);
       const payloadData = {
         data: values,
-      }
-      console.log('submit data',payloadData.data);
+      };
+      console.log("submit data", payloadData.data);
       axios
         .put(`${API}/species/${speciesId}`, payloadData.data)
-        .then(response => {
+        .then((response) => {
           setSpinner(false);
           formik.resetForm();
           message.success("Update species success");
@@ -98,9 +102,8 @@ const SpeciesEditPage = () => {
           console.log("An error occurred:", error.response);
         });
     },
-  })
+  });
 
-  
   return (
     <PageLayout>
       <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
@@ -112,24 +115,23 @@ const SpeciesEditPage = () => {
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]">
+          className="flex flex-col gap-4 w-[600px]"
+        >
+          <Label value="Species ID" />
+          <div>{formik.values.ID}</div>
 
           {/* // * Species Name */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="Name"
-              value="Species Name"
-            />
+            <Label htmlFor="Name" value="Species Name" />
             <TextInput
               id="Name"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.Name}
             />
             {formik.touched.Name && formik.errors.Name ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.Name}
               </div>
             ) : null}
@@ -137,20 +139,16 @@ const SpeciesEditPage = () => {
 
           {/* // * Species Color */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="Color"
-              value="Color"
-            />
+            <Label htmlFor="Color" value="Color" />
             <TextInput
               id="Color"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.Color}
             />
             {formik.touched.Color && formik.errors.Color ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.Color}
               </div>
             ) : null}
@@ -158,20 +156,16 @@ const SpeciesEditPage = () => {
 
           {/* // * Species Size */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="Size"
-              value="Size (cm)"
-            />
+            <Label htmlFor="Size" value="Size (cm)" />
             <TextInput
               id="Size"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.Size}
             />
             {formik.touched.Size && formik.errors.Size ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.Size}
               </div>
             ) : null}
@@ -179,8 +173,7 @@ const SpeciesEditPage = () => {
 
           {/* //* Species Voice */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Voice" 
-            value="Voice" />
+            <Label htmlFor="Voice" value="Voice" />
             <TextInput
               id="Voice"
               type="text"
@@ -195,12 +188,9 @@ const SpeciesEditPage = () => {
             ) : null}
           </div>
 
-          {/* //* Image Link */}  
+          {/* //* Image Link */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="ImageLink"
-              value="Image"
-            />
+            <Label htmlFor="ImageLink" value="Image" />
             <TextInput
               id="ImageLink"
               type="text"
@@ -209,21 +199,17 @@ const SpeciesEditPage = () => {
               value={formik.values.ImageLink}
             />
             {formik.touched.ImageLink && formik.errors.ImageLink ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.ImageLink}
               </div>
             ) : null}
           </div>
 
-          {/* //* LifeExpectancy */} 
+          {/* //* LifeExpectancy */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="LifeExpectancy"
-              value="Life Expectancy (Year)"
-            />
+            <Label htmlFor="LifeExpectancy" value="Life Expectancy (Year)" />
             <TextInput
               id="LifeExpectancy"
-
               type="number"
               min={0}
               max={100}
@@ -232,18 +218,15 @@ const SpeciesEditPage = () => {
               value={formik.values.LifeExpectancy}
             />
             {formik.touched.LifeExpectancy && formik.errors.LifeExpectancy ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.LifeExpectancy}
               </div>
             ) : null}
           </div>
 
-          {/* //* Species Habitat */} 
+          {/* //* Species Habitat */}
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="Habitat"
-              value="Habitat"
-            />
+            <Label htmlFor="Habitat" value="Habitat" />
             <TextInput
               id="Habitat"
               type="text"
@@ -252,17 +235,16 @@ const SpeciesEditPage = () => {
               value={formik.values.Habitat}
             />
             {formik.touched.Habitat && formik.errors.Habitat ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.Habitat}
               </div>
             ) : null}
           </div>
 
-          
           <Button type="submit">
             {spinner ? (
-              <div className='flex justify-center items-center gap-4'>
-                <Spinner aria-label='Spinner button example' />
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
                 <p>Loading...</p>
               </div>
             ) : (
@@ -271,9 +253,8 @@ const SpeciesEditPage = () => {
           </Button>
         </form>
       </div>
-
     </PageLayout>
-  )
-}
+  );
+};
 
-export default SpeciesEditPage
+export default SpeciesEditPage;

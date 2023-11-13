@@ -11,7 +11,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation"
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { FiTrash2 } from "react-icons/fi";
@@ -28,7 +28,7 @@ const PurchaseOrderCreatePage = () => {
   const params = useParams();
   const uid = params.id;
 
-  console.log('editing id',uid);
+  console.log("editing id", uid);
 
   const formik = useFormik({
     initialValues: {
@@ -64,7 +64,8 @@ const PurchaseOrderCreatePage = () => {
     );
     if (existingItemIndex !== -1) {
       const updatedFoodItems = [...formik.values.purchaseOrderDetails];
-      updatedFoodItems[existingItemIndex].quantity += parseInt(selectedQuantity);
+      updatedFoodItems[existingItemIndex].quantity +=
+        parseInt(selectedQuantity);
       formik.setFieldValue("purchaseOrderDetails", updatedFoodItems);
     } else {
       // If it doesn't exist, add a new item
@@ -82,7 +83,9 @@ const PurchaseOrderCreatePage = () => {
   };
 
   function deleteFoodItem(foodId) {
-    const updatedFoodItems = formik.values.purchaseOrderDetails.filter(item => item.foodId !== foodId);
+    const updatedFoodItems = formik.values.purchaseOrderDetails.filter(
+      (item) => item.foodId !== foodId
+    );
     formik.setFieldValue("purchaseOrderDetails", updatedFoodItems);
   }
 
@@ -103,8 +106,8 @@ const PurchaseOrderCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
-          
-          
+          <Label value="Purchase Order ID" />
+          <div>{formik.values.id}</div>
 
           <div className="flex flex-col gap-2">
             <Label value="Food details" />
@@ -129,7 +132,13 @@ const PurchaseOrderCreatePage = () => {
                         <Table.Cell>{item.unit}</Table.Cell>
                         <Table.Cell>{item.NETPrice}</Table.Cell>
                         <Table.Cell>{item.deliverDate}</Table.Cell>
-                        <Table.Cell className="flex items-center gap-2" onClick={() => deleteFoodItem(item.foodId)}><FiTrash2/>Delete</Table.Cell>
+                        <Table.Cell
+                          className="flex items-center gap-2"
+                          onClick={() => deleteFoodItem(item.foodId)}
+                        >
+                          <FiTrash2 />
+                          Delete
+                        </Table.Cell>
                       </Table.Row>
                     );
                   })}
@@ -180,9 +189,9 @@ const PurchaseOrderCreatePage = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <Datepicker
-                        selected={selectedDeliverDate}
-                        onChange={(date) => setSelectedDeliverDate(date)}
-                        dateFormat="yyyy-MM-dd"
+                      selected={selectedDeliverDate}
+                      onChange={(date) => setSelectedDeliverDate(date)}
+                      dateFormat="yyyy-MM-dd"
                     />
                   </Table.Cell>
                   <Table.Cell>

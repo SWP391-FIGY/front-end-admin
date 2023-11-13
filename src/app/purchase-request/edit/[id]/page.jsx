@@ -150,6 +150,8 @@ const PurchaseRequestEditPage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
+          <Label value="Purchase Request ID" />
+          <div>{formik.values.ID}</div>
           <div className="flex flex-col gap-2">
             <Label value="Food details" />
             <Table>
@@ -163,11 +165,13 @@ const PurchaseRequestEditPage = () => {
 
                 {formik.values.PurchaseRequestDetails.length > 0 &&
                   formik.values.PurchaseRequestDetails.map((item, index) => {
-                    const foodItem = foodResponse.find(x=> x.ID == item.FoodID)
+                    const foodItem = foodResponse.find(
+                      (x) => x.ID == item.FoodID
+                    );
                     console.log(foodItem);
                     return (
                       <Table.Row key={index}>
-                        <Table.Cell>{ foodItem.Name}</Table.Cell>
+                        <Table.Cell>{foodItem.Name}</Table.Cell>
                         <Table.Cell>{item.Quantity}</Table.Cell>
                         <Table.Cell
                           className="flex items-center gap-2"

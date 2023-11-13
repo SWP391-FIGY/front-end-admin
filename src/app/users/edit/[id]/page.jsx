@@ -23,17 +23,17 @@ import useAxios from "@/hooks/useFetch";
 import { getUserInfo } from "@/helper";
 import { userRoleEnums } from "../../index/userInfo";
 
-const { default: PageLayout } = require("@/layout/pageLayout")
+const { default: PageLayout } = require("@/layout/pageLayout");
 
 const UserEditPage = () => {
   const router = useRouter();
-  const [spinner, setSpinner] = useState(false)
+  const [spinner, setSpinner] = useState(false);
   const params = useParams();
   const userId = parseInt(params.id, 10);
 
   //Handle user role
   const user = getUserInfo();
-  const disabledRole = !user || userRoleEnums[user.role] != "Admin"
+  const disabledRole = !user || userRoleEnums[user.role] != "Admin";
 
   //Fetch old user data
   const {
@@ -44,7 +44,7 @@ const UserEditPage = () => {
     method: "get",
     url: `${API}/user/?filter=ID%20eq%20${userId}`,
   });
- 
+
   //Fetch old data to form
   useEffect(() => {
     if (userResponse) {
@@ -55,34 +55,38 @@ const UserEditPage = () => {
     }
   }, [userResponse]);
 
-
-  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g
-  const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm
+  const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+  const emailRegExp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gim;
   const formik = useFormik({
     initialValues: {
       Id: userId,
-      name: '',
-      email: '',
-      password: '',
-      phoneNumber: '',
-      firebaseID: '',
+      name: "",
+      email: "",
+      password: "",
+      phoneNumber: "",
+      firebaseID: "",
       role: 1,
       status: 1,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Required'),
-      email: Yup.string().matches(emailRegExp, 'Email is not valid').required('Required'),
-      password: Yup.string().required('Required'),
-      phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
-      role: Yup.number().required('Required'),
-      status: Yup.number().required('Required'),
+      name: Yup.string().required("Required"),
+      email: Yup.string()
+        .matches(emailRegExp, "Email is not valid")
+        .required("Required"),
+      password: Yup.string().required("Required"),
+      phoneNumber: Yup.string()
+        .matches(phoneRegExp, "Phone number is not valid")
+        .required("Required"),
+      role: Yup.number().required("Required"),
+      status: Yup.number().required("Required"),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
         data: values,
       };
-      console.log('submit data',payloadData.data);
+      console.log("submit data", payloadData.data);
       axios
         .put(`${API}/user/${userId}`, payloadData.data)
         .then((response) => {
@@ -97,125 +101,106 @@ const UserEditPage = () => {
           console.log("An error occurred:", error.response);
         });
     },
-  })
+  });
 
   return (
     <PageLayout>
-      <div className='w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll'>
-      <div className='flex flex-col justify-between gap-4'>
-          <Link href={'/users/index'} className="flex flex-row gap-2">{<HiOutlineArrowSmallLeft className="self-center" />} Back to list</Link>
-          <h2 className='text-3xl font-bold'>Edit user</h2>
-
+      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
+        <div className="flex flex-col justify-between gap-4">
+          <Link href={"/users/index"} className="flex flex-row gap-2">
+            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+          </Link>
+          <h2 className="text-3xl font-bold">Edit user</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]">
+          className="flex flex-col gap-4 w-[600px]"
+        >
+          <Label value="User ID" />
+          <div>{formik.values.Id}</div>
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="name"
-              value="Full name"
-            />
+            <Label htmlFor="name" value="Full name" />
             <TextInput
               id="name"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
             />
             {formik.touched.name && formik.errors.name ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.name}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="email"
-              value="email"
-            />
+            <Label htmlFor="email" value="email" />
             <TextInput
               id="email"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
             />
             {formik.touched.email && formik.errors.email ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.email}
               </div>
             ) : null}
           </div>
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="Password"
-              value="Password"
-            />
+            <Label htmlFor="Password" value="Password" />
             <TextInput
               id="password"
-
               type="password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.password}
             />
             {formik.touched.password && formik.errors.password ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.password}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="phoneNumber"
-              value="Phone number"
-            />
+            <Label htmlFor="phoneNumber" value="Phone number" />
             <TextInput
               id="phoneNumber"
-
               type="text"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phoneNumber}
             />
             {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.phoneNumber}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="role"
-              value="Role"
-            />
+            <Label htmlFor="role" value="Role" />
             <Select
               id="role"
               disabled={disabledRole}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.role}
-            >              
+            >
               <option value="1">Manager</option>
               <option value="2">Staff</option>
-
             </Select>
             {formik.touched.role && formik.errors.role ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.role}
               </div>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label
-              htmlFor="status"
-              value="Status"
-            />
+            <Label htmlFor="status" value="Status" />
             <Select
               id="status"
               onChange={formik.handleChange}
@@ -224,10 +209,9 @@ const UserEditPage = () => {
             >
               <option value="1">Activated</option>
               <option value="2">Deactivated</option>
-
             </Select>
             {formik.touched.status && formik.errors.status ? (
-              <div className='text-xs text-red-600 dark:text-red-400'>
+              <div className="text-xs text-red-600 dark:text-red-400">
                 {formik.errors.status}
               </div>
             ) : null}
@@ -235,8 +219,8 @@ const UserEditPage = () => {
 
           <Button type="submit">
             {spinner ? (
-              <div className='flex justify-center items-center gap-4'>
-                <Spinner aria-label='Spinner button example' />
+              <div className="flex justify-center items-center gap-4">
+                <Spinner aria-label="Spinner button example" />
                 <p>Loading...</p>
               </div>
             ) : (
@@ -245,9 +229,8 @@ const UserEditPage = () => {
           </Button>
         </form>
       </div>
-
     </PageLayout>
-  )
-}
+  );
+};
 
-export default UserEditPage
+export default UserEditPage;

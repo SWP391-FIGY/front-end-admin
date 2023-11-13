@@ -134,7 +134,7 @@ const MenuUpdatePage = () => {
     if (existingItemIndex !== -1) {
       const updatedFoodItems = [...formik.values.MenuDetails];
       updatedFoodItems[existingItemIndex].Quantity +=
-      parseFloat(selectedQuantity);
+        parseFloat(selectedQuantity);
       formik.setFieldValue("MenuDetails", updatedFoodItems);
     } else {
       // If it doesn't exist, add a new item
@@ -172,6 +172,8 @@ const MenuUpdatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-[600px]"
         >
+          <Label value="Menu ID" />
+          <div>{formik.values.ID}</div>
           {/* // * Menu Name */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="MenuName" value="Menu name" />
@@ -280,7 +282,11 @@ const MenuUpdatePage = () => {
               value={formik.values.BirdStatus}
             >
               {birdStatusEnum.map((status, index) => {
-                return <option key={index} value={index}>{status}</option>;
+                return (
+                  <option key={index} value={index}>
+                    {status}
+                  </option>
+                );
               })}
             </Select>
             {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
@@ -304,7 +310,11 @@ const MenuUpdatePage = () => {
               value={formik.values.MenuStatus}
             >
               {menuStatusEnum.map((status, index) => {
-                return <option key={index} value={index}>{status}</option>;
+                return (
+                  <option key={index} value={index}>
+                    {status}
+                  </option>
+                );
               })}
             </Select>
             {formik.touched.MenuStatus && formik.errors.MenuStatus ? (
@@ -397,7 +407,7 @@ const MenuUpdatePage = () => {
                       onChange={(e) => {
                         setSelectedQuantity(e.target.value);
                       }}
-                      value={selectedQuantity }
+                      value={selectedQuantity}
                     />
                   </Table.Cell>
                   <Table.Cell></Table.Cell>
