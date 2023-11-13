@@ -6,6 +6,7 @@ import {
   TextInput,
   Datepicker,
   Spinner,
+  FileInput,
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -19,13 +20,16 @@ import moment from "moment/moment";
 import axios from "axios";
 import { API } from "@/constants";
 import useAxios from "@/hooks/useFetch";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { firebaseStorage } from "@/firebase/config";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
 const BirdCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
- 
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   // Get species list
   const {
     response: speciesResponse,
@@ -44,22 +48,21 @@ const BirdCreatePage = () => {
     method: "get",
     url: `${API}/cage/`,
   });
-  
-  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm
+
+  const urlRegExp =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const formik = useFormik({
     initialValues: {
       Description: "",
-      BirdImageUrl: '',
       SpeciesId: 1,
       CageID: 1,
-      DoB: moment(new Date()).format('DD/MM/YYYY'),
+      DoB: moment(new Date()).format("DD/MM/YYYY"),
       LastModifyDate: moment(new Date()),
       Gender: "Male",
       birdStatus: 0,
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
-      BirdImageUrl: Yup.string().matches(urlRegExp, 'Image link is not valid').required('Required'),
       SpeciesId: Yup.number().required("Required"),
       CageID: Yup.number().required("Required"),
       DoB: Yup.date()
@@ -68,30 +71,58 @@ const BirdCreatePage = () => {
       Gender: Yup.string().required("Required"),
       birdStatus: Yup.number().required("Required"),
     }),
-    onSubmit: (values) => {
-      setSpinner(true);
-      const payloadData = {
-        data: values,
-      };
-      console.log(payloadData.data);
-      axios
-        .post(`${API}/bird`, payloadData.data)
-        .then((response) => {
-          setSpinner(false);
-          formik.resetForm();
-          
-          router.push("/birds/index")
-        })
-        .then((response) => {
-          message.success("Add new bird success");
-        })
-        .catch((error) => {
-          message.error("An error occurred");
-          setSpinner(false);
-          console.log("An error occurred:", error.response);
+    onSubmit: async (values) => {
+      try {
+        setSpinner(true);
+        if (!imageUpload) {
+          message.error("Please upload an image");
+          throw new Error("Please upload an image");
+        }
+        const fileRef = ref(
+          firebaseStorage,
+          `/birdImages/${moment().format("DDMMYYYYHHmm")}-${imageUpload.name}`
+        );
+        uploadBytes(fileRef, imageUpload).then((data) => {
+          getDownloadURL(data.ref).then((url) => {
+            console.log("fileUrl", url);
+            // * set upload data
+            const payloadData = {
+              data: values,
+            };
+            payloadData.data.BirdImageUrl = url;
+            console.log(payloadData.data);
+            // * upload to BE
+            axios
+              .post(`${API}/bird`, payloadData.data)
+              .then((response) => {
+                setSpinner(false);
+                formik.resetForm();
+
+                router.push("/birds/index");
+              })
+              .then((response) => {
+                message.success("Add new bird success");
+              })
+              .catch((error) => {
+                message.error("An error occurred");
+                setSpinner(false);
+                console.log("An error occurred:", error.response);
+              });
+          });
         });
+      } catch (e) {
+        console.error(e);
+        setSpinner(false);
+      }
     },
   });
+
+  const handleFileUpload = (e) => {
+    setImageUpload(e.target.files[0]);
+    console.log(e.target.files);
+
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+  };
 
   return (
     <PageLayout>
@@ -106,14 +137,13 @@ const BirdCreatePage = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 w-full"
         >
-
           {/* // * Bird birthDate */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="DoB" value="DoB" />
             <Datepicker
               id="DoB"
               language="vi-VN"
-              value={moment(formik.values.DoB).format('DD/MM/YYYY')}
+              value={moment(formik.values.DoB).format("DD/MM/YYYY")}
               onSelectedDateChanged={(date) => {
                 console.log(new Date(date));
                 formik.setFieldValue("DoB", date);
@@ -131,7 +161,7 @@ const BirdCreatePage = () => {
               </div>
             ) : null}
           </div>
-          
+
           {/* // * Bird gender */}
           <div className="flex flex-col w-[500px] gap-2">
             <Label htmlFor="Gender" value="Bird gender" />
@@ -170,32 +200,32 @@ const BirdCreatePage = () => {
 
           {/* //* Bird image */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="BirdImageUrl" value="Bird Image URL" />
-            <TextInput
-              id="BirdImageUrl"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.BirdImageUrl}
-            />
-            {formik.touched.BirdImageUrl && formik.errors.BirdImageUrl ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.BirdImageUrl}
-              </div>
-            ) : null}
+            <div className="mb-2 block">
+              <Label htmlFor="file" value="Bird Image" />
+            </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                className="w-[200px] h-[200px] bg-cover"
+                alt="Image Preview"
+              />
+            )}
+            <FileInput onChange={handleFileUpload} id="file" />
           </div>
-    
 
           {/* //* Bird species */}
           <div className="flex flex-col w-full gap-2">
             <Label htmlFor="SpeciesId" value="Bird species" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
-              <Select
+                <Select
                   id="SpeciesId"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
-                    formik.setFieldValue("SpeciesId", parseInt(stringSelection));
+                    const stringSelection = e.target.value;
+                    formik.setFieldValue(
+                      "SpeciesId",
+                      parseInt(stringSelection)
+                    );
                   }}
                   onBlur={formik.handleBlur}
                   value={formik.values.SpeciesId}
@@ -225,9 +255,9 @@ const BirdCreatePage = () => {
               </Link>
             </div>
 
-            {formik.touched.speciesId && formik.errors.speciesId ? (
+            {formik.touched.SpeciesId && formik.errors.SpeciesId ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.speciesId}
+                {formik.errors.SpeciesId}
               </div>
             ) : null}
           </div>
@@ -239,7 +269,7 @@ const BirdCreatePage = () => {
                 <Select
                   id="CageID"
                   onChange={(e) => {
-                    const stringSelection = e.target.value
+                    const stringSelection = e.target.value;
                     formik.setFieldValue("CageID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
@@ -258,7 +288,12 @@ const BirdCreatePage = () => {
                   )}
                 </Select>
               </div>
-              <Link href={{pathname:"/cage/create", query: {...formik.values, 'bird-add':true}}}>
+              <Link
+                href={{
+                  pathname: "/cage/create",
+                  query: { ...formik.values, "bird-add": true },
+                }}
+              >
                 <Button>
                   <div className="flex flex-row justify-center gap-2">
                     <div className="my-auto">
@@ -275,7 +310,7 @@ const BirdCreatePage = () => {
               </div>
             ) : null}
           </div>
-          
+
           <Button type="submit" className="w-[500px] ">
             {spinner ? (
               <div className="flex justify-center items-center gap-4">

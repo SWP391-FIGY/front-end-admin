@@ -6,6 +6,7 @@ import {
   TextInput,
   Datepicker,
   Spinner,
+  FileInput,
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -21,6 +22,8 @@ import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
 import { birdStatusEnum } from "../../index/birdInfo";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { firebaseStorage } from "@/firebase/config";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -29,6 +32,8 @@ const BirdEditPage = () => {
   const [spinner, setSpinner] = useState(false);
   const params = useParams();
   const birdId = parseInt(params.id, 10);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Fetch old bird data
   const {
@@ -66,6 +71,7 @@ const BirdEditPage = () => {
       formik.setValues({
         ...birdResponse[0],
       });
+      setImagePreview(birdResponse[0].BirdImageUrl);
     }
   }, [birdResponse]);
 
@@ -85,9 +91,6 @@ const BirdEditPage = () => {
     },
     validationSchema: Yup.object({
       Description: Yup.string().required("Required"),
-      BirdImageUrl: Yup.string()
-        .matches(urlRegExp, "Image link is not valid")
-        .required("Required"),
       SpeciesId: Yup.number().required("Required"),
       SpeciesId: Yup.number().required("Required"),
       CageID: Yup.number().required("Required"),
@@ -95,31 +98,61 @@ const BirdEditPage = () => {
         .max(new Date(), "Birth date must before today")
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      setSpinner(true);
-      const payloadData = {
-        data: values,
-      };
-      console.log("submit data", payloadData.data);
-      axios
-        .put(`${API}/bird/${birdId}`, payloadData.data)
-        .then((response) => {
-          setSpinner(false);
-          formik.resetForm();
-          message.success("Update bird success");
-          router.push("/birds/index");
-        })
-        .then((response) => {
-          message.success("Update bird success");
-        })
-        .catch((error) => {
-          message.error("An error occurred");
-          setSpinner(false);
-          console.log("An error occurred:", error.response);
-        });
+    onSubmit: async (values) => {
+      try {
+        setSpinner(true);
+        if (!imagePreview) {
+          message.error("Please upload an image");
+          throw new Error("Please upload an image");
+        }
+        var imageLink = birdResponse[0].BirdImageUrl;
+        if (imagePreview != birdResponse[0].BirdImageUrl) {
+          const fileRef = ref(
+            firebaseStorage,
+            `/birdImages/${moment().format("DDMMYYYYHHmm")}-${imageUpload.name}`
+          );
+          await uploadBytes(fileRef, imageUpload).then(async (data) => {
+            await getDownloadURL(data.ref).then(async (url) => {
+              console.log("fileUrl", url);
+              imageLink = url;
+            })
+          })
+        }
+
+        const payloadData = {
+          data: values,
+        };
+        payloadData.data.BirdImageUrl = imageLink;
+        console.log("submit data", payloadData.data);
+        await axios
+          .put(`${API}/bird/${birdId}`, payloadData.data)
+          .then((response) => {
+            setSpinner(false);
+            formik.resetForm();
+            
+            router.push("/birds/index");
+          })
+          .then((response) => {
+            message.success("Update bird success");
+          })
+          .catch((error) => {
+            message.error("An error occurred");
+            setSpinner(false);
+            console.log("An error occurred:", error.response);
+          });
+      } catch (e) {
+        console.error(e);
+        setSpinner(false);
+      }
     },
   });
 
+  const handleFileUpload = (e) => {
+    setImageUpload(e.target.files[0]);
+    console.log(e.target.files);
+
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+  };
   useEffect(() => {
     console.log(formik);
   }, [formik]);
@@ -199,19 +232,17 @@ const BirdEditPage = () => {
 
           {/* //* Bird image */}
           <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="BirdImageUrl" value="Bird Image URL" />
-            <TextInput
-              id="BirdImageUrl"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.BirdImageUrl}
-            />
-            {formik.touched.BirdImageUrl && formik.errors.BirdImageUrl ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.BirdImageUrl}
-              </div>
-            ) : null}
+            <div className="mb-2 block">
+              <Label htmlFor="file" value="Bird Image" />
+            </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                className="w-[200px] h-[200px] bg-cover"
+                alt="Image Preview"
+              />
+            )}
+            <FileInput onChange={handleFileUpload} id="file" />
           </div>
 
           {/* // * Bird status */}

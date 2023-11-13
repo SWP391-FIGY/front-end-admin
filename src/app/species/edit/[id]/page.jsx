@@ -6,6 +6,7 @@ import {
   TextInput,
   Datepicker,
   Spinner,
+  FileInput,
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -20,6 +21,8 @@ import axios from "axios";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
 import useAxios from "@/hooks/useFetch";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { firebaseStorage } from "@/firebase/config";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -28,6 +31,8 @@ const SpeciesEditPage = () => {
   const params = useParams();
   const router = useRouter();
   const speciesId = parseInt(params.id, 10);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Fetch old species data
   const {
@@ -46,6 +51,7 @@ const SpeciesEditPage = () => {
       formik.setValues({
         ...speciesResponse[0],
       });
+      setImagePreview(speciesResponse[0].ImageLink);
     }
   }, [speciesResponse]);
 
@@ -65,12 +71,12 @@ const SpeciesEditPage = () => {
     validationSchema: Yup.object({
       Name: Yup.string().required("Required"),
       Color: Yup.string().required("Required"),
-      Size: Yup.string().required("Required"),
+      Size: Yup.number("Require a number")
+        .min(1)
+        .max(200, "Max size is 200cm")
+        .required("Required"),
       Voice: Yup.string()
         .matches(urlRegExp, "Voice link is not valid")
-        .required("Required"),
-      ImageLink: Yup.string()
-        .matches(urlRegExp, "Image link is not valid")
         .required("Required"),
       LifeExpectancy: Yup.number()
         .lessThan(100, "LifeExpectancy must be lower than 100")
@@ -79,30 +85,62 @@ const SpeciesEditPage = () => {
         .required("Required"),
       Habitat: Yup.string().required("Required"),
     }),
-    onSubmit: (values) => {
-      setSpinner(true);
-      const payloadData = {
-        data: values,
-      };
-      console.log("submit data", payloadData.data);
-      axios
-        .put(`${API}/species/${speciesId}`, payloadData.data)
-        .then((response) => {
-          setSpinner(false);
-          formik.resetForm();
-          message.success("Update species success");
-          router.push("/species/index");
-        })
-        .then((response) => {
-          message.success("Update species success");
-        })
-        .catch((error) => {
-          message.error("An error occurred");
-          setSpinner(false);
-          console.log("An error occurred:", error.response);
-        });
+    onSubmit: async (values) => {
+      try {
+        setSpinner(true);
+        if (!imagePreview) {
+          message.error("Please upload an image");
+          throw new Error("Please upload an image");
+        }
+        var imageLink = speciesResponse[0].ImageLink;
+        if (imagePreview != speciesResponse[0].ImageLink) {
+          const fileRef = ref(
+            firebaseStorage,
+            `/speciesImages/${moment().format("DDMMYYYYHHmm")}-${imageUpload.name}`
+          );
+          await uploadBytes(fileRef, imageUpload).then(async (data) => {
+            await getDownloadURL(data.ref).then(async (url) => {
+              console.log("fileUrl", url);
+              imageLink = url;
+            })
+          })
+        }
+        const payloadData = {
+          data: values,
+        };
+        payloadData.data.ImageLink = imageLink;
+        console.log("submit data", payloadData.data);
+        axios
+          .put(`${API}/species/${speciesId}`, payloadData.data)
+          .then(async (response) => {
+            setSpinner(false);
+            formik.resetForm();
+            router.push("/species/index");
+          })
+          .then((response) => {
+            message.success("Update species success");
+          })
+          .catch((error) => {
+            message.error("An error occurred");
+            setSpinner(false);
+            console.log("An error occurred:", error.response);
+          });
+      } catch (e) {
+        console.error(e);
+        setSpinner(false);
+      }
     },
   });
+
+  useEffect(() => {
+    console.log(formik)
+  },[formik])
+  const handleFileUpload = (e) => {
+    setImageUpload(e.target.files[0]);
+    console.log(e.target.files);
+
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+  };
 
   return (
     <PageLayout>
@@ -188,21 +226,19 @@ const SpeciesEditPage = () => {
             ) : null}
           </div>
 
-          {/* //* Image Link */}
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="ImageLink" value="Image" />
-            <TextInput
-              id="ImageLink"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.ImageLink}
-            />
-            {formik.touched.ImageLink && formik.errors.ImageLink ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.ImageLink}
-              </div>
-            ) : null}
+          {/* //* Image Link */}                    
+          <div className="flex flex-col w-[500px] gap-2">
+            <div className="mb-2 block">
+              <Label htmlFor="file" value="Image" />
+            </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                className="w-[200px] h-[200px]  bg-cover"
+                alt="Image Preview"
+              />
+            )}
+            <FileInput onChange={handleFileUpload} id="file" />
           </div>
 
           {/* //* LifeExpectancy */}
