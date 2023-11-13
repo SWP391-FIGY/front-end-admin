@@ -50,7 +50,8 @@ const LoginPage = () => {
           setUserInfo(JSON.stringify(response.data.userInfo));
           setToken(response.data.token);
 
-          router.push("/birds/index");
+          if (response.data.userInfo.role === 0) router.push("/users/index");
+          else router.push("/birds/index");
           // Handle success.
           setSpinner(false);
         })

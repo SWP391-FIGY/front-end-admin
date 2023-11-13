@@ -1,30 +1,27 @@
 "use client";
+import { Button } from "flowbite-react";
+import Link from "next/link";
+import React from "react";
 
-import StaffDashboard from "@/components/Dashboard/StaffDashboard";
-import { useAuthContext } from "@/contexts/authContext";
-import { getUserInfo } from "@/helper";
-import AuthLayout from "@/layout/authLayout";
-import PageLayout from "@/layout/pageLayout";
-import { Spinner } from "flowbite-react";
-import Image from "next/image";
-import { userRoleEnums } from "./users/index/userInfo";
-
-export default function Home() {
-  const user = getUserInfo();
+const FirstPage = () => {
   return (
-    <PageLayout>
-      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-        <h2 className="text-3xl font-bold">Dashboard</h2>
-        {user && userRoleEnums[user.role] === "Staff" ? (
-          <>
-            <StaffDashboard />
-          </>
-        ) : (
-          <div className="w-full h-full flex justify-center items-center">
-            <Spinner />
-          </div>
-        )}
+    <div
+      className='
+    w-[100vw] h-[100vh] 
+    bg-[url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Eopsaltria_australis_-_Mogo_Campground.jpg/640px-Eopsaltria_australis_-_Mogo_Campground.jpg")]
+    bg-cover
+    flex justify-center items-center'
+    >
+      <div className="flex flex-col justify-center items-center 
+      p-10 gap-4 bg-slate-200/[.45] rounded-md">
+        <div className="text-3xl font-bold text-center">Bird Farm <br/> Meal System</div>
+        <div className="text-xl text-center">A solution for managing and feeding meal for birds</div>
+        <Link href={"/auth/login"}>
+          <Button>Get started</Button>
+        </Link>
       </div>
-    </PageLayout>
+    </div>
   );
-}
+};
+
+export default FirstPage;

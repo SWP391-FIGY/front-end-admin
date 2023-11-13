@@ -45,7 +45,6 @@ const PurchaseOrderCreatePage = () => {
     url: `${API}/purchaseRequest/?filter=ID%20eq%20${uid}&expand=creator,purchaseRequestDetails($expand=Food)`,
   });
 
-
   // Get food list
   const {
     response: foodResponse,
@@ -91,8 +90,8 @@ const PurchaseOrderCreatePage = () => {
   }, [user]);
 
   const onFoodSelected = (e) => {
-    setSelectedFood(e.target.value);
-    console.log(selectedFood);
+    console.log(e);
+    if (e.target.value) setSelectedFood(e.target.value);
   };
 
   const onAddFoodClick = (e) => {
@@ -161,11 +160,17 @@ const PurchaseOrderCreatePage = () => {
                   formik.values.purchaseOrderDetails.map((item, index) => {
                     return (
                       <Table.Row key={index}>
-                        <Table.Cell>{foodResponse.find(f => f.ID == item.FoodID).Name}</Table.Cell>
+                        <Table.Cell>
+                          {foodResponse.find((f) => f.ID == item.FoodID).Name}
+                        </Table.Cell>
                         <Table.Cell>{item.Quantity}</Table.Cell>
-                        <Table.Cell>{foodResponse.find(f => f.ID == item.FoodID).Unit}</Table.Cell>
+                        <Table.Cell>
+                          {foodResponse.find((f) => f.ID == item.FoodID).Unit}
+                        </Table.Cell>
                         <Table.Cell>{item.NetPrice}</Table.Cell>
-                        <Table.Cell>{new Date(item.DeliverDate).toDateString()}</Table.Cell>
+                        <Table.Cell>
+                          {new Date(item.DeliverDate).toDateString()}
+                        </Table.Cell>
                         <Table.Cell
                           className="flex items-center gap-2"
                           onClick={() => deleteFoodItem(item.FoodID)}
@@ -184,14 +189,20 @@ const PurchaseOrderCreatePage = () => {
                       onChange={onFoodSelected}
                       value={selectedFood}
                     >
-                      {
-                        purchaseRequestResponse ? purchaseRequestResponse[0].PurchaseRequestDetails.map((item, index) => {
-                          return(
-                            <option key={index} value={item.Food.ID}>{item.Food.Name}</option>
-                          )
-                        }) :
+                      <option></option>
+                      {purchaseRequestResponse ? (
+                        purchaseRequestResponse[0].PurchaseRequestDetails.map(
+                          (item, index) => {
+                            return (
+                              <option key={index} value={item.FoodID}>
+                                {item.Food.Name}
+                              </option>
+                            );
+                          }
+                        )
+                      ) : (
                         <option disabled>Loading...</option>
-                      }
+                      )}
                     </Select>
                   </Table.Cell>
                   <Table.Cell>
@@ -205,9 +216,7 @@ const PurchaseOrderCreatePage = () => {
                       value={selectedQuantity}
                     />
                   </Table.Cell>
-                  <Table.Cell>
-                  
-                  </Table.Cell>
+                  <Table.Cell></Table.Cell>
                   <Table.Cell>
                     <TextInput
                       id="NETPrice"
@@ -222,7 +231,10 @@ const PurchaseOrderCreatePage = () => {
                   <Table.Cell>
                     <Datepicker
                       selected={selectedDeliverDate}
-                      onSelectedDateChanged={(date) => {console.log(date);setSelectedDeliverDate(date.toISOString())}}
+                      onSelectedDateChanged={(date) => {
+                        console.log(date);
+                        setSelectedDeliverDate(date.toISOString());
+                      }}
                       dateFormat="yyyy-MM-dd"
                     />
                   </Table.Cell>

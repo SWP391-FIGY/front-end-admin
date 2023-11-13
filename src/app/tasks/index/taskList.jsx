@@ -21,7 +21,7 @@ const TaskList = () => {
   useEffect(() => {
     if (user && response && response.length > 0) {
       userRoleEnums[user.role] === "Staff"
-        ? setTaskData(response.filter((x) => x.Staff.Role == user.id))
+        ? setTaskData(response.filter((x) => x.Staff.Role == user.role))
         : setTaskData(response)
        
     }

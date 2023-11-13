@@ -9,7 +9,7 @@ import {
 } from "flowbite-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft, HiPlus } from "react-icons/hi2";
@@ -23,6 +23,7 @@ const { default: PageLayout } = require("@/layout/pageLayout");
 
 // TODO: Show menu detail when selected
 const PlanCreatePage = () => {
+  const router = useRouter();
   const [spinner, setSpinner] = useState(false);
 
   // Get Meal Menu list
@@ -46,20 +47,20 @@ const PlanCreatePage = () => {
 
   const formik = useFormik({
     initialValues: {
-      MenuId: 1,
-      BirdId: 1,
+      MealMenuID: 1,
+      BirdID: 1,
       Description: "",
-      DateTime: "",
-      FeedingStatus: 1,
+      DateTime: new Date(),
+      FeedingStatus: "",
     },
     validationSchema: Yup.object({
-      MenuId: Yup.number().required("Required"),
-      BirdId: Yup.number().required("Required"),
+      MealMenuID: Yup.number().required("Required"),
+      BirdID: Yup.number().required("Required"),
       Description: Yup.string().required("Required"),
       DateTime: Yup.date()
         .min(new Date().toLocaleDateString(), "The date must after today")
         .required("Required"),
-      FeedingStatus: Yup.number().required("Required"),
+      FeedingStatus: Yup.string(),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -81,7 +82,7 @@ const PlanCreatePage = () => {
         .catch((error) => {
           message.error("An error occurred");
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
@@ -104,17 +105,17 @@ const PlanCreatePage = () => {
         >
           {/* //* Plan Menu */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="MenuId" value="Menu ID" />
+            <Label htmlFor="MealMenuID" value="Menu ID" />
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="MenuId"
+                  id="MealMenuID"
                   onChange={(e) => {
                     const stringSelection = e.target.value;
-                    formik.setFieldValue("MenuId", parseInt(stringSelection));
+                    formik.setFieldValue("MealMenuID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.MenuId}
+                  value={formik.values.MealMenuID}
                 >
                   {mealMenuResponse && mealMenuResponse.length > 0 ? (
                     mealMenuResponse.map((mealMenu, index) => {
@@ -145,26 +146,26 @@ const PlanCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.MenuId && formik.errors.MenuId ? (
+            {formik.touched.MealMenuID && formik.errors.MealMenuID ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.MenuId}
+                {formik.errors.MealMenuID}
               </div>
             ) : null}
           </div>
           {/* //* Plan Bird Id */}
           <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="BirdId" value="Bird ID" />
+            <Label htmlFor="BirdID" value="Bird ID" />
 
             <div className="flex w-full gap-2">
               <div className="w-[500px]">
                 <Select
-                  id="BirdId"
+                  id="BirdID"
                   onChange={(e) => {
                     const stringSelection = e.target.value;
-                    formik.setFieldValue("BirdId", parseInt(stringSelection));
+                    formik.setFieldValue("BirdID", parseInt(stringSelection));
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.BirdId}
+                  value={formik.values.BirdID}
                 >
                   {birdResponse && birdResponse.length > 0 ? (
                     birdResponse.map((bird, index) => {
@@ -195,9 +196,9 @@ const PlanCreatePage = () => {
                 </Button>
               </Link>
             </div>
-            {formik.touched.BirdId && formik.errors.BirdId ? (
+            {formik.touched.BirdID && formik.errors.BirdID ? (
               <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.BirdId}
+                {formik.errors.BirdID}
               </div>
             ) : null}
           </div>
@@ -237,7 +238,7 @@ const PlanCreatePage = () => {
                 const stringSelection = e.target.value;
                 formik.setFieldValue(
                   "FeedingStatus",
-                  parseInt(stringSelection)
+                  stringSelection
                 );
               }}
               onBlur={formik.handleBlur}

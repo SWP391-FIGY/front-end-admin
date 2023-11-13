@@ -25,22 +25,12 @@ export const userColumns = [
   },
   {
     name: "Role",
-    selector: (row) => {
-      const statusMapping = {
-        0: "Super admin",
-        1: "Admin",
-        2: "Manager",
-        3: "Staff",
-      };
-      return statusMapping[row.role] || "Unknown";
-    },
+    selector: (row) => userRoleEnums[row.role],
     sortable: true,
   },
   {
     name: "Status",
-    selector: (row) => {
-      userStatusEnums[row.status]
-    },
+    selector: (row) => userStatusEnums[row.status],
     sortable: true,
   },
   {

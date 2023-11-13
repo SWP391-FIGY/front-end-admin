@@ -59,7 +59,7 @@ const MenuUpdatePage = () => {
     error: menuError,
   } = useAxios({
     method: "get",
-    url: `${API}/mealMenu/?filter=ID%20eq%20${uid}&expand=species,menuDetails($expand=Food)`,
+    url: `${API}/mealMenu/?filter=ID%20eq%20${uid}&expand=species,menuDetails`,
   });
 
   // Fetch old data to form
