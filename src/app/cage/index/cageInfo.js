@@ -1,7 +1,10 @@
+import { userRoleEnums } from "@/app/users/index/userInfo";
+import { getUserInfo } from "@/helper";
 import { Button, Dropdown } from "flowbite-react";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
+const user = getUserInfo();
 export const cageColumns = [
   {
     name: "ID",
@@ -21,12 +24,12 @@ export const cageColumns = [
   {
     name: "Area",
     selector: (row) => row.area,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Type",
     selector: (row) => row.type,
-	sortable: true,
+    sortable: true,
   },
   {
     name: "Status",
@@ -35,7 +38,7 @@ export const cageColumns = [
         1: "In use",
         2: "Maintenance",
         3: "Broken",
-        4: "Not in use"
+        4: "Not in use",
       };
       return statusMapping[row.cageStatus] || "Unknown";
     },
@@ -49,9 +52,11 @@ export const cageColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/cage/edit/${row.id}`}>
-          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        </Link>
+        {user && userRoleEnums[user.role] === "Manager" && (
+          <Link href={`/cage/edit/${row.id}`}>
+            <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+          </Link>
+        )}
         <Link href={`/cage/details/${row.id}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>

@@ -52,16 +52,21 @@ const PageSidebar = () => {
                         const navBasePath = subItem.href.split("/")[1];
                         const activeRouteDecoration =
                           currentBasePath === navBasePath ? "bg-gray-200" : "";
-                        return (
-                          <Sidebar.Item
-                            key={subIndex}
-                            href={subItem.href}
-                            icon={subItem.icon}
-                            className={`justify-start ${activeRouteDecoration}`}
-                          >
-                            <p className="overflow-clip">{subItem.title}</p>
-                          </Sidebar.Item>
-                        );
+                        if (
+                          userInfo &&
+                          subItem.allowRole.includes(userRoleEnums[userInfo.role])
+                        ) {
+                          return (
+                            <Sidebar.Item
+                              key={subIndex}
+                              href={subItem.href}
+                              icon={subItem.icon}
+                              className={`justify-start ${activeRouteDecoration}`}
+                            >
+                              <p className="overflow-clip">{subItem.title}</p>
+                            </Sidebar.Item>
+                          );
+                        }
                       })}
                     </Sidebar.Collapse>
                   );
@@ -100,14 +105,14 @@ const PageSidebar = () => {
                 inline
                 label={
                   <div className="flex gap-4">
-                  <Image
-                    height={30}
-                    width={30}
-                    src={
-                      "https://cdn-icons-png.flaticon.com/512/666/666201.png"
-                    }
-                  />
-                  {userInfo.name}
+                    <Image
+                      height={30}
+                      width={30}
+                      src={
+                        "https://cdn-icons-png.flaticon.com/512/666/666201.png"
+                      }
+                    />
+                    {userInfo.name}
                   </div>
                 }
               >
