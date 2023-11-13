@@ -15,7 +15,7 @@ const MenuDetailPage = () => {
 
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}&expand=species`,
+    url: `${API}/mealMenu/?filter=ID%20eq%20${menuId}&expand=species,menuDetails($expand=Food)`,
   });
 
   if (isNaN(menuId) || menuId < 0) {
@@ -121,6 +121,17 @@ const MenuDetailPage = () => {
                 Nutritional Ingredients
               </label>
               <p>{menuData.NutritionalIngredients}</p>
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="foodList" className="text-lg font-bold">
+                Food List
+              </label>
+              <ul>
+                {menuData.menuDetails &&
+                  menuData.menuDetails.map((detail) => (
+                    <li key={detail.ID}>{detail.Food.Name}</li>
+                  ))}
+              </ul>
             </div>
           </div>
         </div>
