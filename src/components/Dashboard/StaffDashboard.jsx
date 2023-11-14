@@ -43,7 +43,7 @@ const StaffDashboard = () => {
           <DataTable
             columns={taskColumns}
             data={
-              user.id == 2
+              user.role == 2
                 ? taskResponse.filter((x) => {
                     return x.StaffID == user.id && x.Status != "Done";
                   })
