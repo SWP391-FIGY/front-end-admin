@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { FiTrash2 } from "react-icons/fi";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/authContext";
 import { API } from "@/constants";
 import useAxios from "@/hooks/useFetch";
@@ -32,6 +32,7 @@ const PurchaseOrderCreatePage = () => {
   const { user } = useAuthContext();
   const params = useParams();
   const uid = params.id;
+  const router = useRouter()
 
   console.log("editing id", uid);
 
@@ -70,14 +71,16 @@ const PurchaseOrderCreatePage = () => {
       };
       console.log("Submitted");
       axios
-        .post(`${API}/purchaseOrder`, payloadData)
+        .post(`${API}/purchaseOrder`, payloadData.data)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
+
+          router.push("/purchase-order/index");
         })
         .catch((error) => {
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log("An error occurred:", error);
         });
     },
   });
