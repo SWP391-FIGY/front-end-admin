@@ -122,7 +122,7 @@ export const purchaseOrderColumns = [
     sortable: true,
   },
   {
-    name: "Manager ID",
+    name: "Manager Name",
     selector: (row) => row.managerId,
     sortable: true,
   },

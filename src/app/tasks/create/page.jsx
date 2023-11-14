@@ -67,7 +67,6 @@ const TaskCreatePage = () => {
       Status: "Pending",
     },
     validationSchema: Yup.object({
-      BirdId: Yup.number().required("Required"),
       CageId: Yup.number().required("Required"),
       StaffId: Yup.number().required("Required"),
       TaskName: Yup.string().required("Required"),

@@ -100,7 +100,7 @@ const PurchaseOrderCreatePage = () => {
           <Link href={"/purchase-order/index"} className="flex flex-row gap-2">
             {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
           </Link>
-          <h2 className="text-3xl font-bold">Add new Purchase Order</h2>
+          <h2 className="text-3xl font-bold">Edit Purchase Order</h2>
         </div>
         <form
           onSubmit={formik.handleSubmit}

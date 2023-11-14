@@ -35,10 +35,10 @@ export const cageColumns = [
     name: "Status",
     selector: (row) => {
       const statusMapping = {
-        1: "In use",
-        2: "Maintenance",
-        3: "Broken",
-        4: "Not in use",
+        0: "In use",
+        1: "Maintenance",
+        2: "Broken",
+        3: "Not in use",
       };
       return statusMapping[row.cageStatus] || "Unknown";
     },

@@ -1,9 +1,11 @@
+import { getUserInfo } from "@/helper";
 import { Button, Dropdown } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 import { GiSoundOn } from "react-icons/gi";
 
+const user = getUserInfo();
 export const speciesColumns = [
   {
     name: "ID",
@@ -19,7 +21,7 @@ export const speciesColumns = [
     name: "Color",
     selector: (row) => row.color,
     sortable: true,
-    wrap:true,
+    wrap: true,
   },
   {
     name: "Size (cm)",
@@ -30,15 +32,13 @@ export const speciesColumns = [
     name: "Voice",
     cell: (row) => (
       <Link href={row.voice}>
-        <GiSoundOn/>
+        <GiSoundOn />
       </Link>
     ),
   },
   {
     name: "Image Link",
-    cell: (row) => (
-      <Image src={row.imageLink} width={100} height={100} />
-    ),
+    cell: (row) => <Image src={row.imageLink} width={100} height={100} />,
   },
   {
     name: "Life Expectancy (Year)",
@@ -47,15 +47,17 @@ export const speciesColumns = [
   {
     name: "Habitat",
     selector: (row) => row.habitat,
-    wrap:true,
+    wrap: true,
   },
   {
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/species/edit/${row.id}`}>
-          <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        </Link>
+        {user && userRoleEnums[user.role] !== "Staff" && (
+          <Link href={`/species/edit/${row.id}`}>
+            <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
+          </Link>
+        )}
         <Link href={`/species/details/${row.id}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>

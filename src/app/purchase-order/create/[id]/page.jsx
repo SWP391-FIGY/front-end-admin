@@ -191,15 +191,19 @@ const PurchaseOrderCreatePage = () => {
                     >
                       <option></option>
                       {purchaseRequestResponse ? (
-                        purchaseRequestResponse[0].PurchaseRequestDetails.map(
-                          (item, index) => {
-                            return (
-                              <option key={index} value={item.FoodID}>
-                                {item.Food.Name} ({item.Food.Unit})
-                              </option>
+                        purchaseRequestResponse[0].PurchaseRequestDetails.filter(
+                          (option) => {
+                            return !formik.values.purchaseOrderDetails.includes(
+                              option
                             );
                           }
-                        )
+                        ).map((item, index) => {
+                          return (
+                            <option key={index} value={item.FoodID}>
+                              {item.Food.Name} ({item.Food.Unit})
+                            </option>
+                          );
+                        })
                       ) : (
                         <option disabled>Loading...</option>
                       )}
