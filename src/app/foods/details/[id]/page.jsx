@@ -111,7 +111,7 @@ const FoodDetailPage = () => {
           <div className="flex flex-row justify-between">
             <h2 className="text-3xl font-bold">Food&apos;s Inventory Log</h2>
 
-            <Link href={"/foods/create"}>
+            <Link href={`/foods/details/${foodId}/inventory-log`}>
               <Button>
                 <div className="flex flex-row justify-center gap-4">
                   <div className="my-auto">
