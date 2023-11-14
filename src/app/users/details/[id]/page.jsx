@@ -6,6 +6,7 @@ import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import useAxios from "@/hooks/useFetch";
 import { API } from "@/constants";
 import { useParams } from "next/navigation";
+import { userRoleEnums, userStatusEnums } from "../../index/userInfo";
 
 const { default: PageLayout } = require("@/layout/pageLayout");
 
@@ -79,13 +80,13 @@ const UserDetailPage = () => {
               <label htmlFor="role" className="text-lg font-bold">
               Role
               </label>
-              <p>{userData.role}</p>
+              <p>{userRoleEnums[userData.role]}</p>
             </div>
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="status" className="text-lg font-bold">
               Status
               </label>
-              <p>{userData.status}</p>
+              <p>{userStatusEnums[userData.status]}</p>
             </div>
           </div>
         </div>
