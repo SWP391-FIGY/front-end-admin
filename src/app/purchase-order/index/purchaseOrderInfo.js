@@ -1,4 +1,5 @@
 import { Dropdown } from "flowbite-react";
+import moment from "moment";
 import Link from "next/link";
 import { FiEdit, FiEye, FiMoreVertical } from "react-icons/fi";
 
@@ -118,21 +119,21 @@ export const purchaseOrderDetailInfo = [
 export const purchaseOrderColumns = [
   {
     name: "ID",
-    selector: (row) => row.id,
+    selector: (row) => row.ID,
     sortable: true,
   },
   {
     name: "Manager Name",
-    selector: (row) => row.managerId,
+    selector: (row) => row.Creator.Name,
     sortable: true,
   },
   {
     name: "Purchase Request ID",
-    selector: (row) => row.purchaseRequestId,
+    selector: (row) => row.PurchaseRequestID,
   },
   {
     name: "Created Date",
-    selector: (row) => row.createdDate,
+    selector: (row) => moment(row.CreateDate).format('DD/MM/YYYY'),
   },
   {
     name: "Status",
