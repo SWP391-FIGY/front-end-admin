@@ -124,6 +124,7 @@ const FoodDetailPage = () => {
           </div>
 
           {foodData && foodData.InventoryLog && <DataTable
+          className="overflow-y-scroll"
             columns={inventoryLogColumns}
             data={foodData.InventoryLog}
             defaultSortFieldId={1}

@@ -158,9 +158,9 @@ export const purchaseOrderColumns = [
     name: "Action",
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
-        <Link href={`/purchase-order/edit/${row.id}`}>
+        {/* <Link href={`/purchase-order/edit/${row.id}`}>
           <Dropdown.Item icon={FiEdit}>Edit</Dropdown.Item>
-        </Link>
+        </Link> */}
         <Link href={`/purchase-order/details/${row.id}`}>
           <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
         </Link>
