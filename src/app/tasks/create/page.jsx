@@ -27,6 +27,7 @@ const TaskCreatePage = () => {
   const [selectedSpecies, setSelectedSpecies] = useState(0);
   const [selectedCages, setSelectedCages] = useState([]);
   const [selectedCage, setSelectedCage] = useState(0);
+  const [selectedMenuFoods, setSelectedMenuFoods] = useState([]);
   var tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
   tomorrow.setHours(new Date().getHours() + 7);
@@ -78,6 +79,16 @@ const TaskCreatePage = () => {
   } = useAxios({
     method: 'get',
     url: `${API}/menu?expand=species`,
+  });
+
+  // Get food list
+  const {
+    response: foodResponse,
+    loading: foodLoading,
+    error: foodError,
+  } = useAxios({
+    method: 'get',
+    url: `${API}/food?select=*`,
   });
 
   const formik = useFormik({
@@ -151,8 +162,10 @@ const TaskCreatePage = () => {
   useEffect(() => {
     if (menuResponse && menuResponse.length > 0) {
       formik.setFieldValue('MenuId', menuResponse[0].id);
+      setSelectedMenuFoods(menuResponse[0].menuFoods); // Update the selectedMenuFoods state
     }
   }, [menuResponse]);
+  
 
   useEffect(() => {
     console.log(formik);
@@ -297,6 +310,32 @@ const TaskCreatePage = () => {
           {formik.touched.menuId && formik.errors.menuId ? (
             <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.menuId}</div>
           ) : null}
+        </div>
+
+        {/* //* Display Food Items */}
+        <div className="flex flex-col gap-2">
+          <Label value="Food items in the selected menu" />
+          <Table>
+            <Table.Head>
+              <Table.HeadCell>Food</Table.HeadCell>
+              <Table.HeadCell>Quantity</Table.HeadCell>
+              <Table.HeadCell>Unit</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {selectedMenuFoods &&
+                selectedMenuFoods.length > 0 &&
+                selectedMenuFoods.map((item, index) => {
+                  const foodItem = foodResponse.find((x) => x.Id === item.FoodID);
+                  return (
+                    <Table.Row key={index}>
+                      <Table.Cell>{foodItem.Name}</Table.Cell>
+                      <Table.Cell>{item.Quantity}</Table.Cell>
+                      <Table.Cell>{foodItem.Unit}</Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+            </Table.Body>
+          </Table>
         </div>
 
         <div className="flex flex-col w-[500px] gap-2">

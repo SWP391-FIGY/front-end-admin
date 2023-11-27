@@ -228,7 +228,7 @@ const MenuUpdatePage = () => {
 
         {/* //* Description */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="Description" value="Nutritional Ingredients" />
+          <Label htmlFor="Description" value="Description" />
           <TextInput
             id="Description"
             type="text"
