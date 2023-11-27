@@ -1,40 +1,41 @@
-import { Button, Dropdown } from "flowbite-react";
-import Link from "next/link";
-import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
+import Link from 'next/link';
+
+import { Button, Dropdown } from 'flowbite-react';
+import { FiEdit, FiEye, FiMoreVertical, FiTrash2 } from 'react-icons/fi';
 
 export const userColumns = [
   {
-    name: "id",
+    name: 'id',
     selector: (row) => row.id,
     sortable: true,
   },
   {
-    name: "Name",
-    selector: (row) => row.name,
+    name: 'Name',
+    selector: (row) => row.fullName,
     sortable: true,
   },
   {
-    name: "Email",
+    name: 'Email',
     selector: (row) => row.email,
     sortable: true,
   },
+  // {
+  //   name: 'Phone Number',
+  //   selector: (row) => row.phoneNumber,
+  //   sortable: true,
+  // },
   {
-    name: "Phone Number",
-    selector: (row) => row.phoneNumber,
+    name: 'Role',
+    selector: (row) => row.role,
     sortable: true,
   },
   {
-    name: "Role",
-    selector: (row) => userRoleEnums[row.role],
+    name: 'Status',
+    selector: (row) => row.status,
     sortable: true,
   },
   {
-    name: "Status",
-    selector: (row) => userStatusEnums[row.status],
-    sortable: true,
-  },
-  {
-    name: "Action",
+    name: 'Action',
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
         <Link href={`/users/edit/${row.id}`}>
@@ -48,6 +49,6 @@ export const userColumns = [
   },
 ];
 
-export const userRoleEnums = ["Admin", "Manager", "Staff"];
+export const userRoleEnums = ['Admin', 'Manager', 'Staff'];
 
-export const userStatusEnums = ["Activated", "Deactivated"];
+export const userStatusEnums = ['Active', 'Disabled'];

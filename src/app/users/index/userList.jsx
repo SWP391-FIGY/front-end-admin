@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { userColumns, userInfo, userRoleEnums } from "./userInfo";
-import DataTable from "react-data-table-component";
-import useAxios from "@/hooks/useFetch";
-import { Spinner } from "flowbite-react";
-import { API } from "@/constants";
-import { message } from "antd";
-import { getUserInfo } from "@/helper";
+import { useEffect, useState } from 'react';
+
+import { message } from 'antd';
+import { Spinner } from 'flowbite-react';
+import DataTable from 'react-data-table-component';
+
+import { API } from '@/constants';
+import { getUserInfo } from '@/helper';
+import useAxios from '@/hooks/useFetch';
+
+import { userColumns } from './userInfo';
 
 const UserList = () => {
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState('');
   const { response, loading, error } = useAxios({
-    method: "get",
+    method: 'get',
     url: `${API}/user`,
   });
 
@@ -19,20 +22,17 @@ const UserList = () => {
   const user = getUserInfo();
   useEffect(() => {
     if (user && response && response.length > 0) {
-      userRoleEnums[user.role] === "Admin"
-        ? setUserData(response.filter(x => x.roleId != 0))
-        : setUserData(response.filter((x) => x.id == user.id))
+      user.role === 'Admin' ? setUserData(response.filter((x) => x.role != 'Admin')) : setUserData(response.filter((x) => x.id == user.id));
     }
   }, [response]);
 
-  console.log("Fetched user data", response);
   if (error) {
-    message.error("Error While Getting User data");
+    message.error('Error While Getting User data');
     return <>No Data</>;
   }
   if (loading && !error)
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex items-center justify-center w-full h-full">
         <Spinner />
       </div>
     );
@@ -40,20 +40,20 @@ const UserList = () => {
   const customStyles = {
     rows: {
       style: {
-        minHeight: "200px", // override the row height
+        padding: '20px 0',
       },
     },
     headCells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
     cells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
   };
 
@@ -77,9 +77,7 @@ const UserList = () => {
           keyword && keyword.length > 0
             ? userData.filter((x) => {
                 const idMatch = x.id.toString().includes(keyword);
-                const nameMatch = x.name
-                  .toLowerCase()
-                  .includes(keyword.toLowerCase());
+                const nameMatch = x.name.toLowerCase().includes(keyword.toLowerCase());
                 return idMatch || nameMatch;
               })
             : userData

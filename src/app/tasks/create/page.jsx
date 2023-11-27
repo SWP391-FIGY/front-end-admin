@@ -1,39 +1,43 @@
-"use client";
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Datepicker,
-  Spinner,
-} from "flowbite-react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { DatePicker, Space, message } from "antd";
-import { HiPlus } from "react-icons/hi";
-import moment from "moment/moment";
-import axios from "axios";
-import { API } from "@/constants";
-import useAxios from "@/hooks/useFetch";
+'use client';
 
-const { default: PageLayout } = require("@/layout/pageLayout");
+import { useEffect, useState } from 'react';
+
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
+import { DatePicker, Space, message } from 'antd';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { Button, Datepicker, Label, Select, Spinner, Table, TextInput, Textarea } from 'flowbite-react';
+import { useFormik } from 'formik';
+import moment from 'moment/moment';
+import { FiTrash2 } from 'react-icons/fi';
+import { HiPlus } from 'react-icons/hi';
+import { HiOutlineArrowSmallLeft } from 'react-icons/hi2';
+import * as Yup from 'yup';
+
+import { API } from '@/constants';
+import useAxios from '@/hooks/useFetch';
+
+const { default: PageLayout } = require('@/layout/pageLayout');
 
 const TaskCreatePage = () => {
   const router = useRouter();
   const [spinner, setSpinner] = useState(false);
+  const [selectedSpecies, setSelectedSpecies] = useState(0);
+  const [selectedCages, setSelectedCages] = useState([]);
+  const [selectedCage, setSelectedCage] = useState(0);
+  var tomorrow = new Date();
+  tomorrow.setDate(new Date().getDate() + 1);
 
-  // Get bird list
+  // Get species list
   const {
-    response: birdResponse,
-    loading: birdLoading,
-    error: birdError,
+    response: speciesResponse,
+    loading: speciesLoading,
+    error: speciesError,
   } = useAxios({
-    method: "get",
-    url: `${API}/bird/`,
+    method: 'get',
+    url: `${API}/species/`,
   });
   // Get cage list
   const {
@@ -41,8 +45,17 @@ const TaskCreatePage = () => {
     loading: cageLoading,
     error: cageError,
   } = useAxios({
-    method: "get",
-    url: `${API}/cage/`,
+    method: 'get',
+    url: `${API}/cage?expand=species,currentbirds`,
+  });
+
+  const {
+    response: todoResponse,
+    loading: todoLoading,
+    error: todoError,
+  } = useAxios({
+    method: 'get',
+    url: `${API}/tasks/todocages`,
   });
 
   // Get staff list
@@ -52,158 +65,182 @@ const TaskCreatePage = () => {
     loading: staffLoading,
     error: staffError,
   } = useAxios({
-    method: "get",
-    url: `${API}/user/?filter=role ne 0`,
+    method: 'get',
+    url: `${API}/user/?filter=role eq 'Staff'`,
+  });
+
+  //Get menu list
+  const {
+    response: menuResponse,
+    loading: menuLoading,
+    error: menuError,
+  } = useAxios({
+    method: 'get',
+    url: `${API}/menu?expand=species`,
   });
 
   const formik = useFormik({
     initialValues: {
-      BirdId: 1,
-      CageId: 1,
-      StaffId: 1,
-      TaskName: "",
-      DateTime: moment(new Date()),
-      Description: "",
-      Status: "Pending",
+      // BirdId: 1,
+      // CageId: 1,
+      // StaffId: 1,
+      // TaskName: '',
+      // DateTime: moment(new Date()),
+      // Description: '',
+      // Status: 'Pending',
+
+      name: '',
+      description: '',
+      assignDate: moment(tomorrow),
+      status: 'Ongoing',
+      menuId: 0,
+      staffId: 0,
     },
     validationSchema: Yup.object({
-      CageId: Yup.number().required("Required"),
-      StaffId: Yup.number().required("Required"),
-      TaskName: Yup.string().required("Required"),
-      DateTime: Yup.date()
-        .min(new Date(), "Date must be today or later")
-        .required("Required"),
-      Status: Yup.string().required("Required"),
+      menuId: Yup.number().required('Required'),
+      name: Yup.string().required('Required'),
+      description: Yup.string().required('Required'),
+      menuId: Yup.number().min(1,"Please select menu"),
+      staffId: Yup.number().min(1,"Please select staff"),
+      status: Yup.string(),
     }),
     onSubmit: (values) => {
       setSpinner(true);
       const payloadData = {
-        data: values,
+        task: values,
+        cageIdList: [...selectedCages],
       };
-      console.log(payloadData.data);
+      console.log(payloadData);
+      if (!selectedCages || selectedCages.length == 0) {
+        message.error('Please select cage');
+        setSpinner(false);
+        return;
+      }
       axios
-        .post(`${API}/task`, payloadData.data)
+        .post(`${API}/tasks/assign/multiplecages`, payloadData)
         .then((response) => {
           setSpinner(false);
           formik.resetForm();
 
-          router.push("/tasks/index");
+          router.push('/tasks/index');
         })
         .then((response) => {
-          message.success("Add new task success");
+          message.success('Add new task success');
         })
         .catch((error) => {
-          message.error("An error occurred");
+          message.error('An error occurred');
           setSpinner(false);
-          console.log("An error occurred:", error.response);
+          console.log('An error occurred:', error.response);
         });
     },
   });
 
   useEffect(() => {
+    if (staffResponse && staffResponse.length > 0) {
+      formik.setFieldValue('staffId', staffResponse[0].id);
+    }
+  }, [staffResponse]);
+
+  useEffect(() => {
+    if (cageResponse && cageResponse.length > 0) {
+      formik.setFieldValue('cageId', cageResponse[0].id);
+    }
+  }, [cageResponse]);
+
+  useEffect(() => {
+    if (menuResponse && menuResponse.length > 0) {
+      formik.setFieldValue('MenuId', menuResponse[0].id);
+    }
+  }, [menuResponse]);
+
+  useEffect(() => {
     console.log(formik);
   }, [formik]);
+  useEffect(() => {
+    console.log('selectedSpecies', selectedSpecies);
+  }, [selectedSpecies]);
+
+  useEffect(() => {
+    console.log('selectedCages', selectedCages);
+  }, [selectedCages]);
+  const onAddCageClick = (e) => {
+    const existingItemIndex = selectedCages.findIndex((item) => item == selectedCage);
+
+    if (existingItemIndex === -1)
+      // If it doesn't exist, add a new item
+      setSelectedCages([...selectedCages, selectedCage]);
+  };
+
+  function deleteCageItem(cageId) {
+    const updatedCages = selectedCages.filter((item) => item !== cageId);
+    setSelectedCages(updatedCages);
+  }
+  const onCageSelected = (e) => {
+    setSelectedCage(e.target.value);
+  };
+
   return (
-    <PageLayout>
-      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-        <div className="flex flex-col justify-between gap-4">
-          <Link href={"/tasks/index"} className="flex flex-row gap-2">
-            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
-          </Link>
-          <h2 className="text-3xl font-bold">Add new task</h2>
+    <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-auto fade-in fade-in ">
+      <div className="flex flex-col justify-between gap-4">
+        <Link href={'/tasks/index'} className="flex flex-row gap-2">
+          {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+        </Link>
+      </div>
+      <form
+        onSubmit={formik.handleSubmit}
+        className="flex flex-col gap-4 w-[600px] bg-white px-4 py-8 rounded-lg shadow-lg bg-white px-4 py-10 rounded-lg"
+      >
+        <h2 className="text-3xl font-bold">Add new task for tomorrow</h2>
+
+        {/* // * task name */}
+        <div className="flex flex-col w-full gap-2">
+          <Label htmlFor="name" value="Task name" />
+          <div className="flex w-full gap-2">
+            <div className="w-full">
+              <TextInput id="name" name="name" type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.name} />
+            </div>
+          </div>
+          {formik.touched.name && formik.errors.name ? <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.name}</div> : null}
         </div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[600px]"
-        >
-          {/* //* Bird  */}
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="BirdId" value="Bird" />
-            <div className="flex w-full gap-2">
-              <div className="w-full">
-                <Select
-                  id="BirdId"
-                  onChange={(e) => {
-                    const stringSelection = e.target.value;
-                    formik.setFieldValue("BirdId", parseInt(stringSelection));
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.BirdId}
-                >
-                  <option value={null}>
-                    None
-                  </option>
-                  {birdResponse && birdResponse.length > 0 ? (
-                    birdResponse.map((bird, index) => {
-                      return (
-                        <option key={index} value={bird.id}>
-                          Bird {bird.id}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option disabled>Loading...</option>
-                  )}
-                </Select>
-              </div>
+        <div className="flex flex-col w-full gap-2">
+          <Label htmlFor="description" value="Description" />
+          <div className="flex w-full gap-2">
+            <div className="w-full">
+              <Textarea
+                id="description"
+                name="description"
+                type="text"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.description}
+              />
             </div>
-
-            {formik.touched.BirdId && formik.errors.BirdId ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.BirdId}
-              </div>
-            ) : null}
           </div>
-
-          {/* // * Bird cage */}
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="CageId" value="Bird cage" />
-            <div className="flex w-full gap-2">
-              <div className="w-full">
-                <Select
-                  id="CageID"
-                  onChange={(e) => {
-                    const stringSelection = e.target.value;
-                    formik.setFieldValue("CageID", parseInt(stringSelection));
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.CageID}
-                >
-                  {cageResponse && cageResponse.length > 0 ? (
-                    cageResponse.map((cage, index) => {
-                      return (
-                        <option key={index} value={cage.id}>
-                          Cage {cage.id}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option disabled>Loading...</option>
-                  )}
-                </Select>
-              </div>
-            </div>
-            {formik.touched.CageId && formik.errors.CageId ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.CageId}
-              </div>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="StaffId" value="Staff" />
+          {formik.touched.description && formik.errors.description ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.description}</div>
+          ) : null}
+        </div>
+        {/* //* Bird species */}
+        <div className="flex flex-col w-full gap-2">
+          <Label htmlFor="speciesId" value="Bird species" />
+          <div className="flex w-full gap-2">
             <Select
-              id="StaffId"
-              name="StaffId"
-              onChange={formik.handleChange}
+              id="speciesId"
+              onChange={(e) => {
+                const stringSelection = e.target.value;
+                setSelectedCages([])
+                console.log('selected species',stringSelection);
+                setSelectedSpecies(parseInt(stringSelection));
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.StaffId}
+              value={selectedSpecies}
             >
-              {staffResponse && staffResponse.length > 0 ? (
-                staffResponse.map((staff, index) => {
+              <option value={0}>Choose species...</option>
+              {speciesResponse && speciesResponse.length > 0 ? (
+                speciesResponse.map((species, index) => {
                   return (
-                    <option key={index} value={staff.id}>
-                      Staff {staff.name}
+                    <option key={index} value={species.id}>
+                      {species.name}
                     </option>
                   );
                 })
@@ -211,79 +248,143 @@ const TaskCreatePage = () => {
                 <option disabled>Loading...</option>
               )}
             </Select>
-            {formik.touched.StaffId && formik.errors.StaffId ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.StaffId}
-              </div>
-            ) : null}
           </div>
 
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="TaskName" value="Task name" />
-            <TextInput
-              id="TaskName"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.TaskName}
-            />
-            {formik.touched.TaskName && formik.errors.TaskName ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.TaskName}
-              </div>
-            ) : null}
-          </div>
+          {formik.touched.speciesId && formik.errors.speciesId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.speciesId}</div>
+          ) : null}
+        </div>
 
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DateTime" value="Date and Time" />
-            <Space direction="vertical" size={12}>
-              <DatePicker
-                className="!important"
-                showTime
-                minuteStep={30}
-                secondStep={60}
-                autoClose
-                onSelect={(value) => {
-                  formik.setFieldValue("DateTime", value.$d);
-                }}
-              />
-            </Space>
-            {formik.touched.DateTime && formik.errors.DateTime ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.DateTime}
-              </div>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="Description" value="Description" />
-            <TextInput
-              id="Description"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.Description}
-            />
-            {formik.touched.Description && formik.errors.Description ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Description}
-              </div>
-            ) : null}
-          </div>
-
-          <Button type="submit">
-            {spinner ? (
-              <div className="flex justify-center items-center gap-4">
-                <Spinner aria-label="Spinner button example" />
-                <p>Loading...</p>
-              </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="staffId" value="Staff" />
+          <Select id="staffId" name="staffId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.staffId}>
+            <option value={0}>Choose staff...</option>
+            {staffResponse && staffResponse.length > 0 ? (
+              staffResponse.map((staff, index) => {
+                return (
+                  <option key={index} value={staff.id}>
+                    Staff {staff.fullName}
+                  </option>
+                );
+              })
             ) : (
-              <>Submit</>
+              <option disabled>Loading...</option>
             )}
-          </Button>
-        </form>
-      </div>
-    </PageLayout>
+          </Select>
+          {formik.touched.staffId && formik.errors.staffId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.staffId}</div>
+          ) : null}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="menuId" value="Menu" />
+          <Select id="menuId" name="menuId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.menuId}>
+            <option value={0}>Choose menu...</option>
+            {menuResponse && menuResponse.length > 0 ? (
+              menuResponse
+                .filter((x) => selectedSpecies && x.SpeciesId == selectedSpecies)
+                .map((menu, index) => {
+                  return (
+                    <option key={index} value={menu.Id}>
+                      Menu {menu.Name} - {menu.Species && menu.Species.Name}
+                    </option>
+                  );
+                })
+            ) : (
+              <option disabled>Loading...</option>
+            )}
+          </Select>
+          {formik.touched.menuId && formik.errors.menuId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.menuId}</div>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col w-[500px] gap-2">
+          <Label htmlFor="endDate" value="Assigning date" />
+          <Space direction="vertical" size={12}>
+            <DatePicker
+              className="!important"
+              // showTime
+              // minuteStep={30}
+              // secondStep={60}
+              value={dayjs(tomorrow)}
+              disabled
+            />
+          </Space>
+          {formik.touched.endDate && formik.errors.endDate ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.endDate}</div>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label value="Assigning Cages" />
+          <Table>
+            <Table.Head>
+              <Table.HeadCell>Cage - {selectedCages.length}</Table.HeadCell>
+              <Table.HeadCell></Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {selectedCages.length > 0 &&
+                selectedCages.map((item, index) => {
+                  var cage = cageResponse.find((x) => x.Id == item);
+                  console.log('found dcage', cage);
+                  return (
+                    <Table.Row key={index}>
+                      <Table.Cell>
+                        Cage {cage.Id} - {cage.Species.Name} - {cage.Period} - No. of Birds:{' '}
+                        {cage.CurrentBirds && cage.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length}
+                      </Table.Cell>
+                      <Table.Cell className="flex items-center gap-2" onClick={() => deleteCageItem(item)}>
+                        <FiTrash2 />
+                        Delete
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              <Table.Row>
+                <Table.Cell>
+                  <Select id="selectedFood" onChange={onCageSelected} value={selectedCage}>
+                    <option value={0}>Choose cage...</option>
+                    {todoResponse && todoResponse.length > 0 ? (
+                      todoResponse
+                        .filter((x) => {
+                          var activeBirdInCage = x.currentBirds ? x.currentBirds.filter((x) => x.status != 'Sold' && x.status != 'Dead').length : 0;
+                          var isSameSpecies = selectedSpecies == x.speciesId;
+                          return activeBirdInCage > 0 && isSameSpecies;
+                        })
+                        .map((cage, index) => {
+                          return (
+                            <option key={index} value={cage.id}>
+                              Cage {cage.id} - {cage.species.name} - {cage.period} - No. of Birds:{' '}
+                              {cage.currentBirds ? cage.currentBirds.filter((x) => x.status != 'Sold' && x.status != 'Dead').length : 0}
+                            </option>
+                          );
+                        })
+                    ) : (
+                      <option disabled>Loading...</option>
+                    )}
+                  </Select>
+                </Table.Cell>
+
+                <Table.Cell>
+                  <Button onClick={onAddCageClick}>Add Cage</Button>
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </div>
+
+        <Button type="submit">
+          {spinner ? (
+            <div className="flex items-center justify-center gap-4">
+              <Spinner aria-label="Spinner button example" />
+              <p>Loading...</p>
+            </div>
+          ) : (
+            <>Submit</>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 };
 
