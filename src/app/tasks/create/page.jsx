@@ -30,6 +30,7 @@ const TaskCreatePage = () => {
   const [selectedMenuFoods, setSelectedMenuFoods] = useState([]);
   var tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
+  tomorrow.setHours(new Date().getHours() + 7);
 
   // Get species list
   const {
