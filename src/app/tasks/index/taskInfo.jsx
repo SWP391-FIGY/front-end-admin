@@ -1,16 +1,43 @@
 import Link from 'next/link';
 
 import Tippy from '@tippyjs/react';
-import { Tag } from 'antd';
+import { Tag, message } from 'antd';
 import { Dropdown } from 'flowbite-react';
 import _get from 'lodash/get';
 import moment from 'moment';
 import { FiEdit, FiEye, FiMoreVertical } from 'react-icons/fi';
 
+import { API } from '@/constants';
 import { getUserInfo } from '@/helper';
 import { truncate } from '@/utils/string.helper';
+import { BsCheck } from 'react-icons/bs';
+import { GiSandsOfTime } from 'react-icons/gi';
+import { MdCancel } from "react-icons/md";
 
 const user = getUserInfo();
+const handleChangeStatus = async (row, status) => {
+  try {
+    const response = await fetch(`${API}/tasks/${row.Id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...row,
+        Status: status,
+      }),
+    });
+
+    if (response.ok) {
+      message.info(`Task ${row.Id} status updated`);
+    } else {
+      console.error(`Failed to update task ${row.Id} status: ${response.statusText}`);
+    }
+    location.reload()
+  } catch (error) {
+    console.error(`Error updating task ${row.Id} status: ${error.message}`);
+  }
+};
 export const taskColumns = [
   {
     name: 'ID',
@@ -74,30 +101,8 @@ export const taskColumns = [
   },
   {
     name: 'Action',
+    allowOverflow:true,
     cell: (row) => {
-      const handleChangeStatus = async () => {
-        if (row.Status !== 'Done' && user && user.role !== 'Staff') {
-          try {
-            const response = await fetch(`/api/tasks/${row.Id}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                Status: 'Done',
-              }),
-            });
-  
-            if (response.ok) {
-              console.log(`Task ${row.Id} status updated to "Done"`);
-            } else {
-              console.error(`Failed to update task ${row.Id} status: ${response.statusText}`);
-            }
-          } catch (error) {
-            console.error(`Error updating task ${row.Id} status: ${error.message}`);
-          }
-        }
-      };
       return (
         <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
           {user && user.role !== 'Staff' && (
@@ -108,7 +113,11 @@ export const taskColumns = [
           <Link href={`/tasks/details/${row.Id}`}>
             <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
           </Link>
-          <Dropdown.Item onClick={handleChangeStatus}>Change Status to Done</Dropdown.Item>
+          {row.Status != 'Done' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Done')} icon={BsCheck}>Mark as Done</Dropdown.Item>}
+          {row.Status != 'Ongoing' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Ongoing')} icon={GiSandsOfTime}>Mark task as Ongoing</Dropdown.Item>}
+          {user && user.role != 'Staff' && row.Status != 'Cancel' && (
+            <Dropdown.Item onClick={() => handleChangeStatus(row, 'Cancel')} icon={MdCancel}>Cancel task</Dropdown.Item>
+          )}
         </Dropdown>
       );
     },

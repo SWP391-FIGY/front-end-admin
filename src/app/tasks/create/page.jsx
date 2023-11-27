@@ -27,7 +27,8 @@ const TaskCreatePage = () => {
   const [selectedSpecies, setSelectedSpecies] = useState(0);
   const [selectedCages, setSelectedCages] = useState([]);
   const [selectedCage, setSelectedCage] = useState(0);
-  const [selectedMenuFoods, setSelectedMenuFoods] = useState([]);
+  const [selectedMenu, setSelectedMenu] = useState({});
+
   var tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
   tomorrow.setHours(new Date().getHours() + 7);
@@ -78,7 +79,7 @@ const TaskCreatePage = () => {
     error: menuError,
   } = useAxios({
     method: 'get',
-    url: `${API}/menu?expand=species`,
+    url: `${API}/menu?expand=species,menufoods($expand=food)`,
   });
 
   // Get food list
@@ -161,11 +162,18 @@ const TaskCreatePage = () => {
 
   useEffect(() => {
     if (menuResponse && menuResponse.length > 0) {
-      formik.setFieldValue('MenuId', menuResponse[0].id);
-      setSelectedMenuFoods(menuResponse[0].menuFoods); // Update the selectedMenuFoods state
+      formik.setFieldValue('menuId', menuResponse[0].id);
+      setSelectedMenu(menuResponse[0].menuFoods); // Update the selectedMenuFoods state
     }
   }, [menuResponse]);
   
+  useEffect(() => {
+    if (menuResponse && menuResponse.length > 0 && formik.values.menuId) {
+      const menu = menuResponse.find(x => x.Id == formik.values.menuId)
+      console.log('found menu',menu);
+      setSelectedMenu(menu); // Update the selectedMenuFoods state
+    }
+  }, [formik.values.menuId]);
 
   useEffect(() => {
     console.log(formik);
@@ -243,6 +251,8 @@ const TaskCreatePage = () => {
               onChange={(e) => {
                 const stringSelection = e.target.value;
                 setSelectedCages([])
+                setSelectedMenu({})
+                formik.setFieldValue('menuId', 0);
                 console.log('selected species',stringSelection);
                 setSelectedSpecies(parseInt(stringSelection));
               }}
@@ -318,18 +328,17 @@ const TaskCreatePage = () => {
           <Table>
             <Table.Head>
               <Table.HeadCell>Food</Table.HeadCell>
-              <Table.HeadCell>Quantity</Table.HeadCell>
+              <Table.HeadCell>Required Quantity</Table.HeadCell>
               <Table.HeadCell>Unit</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {selectedMenuFoods &&
-                selectedMenuFoods.length > 0 &&
-                selectedMenuFoods.map((item, index) => {
-                  const foodItem = foodResponse.find((x) => x.Id === item.FoodID);
+              {formik.values.menuId && formik.values.menuId > 0 &&
+                menuResponse.find(x => x.Id == formik.values.menuId).MenuFoods.map((item, index) => {
+                  const foodItem = item.Food;
                   return (
                     <Table.Row key={index}>
                       <Table.Cell>{foodItem.Name}</Table.Cell>
-                      <Table.Cell>{item.Quantity}</Table.Cell>
+                      <Table.Cell>{item.Quantity} </Table.Cell>
                       <Table.Cell>{foodItem.Unit}</Table.Cell>
                     </Table.Row>
                   );
