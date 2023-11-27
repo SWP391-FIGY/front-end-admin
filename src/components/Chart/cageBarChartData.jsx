@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import useAxios from "@/hooks/useFetch";
-import { API } from "@/constants";
+import React, { useEffect, useState } from 'react';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+import { API } from '@/constants';
+import useAxios from '@/hooks/useFetch';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const CageBarChartData = () => {
   const { response, loading, error } = useAxios({
-    method: "get",
+    method: 'get',
     url: `${API}/cage?expand=Birds`,
   });
 
   const [cageCounts, setCageCounts] = useState([]);
 
   const options = {
-    indexAxis: "y",
+    indexAxis: 'y',
     elements: {
       bar: {
         borderWidth: 4,
@@ -39,32 +26,23 @@ const CageBarChartData = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "right",
+        position: 'right',
       },
       title: {
         display: true,
-        text: "Number of bird in Cage",
+        text: 'Number of bird in Cage',
       },
-    }
+    },
   };
 
-  console.log(response);
   const data = {
-    labels:
-      response && response.length > 0
-        ? response.slice(0, 5).map((item) => `Cage ${item.ID}`)
-        : [],
+    labels: response && response.length > 0 ? response.slice(0, 5).map((item) => `Cage ${item.ID}`) : [],
     datasets: [
       {
         label: 'Bird in cage',
-        data:
-          response && response.length > 0
-            ? response.slice(0, 5).map((item) => item.Birds.length)
-            : [],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        
-        
+        data: response && response.length > 0 ? response.slice(0, 5).map((item) => item.Birds.length) : [],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
   };
