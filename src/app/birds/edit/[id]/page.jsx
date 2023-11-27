@@ -1,31 +1,28 @@
-"use client";
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Datepicker,
-  Spinner,
-  FileInput,
-} from "flowbite-react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-import { message } from "antd";
-import { HiPlus } from "react-icons/hi";
-import moment from "moment/moment";
-import axios from "axios";
-import { API } from "@/constants";
-import { useParams } from "next/navigation";
-import useAxios from "@/hooks/useFetch";
-import { birdStatusEnum } from "../../index/birdInfo";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { firebaseStorage } from "@/firebase/config";
+'use client';
 
-const { default: PageLayout } = require("@/layout/pageLayout");
+import { useEffect, useState } from 'react';
+
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+
+import { message } from 'antd';
+import axios from 'axios';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Button, Datepicker, FileInput, Label, Select, Spinner, TextInput } from 'flowbite-react';
+import { useFormik } from 'formik';
+import moment from 'moment/moment';
+import { HiPlus } from 'react-icons/hi';
+import { HiOutlineArrowSmallLeft } from 'react-icons/hi2';
+import * as Yup from 'yup';
+
+import { API } from '@/constants';
+import { firebaseStorage } from '@/firebase/config';
+import useAxios from '@/hooks/useFetch';
+
+import { birdStatusEnum } from '../../index/birdInfo';
+
+const { default: PageLayout } = require('@/layout/pageLayout');
 
 const BirdEditPage = () => {
   const router = useRouter();
@@ -41,7 +38,7 @@ const BirdEditPage = () => {
     loading: birdLoading,
     error: birdError,
   } = useAxios({
-    method: "get",
+    method: 'get',
     url: `${API}/bird/?filter=ID%20eq%20${birdId}&$select=*`,
   });
 
@@ -51,7 +48,7 @@ const BirdEditPage = () => {
     loading: speciesLoading,
     error: speciesError,
   } = useAxios({
-    method: "get",
+    method: 'get',
     url: `${API}/species/`,
   });
   // Get cage list
@@ -60,8 +57,8 @@ const BirdEditPage = () => {
     loading: cageLoading,
     error: cageError,
   } = useAxios({
-    method: "get",
-    url: `${API}/cage/`,
+    method: 'get',
+    url: `${API}/cage/?expand=species`,
   });
 
   // Fetch old data to form
@@ -75,75 +72,42 @@ const BirdEditPage = () => {
     }
   }, [birdResponse]);
 
-  const urlRegExp =
-    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+  const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const formik = useFormik({
     initialValues: {
-      ID: birdId,
-      Description: "",
-      BirdImageUrl: "",
+      Id: birdId,
       SpeciesId: 1,
-      CageID: 1,
-      DoB: moment(new Date()),
-      LastModifyDate: moment(new Date()),
-      Gender: "Male",
-      BirdStatus: 1,
+      CageId: 1,
+      Gender: 'Male',
+      IsSick: false,
+      Status: 'Active',
+      IsDelete: false,
+      LastModifyingDate: moment(new Date()),
     },
     validationSchema: Yup.object({
-      Description: Yup.string().required("Required"),
-      SpeciesId: Yup.number().required("Required"),
-      SpeciesId: Yup.number().required("Required"),
-      CageID: Yup.number().required("Required"),
-      DoB: Yup.date()
-        .max(new Date(), "Birth date must before today")
-        .required("Required"),
+      SpeciesId: Yup.number().required('Required'),
+      CageId: Yup.number().required('Required'),
     }),
     onSubmit: async (values) => {
-      try {
-        setSpinner(true);
-        if (!imagePreview) {
-          message.error("Please upload an image");
-          throw new Error("Please upload an image");
-        }
-        var imageLink = birdResponse[0].BirdImageUrl;
-        if (imagePreview != birdResponse[0].BirdImageUrl) {
-          const fileRef = ref(
-            firebaseStorage,
-            `/birdImages/${moment().format("DDMMYYYYHHmm")}-${imageUpload.name}`
-          );
-          await uploadBytes(fileRef, imageUpload).then(async (data) => {
-            await getDownloadURL(data.ref).then(async (url) => {
-              console.log("fileUrl", url);
-              imageLink = url;
-            })
-          })
-        }
-
-        const payloadData = {
-          data: values,
-        };
-        payloadData.data.BirdImageUrl = imageLink;
-        console.log("submit data", payloadData.data);
-        await axios
-          .put(`${API}/bird/${birdId}`, payloadData.data)
-          .then((response) => {
-            setSpinner(false);
-            formik.resetForm();
-            
-            router.push("/birds/index");
-          })
-          .then((response) => {
-            message.success("Update bird success");
-          })
-          .catch((error) => {
-            message.error("An error occurred");
-            setSpinner(false);
-            console.log("An error occurred:", error.response);
-          });
-      } catch (e) {
-        console.error(e);
-        setSpinner(false);
-      }
+      const payloadData = {
+        data: values,
+      };
+      console.log('submit data', payloadData.data);
+      await axios
+        .put(`${API}/bird/${birdId}`, payloadData.data)
+        .then((response) => {
+          setSpinner(false);
+          formik.resetForm();
+          router.push('/birds/index');
+        })
+        .then((response) => {
+          message.success('Update bird success');
+        })
+        .catch((error) => {
+          message.error('An error occurred');
+          setSpinner(false);
+          console.log('An error occurred:', error.response);
+        });
     },
   });
 
@@ -153,212 +117,157 @@ const BirdEditPage = () => {
 
     setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
+
+  const handleSickChange = (e) => {
+    if (e.target.value == "true") formik.setFieldValue('IsSick', true);
+    else formik.setFieldValue('IsSick', false);
+  }
   useEffect(() => {
     console.log(formik);
   }, [formik]);
+
+  const cageSelection = cageResponse && formik.values.SpeciesId? cageResponse.filter(cage => cage.SpeciesId === formik.values.SpeciesId) : cageResponse
+
   return (
-    <PageLayout>
-      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-        <div className="flex flex-col justify-between gap-4">
-          <Link href={"/birds/index"} className="flex flex-row gap-2">
-            {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
-          </Link>
-          <h2 className="text-3xl font-bold">Edit Bird</h2>
-        </div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-full"
-        >
-          <Label value="Bird ID" />
-          <div>{formik.values.ID}</div>
-          {/* // * Bird birthDate */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="DoB" value="Birthdate" />
-            <Datepicker
-              id="DoB"
-              language="vi-VN"
-              value={moment(formik.values.DoB).format("DD/MM/YYYY")}
-              onSelectedDateChanged={(date) => {
-                console.log(new Date(date));
-                formik.setFieldValue("DoB", date);
-                console.log("value", formik.values);
-                console.log("errors", formik.errors);
-              }}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.DoB && formik.errors.DoB ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.DoB}
-              </div>
-            ) : null}
-          </div>
-
-          {/* // * Bird gender */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Gender" value="Bird gender" />
-            <Select
-              id="Gender"
-              disabled
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.Gender}
-            >
-              <option>Trống</option>
-              <option>Cái</option>
-            </Select>
-            {formik.touched.Gender && formik.errors.Gender ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Gender}
-              </div>
-            ) : null}
-          </div>
-
-          {/* //* Bird Description */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="Description" value="Description" />
-            <TextInput
-              id="Description"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.Description}
-            />
-            {formik.touched.Description && formik.errors.Description ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.Description}
-              </div>
-            ) : null}
-          </div>
-
-          {/* //* Bird image */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <div className="mb-2 block">
-              <Label htmlFor="file" value="Bird Image" />
-            </div>
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                className="w-[200px] h-[200px] bg-cover"
-                alt="Image Preview"
-              />
-            )}
-            <FileInput onChange={handleFileUpload} id="file" />
-          </div>
-
-          {/* // * Bird status */}
-          <div className="flex flex-col w-[500px] gap-2">
-            <Label htmlFor="BirdStatus" value="Bird status" />
-            <Select
-              id="BirdStatus"
-              onChange={(e) => {
-                const stringSelection = e.target.value;
-                formik.setFieldValue("BirdStatus", parseInt(stringSelection));
-              }}
-              onBlur={formik.handleBlur}
-              value={formik.values.BirdStatus}
-            >
-              {birdStatusEnum.map((status, index) => {
-                return (
-                  <option key={index} value={index}>
-                    {status}
-                  </option>
-                );
-              })}
-            </Select>
-            {formik.touched.BirdStatus && formik.errors.BirdStatus ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.BirdStatus}
-              </div>
-            ) : null}
-          </div>
-
-          {/* //* Bird species */}
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="SpeciesId" value="Bird species" />
-            <div className="flex w-full gap-2">
-              <div className="w-[500px]">
-                <Select
-                  id="SpeciesId"
-                  disabled
-                  onChange={(e) => {
-                    const stringSelection = e.target.value;
-                    formik.setFieldValue(
-                      "SpeciesId",
-                      parseInt(stringSelection)
-                    );
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.SpeciesId}
-                >
-                  {speciesResponse && speciesResponse.length > 0 ? (
-                    speciesResponse.map((species, index) => {
-                      return (
-                        <option key={index} value={species.id}>
-                          {species.name}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option disabled>Loading...</option>
-                  )}
-                </Select>
-              </div>
-            </div>
-
-            {formik.touched.SpeciesId && formik.errors.SpeciesId ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.SpeciesId}
-              </div>
-            ) : null}
-          </div>
-          {/* // * Bird cage */}
-          <div className="flex flex-col w-full gap-2">
-            <Label htmlFor="CageID" value="Bird cage" />
-            <div className="flex w-full gap-2">
-              <div className="w-[500px]">
-                <Select
-                  id="CageID"
-                  onChange={(e) => {
-                    const stringSelection = e.target.value;
-                    formik.setFieldValue("CageID", parseInt(stringSelection));
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.CageID}
-                >
-                  {cageResponse && cageResponse.length > 0 ? (
-                    cageResponse.map((cage, index) => {
-                      return (
-                        <option key={index} value={cage.id}>
-                          Cage {cage.id}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option disabled>Loading...</option>
-                  )}
-                </Select>
-              </div>
-            </div>
-            {formik.touched.CageID && formik.errors.CageID ? (
-              <div className="text-xs text-red-600 dark:text-red-400">
-                {formik.errors.CageID}
-              </div>
-            ) : null}
-          </div>
-
-          <Button type="submit" className="w-[500px] ">
-            {spinner ? (
-              <div className="flex justify-center items-center gap-4">
-                <Spinner aria-label="Spinner button example" />
-                <p>Loading...</p>
-              </div>
-            ) : (
-              <>Submit</>
-            )}
-          </Button>
-        </form>
+    <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-auto fade-in">
+      <div className="flex flex-col justify-between gap-4">
+        <Link href={'/birds/index'} className="flex flex-row gap-2">
+          {<HiOutlineArrowSmallLeft className="self-center" />} Back to list
+        </Link>
       </div>
-    </PageLayout>
+      <form onSubmit={formik.handleSubmit} className="flex flex-col w-full max-w-xl gap-4 px-4 py-8 bg-white rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold">Edit Bird</h2>
+        <Label value="Bird ID" />
+        <div>{formik.values.Id}</div>
+
+        {/* // * Bird gender */}
+        <div className="flex flex-col w-[500px] gap-2">
+          <Label htmlFor="Gender" value="Bird gender" />
+          <Select id="Gender" disabled onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Gender}>
+            <option>Trống</option>
+            <option>Cái</option>
+          </Select>
+          {formik.touched.Gender && formik.errors.Gender ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Gender}</div>
+          ) : null}
+        </div>
+
+        {/* // * Bird status */}
+        <div className="flex flex-col w-[500px] gap-2">
+          <Label htmlFor="Status" value="Bird status" />
+          <Select
+            id="Status"
+            onChange={(e) => {
+              const stringSelection = e.target.value;
+              formik.setFieldValue('Status', stringSelection);
+            }}
+            onBlur={formik.handleBlur}
+            value={formik.values.Status}
+          >
+            {birdStatusEnum.map((status, index) => {
+              return (
+                <option key={index}>
+                  {status}
+                </option>
+              );
+            })}
+          </Select>
+          {formik.touched.Status && formik.errors.Status ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Status}</div>
+          ) : null}
+        </div>
+
+        {/* //* Bird species */}
+        <div className="flex flex-col w-full gap-2">
+          <Label htmlFor="SpeciesId" value="Bird species" />
+          <div className="flex w-full gap-2">
+            <div className="w-[500px]">
+              <Select
+                id="SpeciesId"
+                disabled
+                onChange={(e) => {
+                  const stringSelection = e.target.value;
+                  formik.setFieldValue('SpeciesId', parseInt(stringSelection));
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.SpeciesId}
+              >
+                {speciesResponse && speciesResponse.length > 0 ? (
+                  speciesResponse.map((species, index) => {
+                    return (
+                      <option key={index} value={species.id}>
+                        {species.name}
+                      </option>
+                    );
+                  })
+                ) : (
+                  <option disabled>Loading...</option>
+                )}
+              </Select>
+            </div>
+          </div>
+
+          {formik.touched.SpeciesId && formik.errors.SpeciesId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.SpeciesId}</div>
+          ) : null}
+        </div>
+        {/* // * Bird cage */}
+        <div className="flex flex-col w-full gap-2">
+          <Label htmlFor="CageId" value="Bird cage" />
+          <div className="flex w-full gap-2">
+            <div className="w-[500px]">
+              <Select
+                id="CageId"
+                onChange={(e) => {
+                  const stringSelection = e.target.value;
+                  formik.setFieldValue('CageId', parseInt(stringSelection));
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.CageId}
+              >
+                {cageResponse && cageResponse.length > 0 ? (
+                  cageSelection.map((cage, index) => {
+                    return (
+                      <option key={index} value={cage.Id}>
+                        Cage {cage.Id} - {cage.Species.Name} - {cage.Period}
+                      </option>
+                    );
+                  })
+                ) : (
+                  <option disabled>Loading...</option>
+                )}
+              </Select>
+            </div>
+          </div>
+          {formik.touched.CageId && formik.errors.CageId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.CageId}</div>
+          ) : null}
+        </div>
+
+        {/* // * Is Sick */}
+        <div className="flex flex-col w-[500px] gap-2">
+          <Label htmlFor="IsSick" value="Is sick" />
+          <Select id="IsSick" onChange={handleSickChange} onBlur={formik.handleBlur} value={formik.values.IsSick}>
+            <option value={true}>True</option>
+            <option value={false}>False</option>
+          </Select>
+          {formik.touched.IsSick && formik.errors.IsSick ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.IsSick}</div>
+          ) : null}
+        </div>
+
+        <Button type="submit" className="w-[500px] ">
+          {spinner ? (
+            <div className="flex items-center justify-center gap-4">
+              <Spinner aria-label="Spinner button example" />
+              <p>Loading...</p>
+            </div>
+          ) : (
+            <>Submit</>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 };
 

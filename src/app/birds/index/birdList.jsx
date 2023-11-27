@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { birdColumns, birdInfo } from "./birdInfo";
-import DataTable from "react-data-table-component";
-import useAxios from "@/hooks/useFetch";
-import { Spinner } from "flowbite-react";
-import { API } from "@/constants";
-import { message } from "antd";
+import React, { useEffect, useState } from 'react';
+
+import { message } from 'antd';
+import { Spinner } from 'flowbite-react';
+import DataTable from 'react-data-table-component';
+
+import { API } from '@/constants';
+import useAxios from '@/hooks/useFetch';
+
+import { birdColumns, birdInfo } from './birdInfo';
 
 const BirdList = () => {
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState('');
   const { response, loading, error } = useAxios({
-    method: "get",
+    method: 'get',
     url: `${API}/bird?expand=cage,species`,
   });
 
-  console.log("Fetched bird data", response);
+  console.log('Fetched bird data', response);
   if (error) {
-    message.error("Error While Getting Bird data");
+    message.error('Error While Getting Bird data');
     return <>No Data</>;
   }
   if (loading && !error)
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex items-center justify-center w-full h-full">
         <Spinner />
       </div>
     );
@@ -28,20 +31,20 @@ const BirdList = () => {
   const customStyles = {
     rows: {
       style: {
-        minHeight: "200px", // override the row height
+        padding: '20px 0',
       },
     },
     headCells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
     cells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
   };
 
@@ -53,7 +56,6 @@ const BirdList = () => {
           value={keyword}
           onChange={(e) => {
             setKeyword(e.target.value);
-            console.log(keyword);
           }}
           name="search"
           placeholder="Enter your search"
@@ -64,7 +66,7 @@ const BirdList = () => {
         data={
           response && response.length > 0 && keyword && keyword.length > 0
             ? response.filter((x) => {
-                console.log("filter item", x);
+                console.log('filter item', x);
                 const idMatch = x.ID.toString().includes(keyword);
                 const descMatch = x.Description.includes(keyword);
 

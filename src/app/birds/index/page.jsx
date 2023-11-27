@@ -1,15 +1,16 @@
-"use client";
-//import BirdList from "./birdList";
-import PageLayout from "@/layout/pageLayout";
-import { HiPlus } from "react-icons/hi";
-import { useRouter } from "next/navigation";
-import { Button } from "flowbite-react";
-import Link from "next/link";
-import dynamic from "next/dynamic";
-import { getUserInfo } from "@/helper";
-import { userRoleEnums } from "@/app/users/index/userInfo";
+'use client';
 
-const DynamicBirdList = dynamic(() => import("./birdList"), {
+//import BirdList from "./birdList";
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { Button } from 'flowbite-react';
+import { HiPlus } from 'react-icons/hi';
+
+import { getUserInfo } from '@/helper';
+
+const DynamicBirdList = dynamic(() => import('./birdList'), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
@@ -18,27 +19,25 @@ const BirdListPage = () => {
   const user = getUserInfo();
 
   return (
-    <PageLayout>
-      <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-scroll">
-        <div className="flex flex-row justify-between">
-          <h2 className="text-3xl font-bold">Bird List</h2>
+    <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-auto fade-in">
+      <div className="flex flex-row justify-between">
+        <h2 className="text-3xl font-bold">Bird List</h2>
 
-          {user && userRoleEnums[user.role] !== "Staff" && (
-            <Link href={"/birds/create"}>
-              <Button>
-                <div className="flex flex-row justify-center gap-4">
-                  <div className="my-auto">
-                    <HiPlus />
-                  </div>
-                  <p>Add new bird</p>
+        {user && user.role !== 'Staff' && (
+          <Link href={'/birds/create'}>
+            <Button>
+              <div className="flex flex-row justify-center gap-4">
+                <div className="my-auto">
+                  <HiPlus />
                 </div>
-              </Button>
-            </Link>
-          )}
-        </div>
-        <DynamicBirdList />
+                <p>Add new bird</p>
+              </div>
+            </Button>
+          </Link>
+        )}
       </div>
-    </PageLayout>
+      <DynamicBirdList />
+    </div>
   );
 };
 
