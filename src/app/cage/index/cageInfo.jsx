@@ -33,6 +33,11 @@ export const cageColumns = [
     sortable: true,
   },
   {
+    name: 'Birds in cage',
+    selector: (row) => (row.CurrentBirds ? row.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length : 0),
+    sortable: true,
+  },
+  {
     name: 'Capacity',
     selector: (row) => row.Capacity,
   },
