@@ -149,16 +149,8 @@ export const todoCageColumns = [
 export const taskStatusEnum = ['Done', 'Cancel', 'Ongoing'];
 
 export const taskStatusOptions = [
-  {
-    label: 'Not Assign',
-    value: 'Not Assign',
-    color: 'gray',
-  },
-  {
-    label: 'Pending',
-    value: 'Pending',
-    color: 'yellow',
-  },
+  
+  
   {
     label: 'Done',
     value: 'Done',
@@ -169,21 +161,13 @@ export const taskStatusOptions = [
     value: 'Cancel',
     color: 'red',
   },
-  {
-    label: 'Overdue',
-    value: 'Overdue',
-    color: 'red',
-  },
+  
   {
     label: 'Ongoing',
     value: 'Ongoing',
     color: 'blue',
   },
-  {
-    label: 'Upcoming',
-    value: 'Upcoming',
-    color: 'green',
-  },
+  
 ];
 
 function formatDateTime(dateTime) {
