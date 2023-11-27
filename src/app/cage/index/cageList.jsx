@@ -10,7 +10,7 @@ const CageList = () => {
   const [keyword, setKeyword] = useState("");
   const { response, loading, error } = useAxios({
     method: "get",
-    url: `${API}/cage`,
+    url: `${API}/cage?expand=species`,
   });
 
   console.log("Fetched cage data", response);
