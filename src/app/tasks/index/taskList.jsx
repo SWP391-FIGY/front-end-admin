@@ -138,7 +138,7 @@ const TaskList = () => {
               }) || []
           }
           pagination
-          defaultSortFieldId={5}
+          defaultSortFieldId={8}
           defaultSortAsc={false}
           className="overflow-auto"
           customStyles={customStyles}
