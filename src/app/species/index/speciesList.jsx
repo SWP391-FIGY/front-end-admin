@@ -20,7 +20,7 @@ const SpeciesList = () => {
   }
   if (loading && !error)
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex items-center justify-center w-full h-full">
         <Spinner />
       </div>
     );
@@ -28,20 +28,20 @@ const SpeciesList = () => {
   const customStyles = {
     rows: {
       style: {
-        minHeight: "200px", // override the row height
+        padding: "20px 0",
       },
     },
     headCells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
     cells: {
-      style: {
-        paddingLeft: "3px", // override the cell padding for data cells
-        paddingRight: "3px",
-      },
+      // style: {
+      //   paddingLeft: "3px", // override the cell padding for data cells
+      //   paddingRight: "3px",
+      // },
     },
   };
 
