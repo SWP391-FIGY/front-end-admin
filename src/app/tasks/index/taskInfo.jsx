@@ -75,6 +75,29 @@ export const taskColumns = [
   {
     name: 'Action',
     cell: (row) => {
+      const handleChangeStatus = async () => {
+        if (row.Status !== 'Done' && user && user.role !== 'Staff') {
+          try {
+            const response = await fetch(`/api/tasks/${row.Id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                Status: 'Done',
+              }),
+            });
+  
+            if (response.ok) {
+              console.log(`Task ${row.Id} status updated to "Done"`);
+            } else {
+              console.error(`Failed to update task ${row.Id} status: ${response.statusText}`);
+            }
+          } catch (error) {
+            console.error(`Error updating task ${row.Id} status: ${error.message}`);
+          }
+        }
+      };
       return (
         <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>
           {user && user.role !== 'Staff' && (
@@ -85,6 +108,7 @@ export const taskColumns = [
           <Link href={`/tasks/details/${row.Id}`}>
             <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
           </Link>
+          <Dropdown.Item onClick={handleChangeStatus}>Change Status to Done</Dropdown.Item>
         </Dropdown>
       );
     },
