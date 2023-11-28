@@ -65,11 +65,12 @@ const MenuList = () => {
         data={
           keyword && keyword.length > 0
             ? response.filter((x) => {
-                const idMatch = x.ID.toString().includes(keyword);
-                const nameMatch = x.MenuName.toLowerCase().includes(
+                const idMatch = x.Id.toString().includes(keyword);
+                const nameMatch = x.Name.toLowerCase().includes(
                   keyword.toLowerCase()
                 );
-                return idMatch || nameMatch;
+                const speciesMatch = x.Species.Name.toLowerCase().includes(keyword.toLowerCase());
+                return idMatch || nameMatch || speciesMatch;
               })
             : response
         }

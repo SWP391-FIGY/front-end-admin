@@ -67,10 +67,10 @@ const BirdList = () => {
           response && response.length > 0 && keyword && keyword.length > 0
             ? response.filter((x) => {
                 console.log('filter item', x);
-                const idMatch = x.ID.toString().includes(keyword);
-                const descMatch = x.Description.includes(keyword);
+                const idMatch = x.Id.toString().includes(keyword);
+                const speciesMatch = x.Species.Name.toLowerCase().includes(keyword.toLowerCase());
 
-                return idMatch || descMatch;
+                return idMatch || speciesMatch;
               })
             : response
         }

@@ -58,8 +58,14 @@ const CageList = () => {
         <DataTable
           columns={cageColumns}
           data={
-            keyword && keyword.length > 0
-              ? response.filter((x) => x.id.toString().includes(keyword))
+            response && response.length > 0 && keyword && keyword.length > 0
+              ? response.filter((x) => {
+                  console.log('filter item', x);
+                  const idMatch = x.Id.toString().includes(keyword);
+                  const speciesMatch = x.Species.Name.toLowerCase().includes(keyword.toLowerCase());
+  
+                  return idMatch || speciesMatch;
+                })
               : response
           }
           pagination
