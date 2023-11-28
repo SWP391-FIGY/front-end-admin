@@ -82,7 +82,7 @@ const MenuUpdatePage = () => {
     },
     validationSchema: Yup.object({
       Name: Yup.string().required('Required'),
-      SpeciesId: Yup.number().required('Species is required'),
+      SpeciesId: Yup.number().min(1,"Please select species").required('Required'),
       Status: Yup.number().required('Required'),
       Description: Yup.string().required('Required'),
       MenuFoods: Yup.array().min(1, 'Need at least 1 food in Menu'),
@@ -179,6 +179,7 @@ const MenuUpdatePage = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.SpeciesId}
               >
+                <option value={0}>Select...</option>
                 {speciesResponse && speciesResponse.length > 0 ? (
                   speciesResponse.map((species, index) => {
                     return (
