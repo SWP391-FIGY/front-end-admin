@@ -110,8 +110,8 @@ const BirdCreatePage = () => {
         <div className="flex flex-col w-[500px] gap-2">
           <Label htmlFor="Gender" value="Bird gender" />
           <Select id="Gender" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Gender}>
-            <option>Trống</option>
-            <option>Cái</option>
+            <option>Male</option>
+            <option>Female</option>
           </Select>
           {formik.touched.Gender && formik.errors.Gender ? (
             <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Gender}</div>
