@@ -110,7 +110,6 @@ const CageDetailPage = () => {
           <Descriptions.Item label="Species">{cageData.Species.Name}</Descriptions.Item>
           <Descriptions.Item label="Period">{cageData.Period}</Descriptions.Item>
           <Descriptions.Item label="Status">{cageData.Status}</Descriptions.Item>
-          <Descriptions.Item label="Capacity">{cageData.Capacity}</Descriptions.Item>
         </Descriptions>
 
         {/* <div className="grid grid-cols-2 gap-4">

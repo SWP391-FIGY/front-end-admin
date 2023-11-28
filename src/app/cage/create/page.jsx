@@ -42,8 +42,7 @@ const CageCreatePage = () => {
       capacity: 5,
     },
     validationSchema: Yup.object({
-      status: Yup.string().required('Required'),
-      capacity: Yup.number().min(1, 'Capacity must greater than 0'),
+      status: Yup.string().required('Required'),      
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -148,13 +147,7 @@ const CageCreatePage = () => {
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="capacity" value="Cage capacity" />
-          <TextInput id="capacity" type="number" min={1} onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.capacity} />
-          {formik.touched.capacity && formik.errors.capacity ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.capacity}</div>
-          ) : null}
-        </div>
+        
         <Button type="submit">
           {spinner ? (
             <div className="flex items-center justify-center gap-4">

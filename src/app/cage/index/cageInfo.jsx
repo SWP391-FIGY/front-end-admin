@@ -38,10 +38,6 @@ export const cageColumns = [
     sortable: true,
   },
   {
-    name: 'Capacity',
-    selector: (row) => row.Capacity,
-  },
-  {
     name: 'Action',
     cell: (row) => (
       <Dropdown arrowIcon={false} inline label={<FiMoreVertical />}>

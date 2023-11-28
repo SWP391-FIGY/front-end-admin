@@ -32,11 +32,11 @@ export const birdColumns = [
     },
     sortable: true,
   },
-  {
-    name: 'Previous Cage',
-    selector: (row) => row.PrevCageId ? row.PrevCageId : 'N/A',
-    sortable: true,
-  },
+  // {
+  //   name: 'Previous Cage',
+  //   selector: (row) => row.PrevCageId ? row.PrevCageId : 'N/A',
+  //   sortable: true,
+  // },
   {
     name: 'Last Modified',
     selector: (row) => moment(row.LastModifyDate).format('DD/MM/YYYY'),
