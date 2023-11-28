@@ -83,22 +83,22 @@ export const birdGender = ['Trống', 'Mái', 'Male', 'Female', 'Cái'];
 
 export const birdGenderOptions = [
   {
-    label: 'Trống',
+    label: 'Male',
     value: 'Trống',
     color: 'green',
   },
   {
-    label: 'Mái',
+    label: 'Female',
     value: 'Mái',
     color: 'blue',
   },
   {
-    label: 'Trống',
+    label: 'Male',
     value: 'Male',
     color: 'green',
   },
   {
-    label: 'Mái',
+    label: 'Female',
     value: 'Female',
     color: 'blue',
   },
