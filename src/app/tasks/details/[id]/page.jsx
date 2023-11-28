@@ -114,7 +114,7 @@ const TaskDetailPage = () => {
         </Descriptions.Item>
       </Descriptions>
       <div className="flex flex-col gap-2">
-          <Label value="Food items in the selected menu" />
+          <Label value="Food items for the task" />
           <Table>
             <Table.Head>
               <Table.HeadCell>Food</Table.HeadCell>
