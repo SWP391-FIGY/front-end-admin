@@ -69,7 +69,7 @@ export const taskColumns = [
   {
     name: 'Staff',
     selector: (row) => row.Staff.FullName,
-
+    sortable: true,
     wrap: true,
   },
   {
@@ -114,7 +114,7 @@ export const taskColumns = [
             <Dropdown.Item icon={FiEye}>Details</Dropdown.Item>
           </Link>
           {row.Status != 'Cancel' && row.Status != 'Done' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Done')} icon={BsCheck}>Mark as Done</Dropdown.Item>}
-          {row.Status != 'Cancel' && row.Status != 'Ongoing' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Ongoing')} icon={GiSandsOfTime}>Mark task as Ongoing</Dropdown.Item>}
+          {user.role != 'Staff' && row.Status != 'Cancel' && row.Status != 'Ongoing' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Ongoing')} icon={GiSandsOfTime}>Mark task as Ongoing</Dropdown.Item>}
           {user && user.role != 'Staff' && row.Status != 'Done' && row.Status != 'Cancel' && (
             <Dropdown.Item onClick={() => handleChangeStatus(row, 'Cancel')} icon={MdCancel}>Cancel task</Dropdown.Item>
           )}
