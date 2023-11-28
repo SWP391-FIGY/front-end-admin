@@ -208,7 +208,7 @@ const MenuUpdatePage = () => {
             name="Status"
             onChange={(e) => {
               const stringSelection = e.target.value;
-              formik.setFieldValue('Status', parseInt(stringSelection));
+              formik.setFieldValue('Status', stringSelection);
             }}
             onBlur={formik.handleBlur}
             value={formik.values.Status}
