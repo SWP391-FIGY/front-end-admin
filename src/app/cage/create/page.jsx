@@ -36,7 +36,7 @@ const CageCreatePage = () => {
 
   const formik = useFormik({
     initialValues: {
-      speciesId: '',
+      speciesId: 0,
       period: '',
       status: 'Active',
       capacity: 5,
@@ -105,6 +105,7 @@ const CageCreatePage = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.speciesId}
               >
+                <option value={0}>Select...</option>
                 {speciesResponse && speciesResponse.length > 0 ? (
                   speciesResponse.map((species, index) => {
                     return (

@@ -165,6 +165,7 @@ const BirdCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.CageId}
             >
+              <option value={0}>Select...</option>
               {cageResponse && cageResponse.length > 0 ? (
                 cageSelection.map((cage, index) => {
                   return (

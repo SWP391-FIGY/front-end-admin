@@ -76,8 +76,8 @@ const BirdEditPage = () => {
   const formik = useFormik({
     initialValues: {
       Id: birdId,
-      SpeciesId: 1,
-      CageId: 1,
+      SpeciesId: 0,
+      CageId: 0,
       Gender: 'Male',
       IsSick: false,
       Status: 'Active',
@@ -85,8 +85,8 @@ const BirdEditPage = () => {
       LastModifyingDate: moment(new Date()),
     },
     validationSchema: Yup.object({
-      SpeciesId: Yup.number().required('Required'),
-      CageId: Yup.number().required('Required'),
+      SpeciesId: Yup.number().min(1,"Please select species").required('Required'),
+      CageId: Yup.number().min(1,"Please select cage").required('Required'),
     }),
     onSubmit: async (values) => {
       const payloadData = {
@@ -164,6 +164,7 @@ const BirdEditPage = () => {
             onBlur={formik.handleBlur}
             value={formik.values.Status}
           >
+            <option value={0}>Select...</option>
             {birdStatusEnum.map((status, index) => {
               return (
                 <option key={index}>
@@ -192,6 +193,7 @@ const BirdEditPage = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.SpeciesId}
               >
+                <option value={0}>Select...</option>
                 {speciesResponse && speciesResponse.length > 0 ? (
                   speciesResponse.map((species, index) => {
                     return (
@@ -225,6 +227,7 @@ const BirdEditPage = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.CageId}
               >
+                <option value={0}>Select...</option>
                 {cageResponse && cageResponse.length > 0 ? (
                   cageSelection.map((cage, index) => {
                     return (
@@ -244,7 +247,7 @@ const BirdEditPage = () => {
           ) : null}
         </div>
 
-        {/* // * Is Sick */}
+        // * Is Sick
         <div className="flex flex-col w-[500px] gap-2">
           <Label htmlFor="IsSick" value="Is sick" />
           <Select id="IsSick" onChange={handleSickChange} onBlur={formik.handleBlur} value={formik.values.IsSick}>
