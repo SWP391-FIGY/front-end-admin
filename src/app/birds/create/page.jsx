@@ -48,8 +48,8 @@ const BirdCreatePage = () => {
   const urlRegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const formik = useFormik({
     initialValues: {
-      SpeciesId: 1,
-      CageId: 1,
+      SpeciesId: 0,
+      CageId: 0,
       Gender: 'Male',
       IsSick: false,
       Status: 'Active',
@@ -57,9 +57,9 @@ const BirdCreatePage = () => {
       LastModifyingDate: moment(new Date()),
     },
     validationSchema: Yup.object({
-      SpeciesId: Yup.number().required('Required'),
-      CageId: Yup.number().required('Required'),
-      Gender: Yup.string().required('Required'),      
+      SpeciesId: Yup.number().min(1,"Please select species").required('Required'),
+      CageId: Yup.number().min(1,"Please select cage").required('Required'),
+      Gender: Yup.string().required('Required'),
     }),
     onSubmit: async (values) => {
       // * set upload data
@@ -94,7 +94,8 @@ const BirdCreatePage = () => {
     setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
 
-  const cageSelection = cageResponse && formik.values.SpeciesId ? cageResponse.filter(cage => cage.SpeciesId === formik.values.SpeciesId) : cageResponse
+  const cageSelection =
+    cageResponse && formik.values.SpeciesId ? cageResponse.filter((cage) => cage.SpeciesId === formik.values.SpeciesId) : cageResponse;
 
   return (
     <div className="w-full p-10 flex flex-col gap-4 h-[100vh] overflow-y-auto fade-in">
@@ -110,8 +111,8 @@ const BirdCreatePage = () => {
         <div className="flex flex-col w-[500px] gap-2">
           <Label htmlFor="Gender" value="Bird gender" />
           <Select id="Gender" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Gender}>
-            <option>Trống</option>
-            <option>Cái</option>
+            <option>Male</option>
+            <option>Female</option>
           </Select>
           {formik.touched.Gender && formik.errors.Gender ? (
             <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Gender}</div>
@@ -131,6 +132,7 @@ const BirdCreatePage = () => {
               onBlur={formik.handleBlur}
               value={formik.values.SpeciesId}
             >
+              <option value={0}>Select...</option>
               {speciesResponse && speciesResponse.length > 0 ? (
                 speciesResponse.map((species, index) => {
                   return (

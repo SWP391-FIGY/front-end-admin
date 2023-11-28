@@ -302,7 +302,7 @@ const TaskCreatePage = () => {
         <div className="flex flex-col gap-2">
           <Label htmlFor="menuId" value="Menu" />
           <Select id="menuId" name="menuId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.menuId}>
-            <option value={0}>Choose menu...</option>
+            <option value={0}>Select...</option>
             {menuResponse && menuResponse.length > 0 ? (
               menuResponse
                 .filter((x) => selectedSpecies && x.SpeciesId == selectedSpecies)
