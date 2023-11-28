@@ -17,6 +17,7 @@ const TaskList = () => {
   const TOMORROW_TASK_DISPLAY = 'Tomorrow tasks';
   const TODO_CAGE_DISPLAY = 'To do cages';
   const [taskStatus, setTaskStatus] = useState('');
+  const [selectedStaff, setSelectedStaff] = useState();
   const [displayType, setDisplayType] = useState(ALL_TASK_DISPLAY);
   const [keyword, setKeyword] = useState('');
   const {
@@ -36,6 +37,18 @@ const TaskList = () => {
     method: 'get',
     url: `${API}/tasks/todocages`,
   });
+
+  // Get staff list
+  // TODO: Nho cho dieu kien ve role
+  const {
+    response: staffResponse,
+    loading: staffLoading,
+    error: staffError,
+  } = useAxios({
+    method: 'get',
+    url: `${API}/user/?filter=role eq 'Staff'`,
+  });
+
   const [taskData, setTaskData] = useState([]);
 
   const user = getUserInfo();
@@ -99,7 +112,7 @@ const TaskList = () => {
           }}
           value={taskStatus}
         >
-          <option value="">All</option>
+          <option value="">All status</option>
           {taskStatusEnum.map((status, index) => {
             return (
               <option key={index} value={status}>
@@ -108,6 +121,26 @@ const TaskList = () => {
             );
           })}
         </Select>
+        {user.role != 'Staff' && (
+          <Select
+            className="w-48"
+            onChange={(e) => {
+              const stringSelection = e.target.value;
+              setSelectedStaff(stringSelection);
+            }}
+            value={selectedStaff}
+          >
+            <option value="">All staff</option>
+            {staffResponse &&
+              staffResponse.map((staff, index) => {
+                return (
+                  <option key={index} value={staff.id}>
+                    {staff.fullName}
+                  </option>
+                );
+              })}
+          </Select>
+        )}
         <Select
           className="w-48"
           onChange={(e) => {
@@ -133,6 +166,9 @@ const TaskList = () => {
                 const nameMatch = x.Name.toLowerCase().includes(keyword.toLowerCase());
                 return idMatch || nameMatch;
               })
+              .filter(x => {
+                return selectedStaff && selectedStaff > 0 ? x.StaffId == selectedStaff : true;
+              })
               .filter((x) => {
                 return taskStatus && taskStatus.length > 0 ? x.Status === taskStatus : true;
               }) || []
@@ -154,6 +190,9 @@ const TaskList = () => {
                 //const birdIdMatch = (x.birdId != null && x.birdId.toString().includes(keyword));
                 const nameMatch = x.Name.toLowerCase().includes(keyword.toLowerCase());
                 return idMatch || nameMatch;
+              })
+              .filter(x => {
+                return selectedStaff && selectedStaff > 0 ? x.StaffId == selectedStaff : true;
               })
               .filter((x) => {
                 const taskDate = new Date(x.AssignDate);
@@ -190,6 +229,9 @@ const TaskList = () => {
                 //const birdIdMatch = (x.birdId != null && x.birdId.toString().includes(keyword));
                 const nameMatch = x.Name.toLowerCase().includes(keyword.toLowerCase());
                 return idMatch || nameMatch;
+              })
+              .filter(x => {
+                return selectedStaff && selectedStaff > 0 ? x.StaffId == selectedStaff : true;
               })
               .filter((x) => {
                 const taskDate = new Date(x.AssignDate);
