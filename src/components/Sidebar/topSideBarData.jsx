@@ -22,7 +22,7 @@ export const topSideBarData = [
     title: 'Dashboard',
     href: '/dashboard',
     icon: HiChartPie,
-    allowRole: ['Admin', 'Manager', 'Staff'],
+    allowRole: ['Admin', 'Manager', ],
   },
   {
     title: 'Bird Management',
