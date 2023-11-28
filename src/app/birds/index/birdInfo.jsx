@@ -61,15 +61,7 @@ export const birdColumns = [
     },
     sortable: true,
   },
-  {
-    name: 'Is Sick',
-    selector: (row) => {
-      const value = birdStatusOptions.find((item) => item.value === row.Status);
-
-      return <Tag color={row.isSick ? 'red' : 'gray'}>{row.isSick ? 'Yes' : 'No'}</Tag>;
-    },
-    sortable: true,
-  },
+  
   {
     name: 'Action',
     cell: (row) => (

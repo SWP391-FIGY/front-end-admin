@@ -102,7 +102,7 @@ const FoodEditPage = () => {
         <div className="flex flex-col gap-2">
           <Label htmlFor="unit" value="Unit" />
           <Select id="unit" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.unit}>
-            <option>kg</option>
+            <option>gram</option>
             <option>each</option>
           </Select>
           {formik.touched.unit && formik.errors.unit ? <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.unit}</div> : null}

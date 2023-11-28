@@ -247,17 +247,7 @@ const BirdEditPage = () => {
           ) : null}
         </div>
 
-        // * Is Sick
-        <div className="flex flex-col w-[500px] gap-2">
-          <Label htmlFor="IsSick" value="Is sick" />
-          <Select id="IsSick" onChange={handleSickChange} onBlur={formik.handleBlur} value={formik.values.IsSick}>
-            <option value={true}>True</option>
-            <option value={false}>False</option>
-          </Select>
-          {formik.touched.IsSick && formik.errors.IsSick ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.IsSick}</div>
-          ) : null}
-        </div>
+        
 
         <Button type="submit" className="w-[500px] ">
           {spinner ? (
