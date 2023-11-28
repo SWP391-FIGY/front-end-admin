@@ -247,7 +247,7 @@ const BirdEditPage = () => {
           ) : null}
         </div>
 
-        // * Is Sick
+        {/* // * Is Sick */}
         <div className="flex flex-col w-[500px] gap-2">
           <Label htmlFor="IsSick" value="Is sick" />
           <Select id="IsSick" onChange={handleSickChange} onBlur={formik.handleBlur} value={formik.values.IsSick}>
