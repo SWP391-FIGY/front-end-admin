@@ -121,7 +121,7 @@ const TaskList = () => {
             );
           })}
         </Select>
-        {user & user.role != 'Staff' && (
+        {user && user.role != 'Staff' && (
           <Select
             className="w-48"
             onChange={(e) => {
