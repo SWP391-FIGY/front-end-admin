@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { Descriptions } from 'antd';
-import { Label, Spinner } from 'flowbite-react';
+import { Button, Label, Spinner } from 'flowbite-react';
 import DataTable from 'react-data-table-component';
 import { HiOutlineArrowSmallLeft } from 'react-icons/hi2';
 
@@ -14,13 +14,30 @@ import { birdColumns } from '@/app/birds/index/birdInfo';
 import { taskColumns } from '@/app/tasks/index/taskInfo';
 import { API } from '@/constants';
 import useAxios from '@/hooks/useFetch';
+import { HiPlus } from 'react-icons/hi';
+import { getUserInfo } from '@/helper';
 
 const { default: PageLayout } = require('@/layout/pageLayout');
 
+const user = getUserInfo()
 const BirdTable = ({ birdData }) => {
   return (
     <div className="p-6 mt-4 bg-white rounded-lg shadow">
-      <h3 className="mb-4 text-2xl font-bold">Birds in Cage</h3>
+      <div className="flex flex-row justify-between">
+        <h3 className="mb-4 text-2xl font-bold">Birds in Cage</h3>
+        {user && user.role !== 'Staff' && (
+          <Link href={'/birds/create'}>
+            <Button>
+              <div className="flex flex-row justify-center gap-4">
+                <div className="my-auto">
+                  <HiPlus />
+                </div>
+                <p>Add new bird</p>
+              </div>
+            </Button>
+          </Link>
+        )}
+      </div>
       <DataTable
         columns={birdColumns}
         data={birdData}
@@ -147,7 +164,6 @@ const CageDetailPage = () => {
       </div>
       <BirdTable birdData={birdData} />
 
-      <TaskTable taskData={taskData} />
     </div>
   );
 };

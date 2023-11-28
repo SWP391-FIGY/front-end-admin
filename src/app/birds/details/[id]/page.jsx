@@ -163,7 +163,6 @@ const BirdDetailPage = () => {
       ) : (
         <>No data</>
       )}
-      <PlanTable planData={planData} />
     </div>
   );
 };
