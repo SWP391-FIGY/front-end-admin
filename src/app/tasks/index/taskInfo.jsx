@@ -115,7 +115,7 @@ export const taskColumns = [
           </Link>
           {row.Status != 'Done' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Done')} icon={BsCheck}>Mark as Done</Dropdown.Item>}
           {row.Status != 'Ongoing' && <Dropdown.Item onClick={() => handleChangeStatus(row, 'Ongoing')} icon={GiSandsOfTime}>Mark task as Ongoing</Dropdown.Item>}
-          {user && user.role != 'Staff' && row.Status != 'Cancel' && (
+          {user && user.role != 'Staff' && row.Status != 'Done' && row.Status != 'Cancel' && (
             <Dropdown.Item onClick={() => handleChangeStatus(row, 'Cancel')} icon={MdCancel}>Cancel task</Dropdown.Item>
           )}
         </Dropdown>

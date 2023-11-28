@@ -68,7 +68,6 @@ const CageEditPage = () => {
     },
     validationSchema: Yup.object({
       status: Yup.string().required('Required'),
-      capacity: Yup.number().required('Required'),
       period: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
@@ -186,13 +185,6 @@ const CageEditPage = () => {
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="capacity" value="Capacity" />
-          <TextInput id="capacity" type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.capacity} />
-          {formik.touched.capacity && formik.errors.capacity ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.capacity}</div>
-          ) : null}
-        </div>
 
         <Button type="submit">
           {spinner ? (

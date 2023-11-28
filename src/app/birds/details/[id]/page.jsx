@@ -134,12 +134,12 @@ const BirdDetailPage = () => {
               </label>
               <p>{birdData.CageId}</p>
             </div>
-            <div className="col-span-2 sm:col-span-1">
+            {/* <div className="col-span-2 sm:col-span-1">
               <label htmlFor="cageID" className="text-lg font-bold">
                 Previous Cage
               </label>
               <p>{birdData.PrevCageId ? birdData.PrevCageId : 'N/A'}</p>
-            </div>
+            </div> */}
             <div className="col-span-2 sm:col-span-1">
               <label htmlFor="gender" className="text-lg font-bold">
                 Gender
