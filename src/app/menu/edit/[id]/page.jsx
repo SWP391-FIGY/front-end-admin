@@ -83,7 +83,6 @@ const MenuUpdatePage = () => {
     validationSchema: Yup.object({
       Name: Yup.string().required('Required'),
       SpeciesId: Yup.number().min(1,"Please select species").required('Required'),
-      Status: Yup.number().required('Required'),
       Description: Yup.string().required('Required'),
       MenuFoods: Yup.array().min(1, 'Need at least 1 food in Menu'),
     }),

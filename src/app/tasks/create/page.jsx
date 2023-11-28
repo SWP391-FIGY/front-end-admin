@@ -328,7 +328,7 @@ const TaskCreatePage = () => {
           <Table>
             <Table.Head>
               <Table.HeadCell>Food</Table.HeadCell>
-              <Table.HeadCell>Required Quantity</Table.HeadCell>
+              <Table.HeadCell>Unit Quantity</Table.HeadCell>
               <Table.HeadCell>Unit</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">

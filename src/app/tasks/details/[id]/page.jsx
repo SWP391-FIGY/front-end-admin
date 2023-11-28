@@ -118,17 +118,18 @@ const TaskDetailPage = () => {
           <Table>
             <Table.Head>
               <Table.HeadCell>Food</Table.HeadCell>
-              <Table.HeadCell>Required Quantity</Table.HeadCell>
+              <Table.HeadCell>Total Required Quantity</Table.HeadCell>
               <Table.HeadCell>Unit</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
               {menuResponse && taskData &&
                 menuResponse.find(x => x.Id == taskData?.MenuId)?.MenuFoods?.map((item, index) => {
                   const foodItem = item.Food;
+                  const numberOfBird = taskData.Cage && taskData?.Cage?.CurrentBirds ? taskData?.Cage?.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length : 1
                   return (
                     <Table.Row key={index}>
                       <Table.Cell>{foodItem.Name}</Table.Cell>
-                      <Table.Cell>{item.Quantity} </Table.Cell>
+                      <Table.Cell>{item.Quantity * numberOfBird} </Table.Cell>
                       <Table.Cell>{foodItem.Unit}</Table.Cell>
                     </Table.Row>
                   );

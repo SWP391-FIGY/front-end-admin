@@ -223,7 +223,7 @@ const MenuCreatePage = () => {
                       foodResponse.map((food, index) => {
                         return (
                           <option key={index} value={food.Id}>
-                            {food.Name}
+                            {food.Name} ({food.Unit})
                           </option>
                         );
                       })
