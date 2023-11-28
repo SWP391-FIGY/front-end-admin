@@ -154,9 +154,9 @@ const LoginPage = () => {
               <>Login</>
             )}
           </Button>
-          <div className="w-6/12 justify-center items-center flex flex-col mx-auto gap-2">
+          {/* <div className="w-6/12 justify-center items-center flex flex-col mx-auto gap-2">
             <GoogleButton onClick={handleGoogleLogin} />
-          </div>
+          </div> */}
         </form>
 
         <div className="w-6/12 relative">

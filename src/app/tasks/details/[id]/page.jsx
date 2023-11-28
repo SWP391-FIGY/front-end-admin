@@ -30,7 +30,7 @@ const TaskDetailPage = () => {
 
   const { response, loading, error, refetch } = useAxios({
     method: 'get',
-    url: `${API}/tasks/?filter=ID%20eq%20${taskId}&expand=Cage($expand=species),Staff`,
+    url: `${API}/tasks/?filter=ID%20eq%20${taskId}&expand=Cage($expand=species,currentBirds),Staff`,
   });
 
   //Get menu list
@@ -100,7 +100,7 @@ const TaskDetailPage = () => {
           Cage {taskData?.Cage?.Id} - {taskData?.Cage?.Species?.Name} - {taskData?.Cage?.Period}
         </Descriptions.Item>
         <Descriptions.Item span={2} label="Number of bird">
-          {taskData?.Cage?.CurrentBirds ? row.Cage.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length : 0}
+          {taskData?.Cage?.CurrentBirds ? taskData.Cage.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length : 0}
         </Descriptions.Item>
         <Descriptions.Item label="Assign Date">{moment(taskData?.AssignDate).format('DD/MM/YYYY')}</Descriptions.Item>
         <Descriptions.Item label="Status" span={2}>
