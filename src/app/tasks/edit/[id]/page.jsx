@@ -39,7 +39,6 @@ const TaskEditPage = () => {
 
   //Fetch old data to form
   useEffect(() => {
-    
     if (taskResponse) {
       const task = taskResponse.find((task) => task.Id === taskId);
 
@@ -78,7 +77,7 @@ const TaskEditPage = () => {
     error: cageError,
   } = useAxios({
     method: 'get',
-    url: `${API}/cage/`,
+    url: `${API}/cage?expand=species,currentbirds`,
   });
 
   //Get menu list
@@ -93,28 +92,22 @@ const TaskEditPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      startDate: moment(new Date()),
-      endDate: moment(new Date()),
-      staffChecked: '',
-      managerChecked: '',
-      status: 'Pending',
-      cageId: 0,
-      menuId: 0,
-      staffId: 0,
+      Name: '',
+      Description: '',
+      AssignDate: moment(new Date()),
+      Status: 'Pending',
+      CageId: 0,
+      MenuId: 0,
+      StaffId: 0,
     },
     validationSchema: Yup.object({
-      cageId: Yup.number().required('Required'),
-      menuId: Yup.number().required('Required'),
-      staffId: Yup.number().required('Required'),
-      name: Yup.string().required('Required'),
-      description: Yup.string().required('Required'),
-      startDate: Yup.date().required('Required'),
-      endDate: Yup.date().required('Required'),
-      status: Yup.string(),
-      staffChecked: Yup.boolean(),
-      managerChecked: Yup.boolean(),
+      AssignDate: Yup.date().required('Required'),
+      CageId: Yup.number().min(1,"Please select cage").required('Required'),
+      Description: Yup.string().required('Required'),
+      MenuId: Yup.number().min(1,"Please select menu").required('Required'),
+      Name: Yup.string().required('Required'),
+      StaffId: Yup.number().min(1,"Please select staff").required('Required'),
+      Status: Yup.string(),
     }),
     onSubmit: (values) => {
       setSpinner(true);
@@ -152,52 +145,54 @@ const TaskEditPage = () => {
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-[600px] bg-white px-4 py-8 rounded-lg shadow-lg ">
         <h2 className="text-3xl font-bold">Edit task</h2>
         <Label value="Task ID" />
-        <div>{formik.values.id}</div>
+        <div>{formik.values.Id}</div>
         <div className="flex flex-col w-full gap-2">
-          <Label htmlFor="name" value="Task name" />
+          <Label htmlFor="Name" value="Task name" />
           <div className="flex w-full gap-2">
             <div className="w-full">
-              <TextInput id="name" name="name" type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.name} />
+              <TextInput id="Name" name="Name" type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Name} />
             </div>
           </div>
-          {formik.touched.name && formik.errors.name ? <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.name}</div> : null}
+          {formik.touched.Name && formik.errors.Name ? <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Name}</div> : null}
         </div>
         <div className="flex flex-col w-full gap-2">
-          <Label htmlFor="description" value="Description" />
+          <Label htmlFor="Description" value="Description" />
           <div className="flex w-full gap-2">
             <div className="w-full">
               <Textarea
-                id="description"
-                name="description"
+                id="Description"
+                name="Description"
                 type="text"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.description}
+                value={formik.values.Description}
               />
             </div>
           </div>
-          {formik.touched.description && formik.errors.description ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.description}</div>
+          {formik.touched.Description && formik.errors.Description ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.Description}</div>
           ) : null}
         </div>
         <div className="flex flex-col w-full gap-2">
-          <Label htmlFor="cageId" value="Bird cage" />
+          <Label htmlFor="CageId" value="Bird cage" />
           <div className="flex w-full gap-2">
             <div className="w-full">
               <Select
-                id="cageId"
+                id="CageId"
                 onChange={(e) => {
                   const stringSelection = e.target.value;
-                  formik.setFieldValue('cageId', parseInt(stringSelection));
+                  formik.setFieldValue('CageId', parseInt(stringSelection));
                 }}
                 onBlur={formik.handleBlur}
-                value={formik.values.cageId}
+                value={formik.values.CageId}
               >
+                <option value={0}>Select...</option>
                 {cageResponse && cageResponse.length > 0 ? (
                   cageResponse.map((cage, index) => {
                     return (
-                      <option key={index} value={cage.id}>
-                        Cage {cage.id}
+                      <option key={index} value={cage.Id}>
+                        Cage {cage.Id} - {cage.Species.Name} - {cage.Period} - No. of Birds:{' '}
+                        {cage.CurrentBirds && cage.CurrentBirds.filter((x) => x.Status != 'Sold' && x.Status != 'Dead').length}
                       </option>
                     );
                   })
@@ -207,13 +202,14 @@ const TaskEditPage = () => {
               </Select>
             </div>
           </div>
-          {formik.touched.cageId && formik.errors.cageId ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.cageId}</div>
+          {formik.touched.CageId && formik.errors.CageId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.CageId}</div>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="staffId" value="Staff" />
-          <Select id="staffId" name="staffId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.staffId}>
+          <Label htmlFor="StaffId" value="Staff" />
+          <Select id="StaffId" name="StaffId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.StaffId}>
+            <option value={0}>Select...</option>
             {staffResponse && staffResponse.length > 0 ? (
               staffResponse.map((staff, index) => {
                 return (
@@ -226,13 +222,14 @@ const TaskEditPage = () => {
               <option disabled>Loading...</option>
             )}
           </Select>
-          {formik.touched.staffId && formik.errors.staffId ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.staffId}</div>
+          {formik.touched.StaffId && formik.errors.StaffId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.StaffId}</div>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="menuId" value="Menu" />
-          <Select id="menuId" name="menuId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.menuId}>
+          <Label htmlFor="MenuId" value="Menu" />
+          <Select id="MenuId" name="MenuId" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.MenuId}>
+            <option value={0}>Select...</option>
             {menuResponse && menuResponse.length > 0 ? (
               menuResponse.map((menu, index) => {
                 return (
@@ -245,49 +242,8 @@ const TaskEditPage = () => {
               <option disabled>Loading...</option>
             )}
           </Select>
-          {formik.touched.menuId && formik.errors.menuId ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.menuId}</div>
-          ) : null}
-        </div>
-        <div className="flex flex-col w-[500px] gap-2">
-          <Label htmlFor="startDate" value="Start date" />
-          <Space direction="vertical" size={12}>
-            <DatePicker
-              className="!important"
-              // showTime
-              // minuteStep={30}
-              // secondStep={60}
-              value={dayjs(formik.values.startDate)}
-              onChange={(date, dateString) => {
-                if (dateString === '') {
-                  formik.setFieldValue('startDate', new Date().toISOString());
-                } else {
-                  formik.setFieldValue('startDate', new Date(dateString).toISOString());
-                }
-              }}
-            />
-          </Space>
-          {formik.touched.startDate && formik.errors.startDate ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.startDate}</div>
-          ) : null}
-        </div>
-        <div className="flex flex-col w-[500px] gap-2">
-          <Label htmlFor="endDate" value="End date" />
-          <Space direction="vertical" size={12}>
-            <DatePicker
-              className="!important"
-              value={dayjs(formik.values.endDate)}
-              onChange={(date, dateString) => {
-                if (dateString === '') {
-                  formik.setFieldValue('endDate', new Date().toISOString());
-                } else {
-                  formik.setFieldValue('endDate', new Date(dateString).toISOString());
-                }
-              }}
-            />
-          </Space>
-          {formik.touched.endDate && formik.errors.endDate ? (
-            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.endDate}</div>
+          {formik.touched.MenuId && formik.errors.MenuId ? (
+            <div className="text-xs text-red-600 dark:text-red-400">{formik.errors.MenuId}</div>
           ) : null}
         </div>
 
